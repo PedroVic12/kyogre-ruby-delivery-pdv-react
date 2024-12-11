@@ -29,13 +29,13 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <div className="flex items-center gap-4">
         <img
-          src={product.image}
+          src= {product.imageUrl} ?? '' 
           alt={product.name}
           className="w-16 h-16 rounded-lg object-cover"
         />
         <div>
           <h3 className="font-semibold text-lg text-white">{product.name}</h3>
-          <p className="text-green-500">R$ {product.price.toFixed(2)} Reais</p>
+          <p className="text-green-500">R$ {typeof product.price === 'number' && !isNaN(product.price) ? product.price.toFixed(2) : 'N/A'} Reais</p>
         </div>
       </div>
 
