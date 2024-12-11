@@ -5,6 +5,8 @@ import { Header } from './components/Header';
 import { HomePage } from './pages/HomePage';
 import { MenuPage } from './pages/MenuPage';
 import { DashboardPage } from './pages/DashboardPage';
+
+
 import  Index  from "./pages/Index";
 import CartPage from './pages/CartPage';
 import ProductDetail from './pages/ProductDetail';
@@ -12,7 +14,7 @@ import ProductDetail from './pages/ProductDetail';
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-60">
         <Sidebar />
         <Header />
         <Routes>
@@ -25,9 +27,9 @@ export default function App() {
 
 
         {/* Lovable DEV */}
-        <Route path="/" element={<Index />} />
+        <Route path="/cardapioDigital" element={<Index />} />
         <Route path="/cart" element={<CartPage />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
 
 
 

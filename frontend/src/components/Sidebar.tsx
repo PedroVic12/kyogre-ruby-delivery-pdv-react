@@ -3,12 +3,18 @@ import { Home, LayoutDashboard, Book, Users, UserPlus, Coffee, HeadphonesIcon, M
 import { Link } from './ui/Link';
 
 export function Sidebar() {
+
+
+
   const menuItems = [
     { icon: Home, label: 'Home', href: '/' },
-    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
-    { icon: Book, label: 'Cardápio', href: '/cardapio' },
+    { icon: Menu , label: "Cardapio Digital NEW", href: "/cardapioDigital"},
+    { icon: Coffee, label: 'Pedidos', href: '/dashboard' },
+    { icon: Book, label: 'Gestor Cardápio', href: '/cardapio' },
+
+
+
     { icon: Users, label: 'Clientes', href: '/clientes' },
-    { icon: Coffee, label: 'Pedidos', href: '/pedidos' },
     { icon: UserPlus, label: 'Cadastro', href: '/cadastro' },
     { icon: HeadphonesIcon, label: 'Atendimento', href: '/atendimento' },
   ];
@@ -17,7 +23,7 @@ export function Sidebar() {
     <div className="h-screen w-64 bg-purple-700 text-white p-4 fixed left-0 top-0">
       <div className="flex items-center gap-2 mb-8 p-2">
         <Coffee className="h-8 w-8" />
-        <h1 className="text-xl font-bold">Ruby Delivery</h1>
+        <h1 className="text-xl font-bold">Ruby Delivery App React</h1>
       </div>
       
       <nav className="space-y-2">
