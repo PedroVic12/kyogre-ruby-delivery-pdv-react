@@ -1,8 +1,8 @@
-import { useCart } from "@/contexts/CartContext";
-import { Button } from "@/components/ui/button";
+import { useCart } from "../contexts/CartContext";
 import { ArrowLeft, Minus, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "../components/ui/scroll-area";
+import CustomButton from "../components/ui/button"; // Import your custom button
 
 export default function CartPage() {
   const { items, total, itemCount, incrementQuantity, decrementQuantity } = useCart();
@@ -14,14 +14,13 @@ export default function CartPage() {
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="menu-header text-white p-4 flex items-center gap-4">
-        <Button 
-          variant="ghost" 
-          size="icon"
+        <CustomButton 
+          variant="contained" // Use a suitable variant
           onClick={() => navigate(-1)}
           className="text-white hover:text-white/80"
         >
           <ArrowLeft className="h-6 w-6" />
-        </Button>
+        </CustomButton>
         <h1 className="text-xl font-bold">CARRINHO</h1>
       </div>
 
@@ -45,23 +44,35 @@ export default function CartPage() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
+                <CustomButton
+                  variant="outlined" // Use a suitable variant
+                  size="small" // Adjust size if needed
                   className="rounded-full h-8 w-8"
-                  onClick={() => decrementQuantity(item.id)}
+                  onClick={() => {
+                    if (typeof item.id === 'string') {
+                      decrementQuantity(item.id);
+                    } else {
+                      console.error("item.id is not a valid string:", item.id);
+                    }
+                  }}
                 >
                   <Minus className="h-4 w-4" />
-                </Button>
+                </CustomButton>
                 <span className="w-8 text-center">{item.quantity}</span>
-                <Button
-                  variant="outline"
-                  size="icon"
+                <CustomButton
+                  variant="outlined" // Use a suitable variant
+                  size="small" // Adjust size if needed
                   className="rounded-full h-8 w-8"
-                  onClick={() => incrementQuantity(item.id)}
+                  onClick={() => {
+                    if (typeof item.id === 'string') {
+                      incrementQuantity(item.id);
+                    } else {
+                      console.error("item.id is not a valid string:", item.id);
+                    }
+                  }}
                 >
                   <Plus className="h-4 w-4" />
-                </Button>
+                </CustomButton>
               </div>
             </div>
           ))}
@@ -76,12 +87,12 @@ export default function CartPage() {
             </span>
             <span className="font-bold">R$ {total.toFixed(2)}</span>
           </div>
-          <Button
+          <CustomButton
             className="w-full cart-button text-white py-6 rounded-full"
             onClick={() => window.open('https://wa.me/5511999999999', '_blank')}
           >
             Continuar o Pedido no WhatsApp
-          </Button>
+          </CustomButton>
         </div>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import { Product } from "@/types/menu";
 import { useCart } from "@/contexts/CartContext";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
+import CustonButton from "./ui/button";
 
 interface ProductCardProps {
   product: Product;
@@ -37,6 +38,14 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-green-500">R$ {product.price.toFixed(2)} Reais</p>
         </div>
       </div>
+
+      <CustonButton 
+        variant="contained" // Use a suitable variant
+        onClick={() => navigate(`/product/${product.id}`)}
+        className="text-white hover:text-white/80"
+      >
+        <Plus className="h-6 w-6" />
+      </CustonButton>
       <Button
         onClick={handleAddToCart}
         className="rounded-full w-12 h-12 bg-primary hover:bg-primary/90"

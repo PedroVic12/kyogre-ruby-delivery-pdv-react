@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ProductCard } from "@/components/ProductCard";
-import { Cart } from "@/components/Cart";
-import { categories, products } from "@/data/menuData";
+import { ProductCard } from "../components/ProductCard";
+import { Cart } from "../components/Cart";
+import { categories, products } from "../data/menuData";
 
 export function  CardapioDigitalPage()  {
   const [activeCategory, setActiveCategory] = useState(categories[0].id);

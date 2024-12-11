@@ -1,7 +1,7 @@
-import { useCart } from "@/contexts/CartContext";
-import { Button } from "@/components/ui/button";
+import { useCart } from "../contexts/CartContext";
 import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "./ui/button";
 
 export function Cart() {
   const { total, itemCount } = useCart();
@@ -10,10 +10,11 @@ export function Cart() {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white p-4 border-t">
       <div className="max-w-md mx-auto">
-        <Button
-          className="w-full cart-button text-white py-6 rounded-full"
-          disabled={itemCount === 0}
+
+        <CustomButton 
+          variant="contained" // Use a suitable variant
           onClick={() => navigate('/cart')}
+          className="text-white hover:text-white/80"
         >
           <ShoppingCart className="mr-2" />
           VER CARRINHO
@@ -21,7 +22,8 @@ export function Cart() {
             {itemCount > 0 && `(${itemCount} ${itemCount === 1 ? 'item' : 'itens'})`}
           </span>
           <span className="ml-2">R$ {total.toFixed(2)}</span>
-        </Button>
+          
+              </CustomButton>
       </div>
     </div>
   );
