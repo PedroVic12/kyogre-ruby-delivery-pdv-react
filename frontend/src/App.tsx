@@ -5,6 +5,9 @@ import { Header } from './components/Header';
 import { HomePage } from './pages/HomePage';
 import { MenuPage } from './pages/MenuPage';
 import { DashboardPage } from './pages/DashboardPage';
+import  Index  from "./pages/Index";
+import CartPage from './pages/CartPage';
+import ProductDetail from './pages/ProductDetail';
 
 export default function App() {
   return (
@@ -13,9 +16,21 @@ export default function App() {
         <Sidebar />
         <Header />
         <Routes>
+
+          {/* BoltNew*/}
+
           <Route path="/" element={<HomePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/cardapio" element={<MenuPage />} />
+
+
+        {/* Lovable DEV */}
+        <Route path="/" element={<Index />} />
+        <Route path="/cart" element={<CartPage />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+
+
+
         </Routes>
       </div>
     </Router>
