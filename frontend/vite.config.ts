@@ -10,4 +10,20 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'), // Maps '@' to the 'src' directory
     },
   },
+
+  build: {
+    assetsDir: 'static',
+  },
+  server: {
+    port: 3000,
+    cors: true,
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:1998/",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
 });

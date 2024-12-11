@@ -6,9 +6,23 @@ import { Category } from '../../types/menu';
 const categoryColors = {
   'Hamburguer': 'bg-blue-50 border-blue-200',
   'Pizza': 'bg-green-50 border-green-200',
-  'Sucos': 'bg-yellow-50 border-yellow-200',
+  'Sucos': 'bg-yellow-200 border-yellow-200',
   'Salgados': 'bg-red-50 border-red-200'
 };
+// Assuming your object is something like this
+const menuItems = {
+  Hamburguer: "Delicious Hamburger",
+  Pizza: "Cheesy Pizza",
+  Sucos: "Fresh Juices",
+  Salgados: "Savory Snacks",
+};
+
+// If you have a variable that is a string
+const itemKey: string = "Pizza"; // This could be any string
+
+// Use type assertion to tell TypeScript that itemKey is one of the keys
+const item = menuItems[itemKey as keyof typeof menuItems];
+
 
 interface MenuCategoryProps {
   category: Category;

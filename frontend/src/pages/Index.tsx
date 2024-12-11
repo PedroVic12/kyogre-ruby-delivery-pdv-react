@@ -10,7 +10,7 @@ export function CardapioDigitalPage() {
   
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch('http://localhost:3001/products');
+      const response = await fetch('http://localhost:1998/products');
       const data = await response.json();
       setProducts(data);
     };

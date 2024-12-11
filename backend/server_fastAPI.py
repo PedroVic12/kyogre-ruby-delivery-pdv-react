@@ -48,6 +48,17 @@ async def create_product(name: str, price: int, file: UploadFile = File(...)):
 
 @app.get("/products/", response_model=list[Product])
 def read_products():
+
+    array_db =  [
+        Product(id=1, name="Product 1", price=10.0, image_path="https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg"),
+        Product(id=2, name="Product 2", price=15.0, image_path="https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg"),
+        Product(
+
+
+            id= 3,
+             name="Product 2", price=15.0, image_path="https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg"
+        )
+    ]
     db = SessionLocal()
     products = db.query(Product).all()
     db.close()
@@ -69,4 +80,10 @@ def read_root():
     </html>
     """
 
+
 # Run the app with: uvicorn server_fastAPI:app --reload
+def main_fastAPI():
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+main_fastAPI()

@@ -60,7 +60,8 @@ export function MenuPage() {
     try {
       const name = "New Product";
       const price = 100;
-      const imagePath = "https://example.com/image.jpg"; // Replace with your image URL
+      // <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500" alt="Big Mac" class="w-full h-full object-cover">
+      const imagePath = "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"; // Replace with your image URL
 
       const result = await createProduct(name, price, imagePath);
       console.log(result);
