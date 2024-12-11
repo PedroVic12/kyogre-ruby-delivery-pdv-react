@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { Cart } from "../components/Cart";
-import { categories, products } from "../data/menuData";
+import { categories, Category } from "../data/menuData";
+import { Product } from "@/types/menu";
 
-export function  CardapioDigitalPage()  {
+export function CardapioDigitalPage() {
   const [activeCategory, setActiveCategory] = useState(categories[0].id);
+  const [products, setProducts] = useState([]);
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch('http://localhost:3001/products');
+      const data = await response.json();
+      setProducts(data);
+    };
 
-  const filteredProducts = products.filter(
-    (product) => product.category === activeCategory
-  );
+    fetchProducts();
+  }, []);
+
+
+  const handleAddToCart = (product: { name: any; }) => {
+    // Add product to cart logic here
+    alert(`Added ${product.name} to cart!`);
+  };
 
   return (
     <div className="pb-24">
@@ -40,13 +54,10 @@ export function  CardapioDigitalPage()  {
           </h2>
         </div>
 
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        { (categories.find((c) => c.id === activeCategory) as Category)?.name }
       </div>
 
       <Cart />
     </div>
   );
 };
-

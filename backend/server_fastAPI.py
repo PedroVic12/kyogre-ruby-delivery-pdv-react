@@ -1,52 +1,72 @@
-from fastapi import FastAPI
-from sqlalchemy import create_engine
+from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from databases import Database
+import os
 
-# cria uma conexão com o banco de dados
-engine = create_engine('sqlite:///banco_de_dados.db')
-
-# define o objeto base
+# Database setup
+DATABASE_URL = "sqlite:///./test.db"
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# define a classe que representa a tabela
-class Tabela(Base):
-    __tablename__ = 'tabela'
+# Model definition
+class Product(Base):
+    __tablename__ = "products"
 
-    id = Column(Integer, primary_key=True)
-    nome = Column(String)
-    idade = Column(Integer)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    price = Column(Integer)
+    image_path = Column(String)
 
-# inicializa o FastAPI
+Base.metadata.create_all(bind=engine)
+
+# FastAPI app
 app = FastAPI()
 
-# cria a tabela no banco de dados
-Base.metadata.create_all(engine)
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# cria uma sessão com o banco de dados
-Session = sessionmaker(bind=engine)
+# CRUD operations
+@app.post("/products/")
+async def create_product(name: str, price: int, file: UploadFile = File(...)):
+    db = SessionLocal()
+    image_path = f"static/{file.filename}"
+    
+    # Save image
+    with open(image_path, "wb") as buffer:
+        buffer.write(await file.read())
+    
+    product = Product(name=name, price=price, image_path=image_path)
+    db.add(product)
+    db.commit()
+    db.refresh(product)
+    db.close()
+    return product
 
-# cria uma instância do banco de dados
-db = Database(engine)
+@app.get("/products/", response_model=list[Product])
+def read_products():
+    db = SessionLocal()
+    products = db.query(Product).all()
+    db.close()
+    return products
 
+@app.get("/", response_class=HTMLResponse)
+def read_root():
+    return """
+    <html>
+        <body>
+            <h1>Upload a Product</h1>
+            <form action="/products/" method="post" enctype="multipart/form-data">
+                <input name="name" type="text" placeholder="Product Name" required>
+                <input name="price" type="number" placeholder="Product Price" required>
+                <input name="file" type="file" required>
+                <button type="submit">Submit</button>
+            </form>
+        </body>
+    </html>
+    """
 
-# endpoint para criar um novo registro
-@app.post('/tabela')
-async def criar_registro(nome: str, idade: int, session: Session = Depends(get_db)):
-    registro = Tabela(nome=nome, idade=idade)
-    session.add(registro)
-    session.commit()
-
-# endpoint para ler os registros da tabela
-@app.get('/tabela')
-async def ler_registros(session: Session = Depends(get_db)):
-    resultado = session.query(Tabela).all()
-    return resultado
-
-# endpoint para atualizar um registro
-@app.put('/tabela/{id}')
-async def atualizar_registro(id: int, nome: str, idade: int, session: Session = Depends(get_db)):
-    registro = session.query(Tabela).get(id)
-    registro.nome = nome
-    registro.idade
+# Run the app with: uvicorn server_fastAPI:app --reload

@@ -29,8 +29,9 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       <div className="flex items-center gap-4">
         <img
-          src= {product.imageUrl} ?? '' 
-          alt={product.name}
+    src={product.imageUrl || ''}
+
+        alt={product.name}
           className="w-16 h-16 rounded-lg object-cover"
         />
         <div>
