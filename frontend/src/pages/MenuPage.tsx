@@ -13,8 +13,29 @@ export function MenuPage() {
   } = useMenuState();
 
 
+
+    const array_imagens_storage = [
+
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+      "https://www.iugu.com/hubfs/Imported_Blog_Media/Ruby-conhe%C3%A7a-essa-linguagem-de-programa%C3%A7%C3%A3o-1.jpg",
+
+    ];
+
+
   // api.js
- const createProduct = async (name, price, imagePath) => {
+ const createProduct = async (name: string, price: number, imagePath: string) => {
   const response = await fetch("http://localhost:8000/products/", {
     method: "POST",
     headers: {

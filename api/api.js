@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3001;
+const PORT = 1998;
 
 // Middleware
 app.use(cors());
@@ -50,7 +50,7 @@ app.post('/products', (req, res) => {
 });
 
 // api.js
-export const createProduct = async (name, price, imagePath) => {
+const createProduct = async (name, price, imagePath) => {
     const response = await fetch("http://localhost:8000/products/", {
       method: "POST",
       headers: {
@@ -77,8 +77,7 @@ app.listen(PORT, () => {
 
     //iniciando...
     
-    
-    createProduct()
+
 });
 
 
