@@ -18,17 +18,22 @@ const db = new sqlite3.Database('./menu.db', (err) => {
     console.log('Connected to the menu database.');
 });
 
-// Create table if not exists
-db.run(`CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    price REAL NOT NULL,
-    image_path TEXT NOT NULL
+// Create table if not exists for orders
+db.run(`CREATE TABLE IF NOT EXISTS orders (
+    id_pedido INTEGER PRIMARY KEY AUTOINCREMENT,
+    data TEXT NOT NULL,
+    nome TEXT NOT NULL,
+    telefone TEXT NOT NULL,
+    endereco TEXT NOT NULL,
+    complemento TEXT,
+    formaPagamento TEXT NOT NULL,
+    status TEXT NOT NULL,
+    totalPagar REAL NOT NULL
 )`);
 
-// GET endpoint to retrieve products
-app.get('/products', (req, res) => {
-    db.all('SELECT * FROM products', [], (err, rows) => {
+// GET endpoint to retrieve all orders
+app.get('/orders', (req, res) => {
+    db.all('SELECT * FROM orders', [], (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -37,49 +42,21 @@ app.get('/products', (req, res) => {
     });
 });
 
-// POST endpoint to add a new product
-app.post('/products', (req, res) => {
-    const { name, price, image_path } = req.body;
-    db.run(`INSERT INTO products (name, price, image_path) VALUES (?, ?, ?)`, [name, price, image_path], function(err) {
+// POST endpoint to create a new order
+app.post('/orders', (req, res) => {
+    const { data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar } = req.body;
+    db.run(`INSERT INTO orders (data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
+    [data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar], 
+    function(err) {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
         }
-        res.status(201).json({ id: this.lastID, name, price, image_path });
+        res.status(201).json({ id_pedido: this.lastID, data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar });
     });
 });
-
-// api.js
-const createProduct = async (name, price, imagePath) => {
-    const response = await fetch("http://localhost:8000/products/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        price,
-        image_path: imagePath,
-      }),
-    });
-  
-    if (!response.ok) {
-      throw new Error("Failed to create product");
-    }
-  
-    const data = await response.json();
-    return data;
-  };
 
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-
-    //iniciando...
-    
-
 });
-
-
-
-//! npm install express sqlite3 body-parser cors
