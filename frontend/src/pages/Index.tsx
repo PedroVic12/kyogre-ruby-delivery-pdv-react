@@ -3,7 +3,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { Cart } from "@/components/Cart";
 import { categories, products } from "@/data/menuData";
 
-const Index = () => {
+export function  CardapioDigitalPage()  {
   const [activeCategory, setActiveCategory] = useState(categories[0].id);
 
   const filteredProducts = products.filter(
@@ -50,4 +50,3 @@ const Index = () => {
   );
 };
 
-export default Index;

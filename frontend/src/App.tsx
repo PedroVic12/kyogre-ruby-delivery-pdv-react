@@ -7,7 +7,9 @@ import { MenuPage } from './pages/MenuPage';
 import { DashboardPage } from './pages/DashboardPage';
 
 
-import  Index  from "./pages/Index";
+import  {CardapioDigitalPage}  from "./pages/Index";
+
+
 import CartPage from './pages/CartPage';
 import ProductDetail from './pages/ProductDetail';
 
@@ -26,10 +28,10 @@ export default function App() {
           <Route path="/cardapio" element={<MenuPage />} />
 
 
-        {/* Lovable DEV */}
-        <Route path="/cardapioDigital" element={<Index />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+          {/* Lovable DEV */}
+          <Route path="/cardapioDigital" element={<CardapioDigitalPage />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
 
 
 
