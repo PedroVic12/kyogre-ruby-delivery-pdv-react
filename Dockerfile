@@ -24,8 +24,9 @@ COPY . .
 # Gera o build da aplicação
 RUN npm run build
 
+
 # Expose port (using PORT environment variable from Render)
 EXPOSE $PORT
 
-# Start command usando npx para garantir que encontre o serve
-CMD ["sh", "-c", "npx serve -s dist -l $PORT"]
+# Start command usando npm
+CMD ["sh", "-c", "npm run serve -- -s dist -l $PORT"]
