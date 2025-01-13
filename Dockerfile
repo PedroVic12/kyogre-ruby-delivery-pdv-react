@@ -1,5 +1,4 @@
-# Estágio de build
-FROM node:18-alpine as build
+FROM node:18-alpine
 
 WORKDIR /app/frontend/kyogre_pdv_app
 
@@ -8,10 +7,11 @@ COPY package*.json ./
 COPY tailwind.config.js ./
 COPY postcss.config.js ./
 
-# Instala as dependências específicas primeiro
+# Instala as dependências
 RUN npm install @mui/material @emotion/react @emotion/styled lucide-react react-router-dom && \
     npm install -D tailwindcss postcss autoprefixer && \
-    npx tailwindcss init -p
+    npx tailwindcss init -p && \
+    npm install serve -g
 
 # Instala as demais dependências
 RUN npm install
@@ -22,14 +22,8 @@ COPY . .
 # Gera o build da aplicação
 RUN npm run build
 
-# Estágio de produção com nginx
-FROM nginx:alpine
+# Expõe a porta que o serve utilizará
+EXPOSE 3000
 
-# Copia os arquivos de build para o diretório do nginx
-COPY --from=build /app/frontend/kyogre_pdv_app/dist /usr/share/nginx/html
-
-# Expõe a porta 80
-EXPOSE 80
-
-# Inicia o nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Comando para iniciar a aplicação
+CMD ["npx", "serve", "-s", "dist", "-l", "3000"]
