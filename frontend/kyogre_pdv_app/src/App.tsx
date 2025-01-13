@@ -24,6 +24,8 @@ export default function App() {
       <CartProvider>
         <Routes>
           //!Rotas Admin Dashboard (Template 2)
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
           <Route
             path="/dashboard/*"
             element={
@@ -32,7 +34,6 @@ export default function App() {
                 <Header />
                 <div className="pt-16">
                   <Routes>
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="produtos" element={<MenuPage />} />
                     <Route path="clientes" element={<ClientsPage />} />
