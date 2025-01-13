@@ -1,9 +1,9 @@
-import React from 'react';
 
 const orders = [
   { id: 1, customer: 'João Silva', items: 3, total: 'R$ 89,90', status: 'Pendente' },
   { id: 2, customer: 'Maria Santos', items: 2, total: 'R$ 45,80', status: 'Em preparo' },
-  { id: 3, customer: 'Pedro Lima', items: 4, total: 'R$ 112,50', status: 'Em entrega' },
+  { id: 3, customer: 'Anakin Skywalker', items: 4, total: 'R$ 112,50', status: 'Em entrega' },
+  { id: 4, customer: 'Pedro Victor', items: 1, total: 'R$ 25,00', status: 'Entregue' },
 ];
 
 export function OrdersTable() {

@@ -5,7 +5,7 @@ import {
   Box,
   AppBar,
   Toolbar,
-  useTheme,
+  //useTheme,
 } from '@mui/material';
 
 
@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { MenuCard } from '../../components/cardapio/MenuCard';
 
 export const CardapioDigitalPage: React.FC = () => {
-  const theme = useTheme();
+  //const theme = useTheme();
   const navigate = useNavigate();
   const { items, total, itemCount, addToCart, removeFromCart, updateQuantity } = useCart();
   const [openCart, setOpenCart] = useState(false);
@@ -116,7 +116,6 @@ export const CardapioDigitalPage: React.FC = () => {
       </Container>
 
       <Cart
-        items={items}
         total={total}
         itemCount={itemCount}
         onViewCart={() => setOpenCart(true)}

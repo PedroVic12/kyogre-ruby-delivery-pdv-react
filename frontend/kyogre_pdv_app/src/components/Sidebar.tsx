@@ -1,4 +1,3 @@
-import React from 'react';
 import { Home, LayoutDashboard, Book, Users, UserPlus, Coffee, HeadphonesIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

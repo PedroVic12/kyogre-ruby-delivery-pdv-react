@@ -1,4 +1,3 @@
-import React from 'react';
 import { MenuCategory } from '../../components/menu/MenuCategory';
 import { AddProductModal } from '../../components/menu/AddProductModal';
 import { useMenuState } from '../../hooks/useMenuState';

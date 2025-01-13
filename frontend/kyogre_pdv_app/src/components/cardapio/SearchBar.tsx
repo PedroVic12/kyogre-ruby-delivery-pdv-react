@@ -1,5 +1,5 @@
 import  { useState, useEffect } from 'react';
-import { Paper, InputBase, IconButton, Box } from '@mui/material';
+import { Paper, InputBase, IconButton, } from '@mui/material';
 import { Search, X } from 'lucide-react';
 
 interface SearchBarProps {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { OrderCard } from './OrderCard';
 import { Order } from '../../types/order';
 import { ReactNode } from 'react';

@@ -1,5 +1,4 @@
-import React from 'react';
-import { BarChart, LineChart, Calendar } from 'lucide-react';
+import { BarChart, LineChart,  } from 'lucide-react';
 
 const mockData = {
   weekly: [

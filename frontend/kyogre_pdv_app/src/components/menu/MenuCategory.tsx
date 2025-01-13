@@ -1,9 +1,10 @@
-import React from 'react';
-import { Plus, Minus, MoreVertical, Edit, Trash } from 'lucide-react';
+import { Plus, Minus,  } from 'lucide-react';
 import { ProductCard } from './ProductCard';
 import { Category } from '../../types/menu';
 
-const categoryColors = {
+type CategoryName = 'Hamburguer' | 'Pizza' | 'Sucos' | 'Salgados';
+
+const categoryColors: Record<CategoryName, string> = {
   'Hamburguer': 'bg-blue-50 border-blue-200',
   'Pizza': 'bg-green-50 border-green-200',
   'Sucos': 'bg-yellow-50 border-yellow-200',
@@ -16,7 +17,7 @@ interface MenuCategoryProps {
 }
 
 export function MenuCategory({ category, onDeleteProduct }: MenuCategoryProps) {
-  const colorClass = categoryColors[category.name] || 'bg-gray-50 border-gray-200';
+  const colorClass = categoryColors[category.name as CategoryName] || 'bg-gray-50 border-gray-200';
 
   return (
     <div className={`rounded-xl shadow-sm overflow-hidden border ${colorClass}`}>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useOrderStack } from '../../hooks/useOrderStack';
 import { OrderColumn } from '../../components/dashboard/OrderColumn';
 import { ChevronRight } from 'lucide-react';

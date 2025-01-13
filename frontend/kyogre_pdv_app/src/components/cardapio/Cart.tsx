@@ -1,16 +1,15 @@
 import React from 'react';
 import { Box, Button, Typography, Badge } from '@mui/material';
 import { ShoppingCart } from 'lucide-react';
-import { CartItem } from '../types/CartItem';
+import { CartItem } from '../../types/CartItem';
 
 interface CartProps {
-  items: CartItem[];
   total: number;
   itemCount: number;
   onViewCart: () => void;
 }
 
-export const Cart: React.FC<CartProps> = ({ items, total, itemCount, onViewCart }) => {
+export const Cart: React.FC<CartProps> = ({ total, itemCount, onViewCart }) => {
   return (
     <Box
       sx={{

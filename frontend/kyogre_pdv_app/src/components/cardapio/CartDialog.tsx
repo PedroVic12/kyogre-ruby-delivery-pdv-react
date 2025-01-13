@@ -13,7 +13,7 @@ import {
   Box
 } from '@mui/material';
 import { Minus, Plus, Trash2 } from 'lucide-react';
-import { CartItem } from '../types/CartItem';
+import { CartItem } from '../../types/CartItem';
 
 interface CartDialogProps {
   open: boolean;
