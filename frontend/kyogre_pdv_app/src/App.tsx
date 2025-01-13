@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { MenuPage } from './pages/dashboard/MenuPage';
@@ -32,7 +32,8 @@ export default function App() {
                 <Header />
                 <div className="ml-64 pt-16">
                   <Routes>
-                    <Route path="/" element={<DashboardPage />} />
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="produtos" element={<MenuPage />} />
                     <Route path="clientes" element={<ClientsPage />} />
                     <Route path="pedidos" element={<OrdersPage />} />
