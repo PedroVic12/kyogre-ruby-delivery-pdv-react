@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Button, Typography, Badge } from '@mui/material';
 import { ShoppingCart } from 'lucide-react';
-import { CartItem } from '../../types/CartItem';
 
 interface CartProps {
   total: number;
