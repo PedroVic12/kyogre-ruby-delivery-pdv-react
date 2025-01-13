@@ -23,9 +23,10 @@ export default function App() {
     <Router>
       <CartProvider>
         <Routes>
-          //!Rotas Admin Dashboard (Template 2)
+
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
+          //!Rotas Admin Dashboard (Template 2)
           <Route
             path="/dashboard/*"
             element={
