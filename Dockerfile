@@ -12,7 +12,7 @@ RUN npm install @mui/material @emotion/react @emotion/styled lucide-react react-
     npm install -D tailwindcss postcss autoprefixer && \
     npx tailwindcss init -p
 
-# Instala o serve como dependência do projeto (não global)
+# Instala o serve como dependência do projeto
 RUN npm install serve
 
 # Instala as demais dependências
@@ -24,9 +24,8 @@ COPY . .
 # Gera o build da aplicação
 RUN npm run build
 
+# Expose port
+EXPOSE 3000
 
-# Expose port (using PORT environment variable from Render)
-EXPOSE $PORT
-
-# Start command usando npm
-CMD ["sh", "-c", "npm run serve -- -s dist -l $PORT"]
+# Start command
+CMD ["npm", "run", "dev"]
