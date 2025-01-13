@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18-alpine as BUILD_IMAGE
 
 WORKDIR /app/frontend/kyogre_pdv_app
 
@@ -6,6 +6,7 @@ WORKDIR /app/frontend/kyogre_pdv_app
 COPY package*.json ./
 COPY tailwind.config.js ./
 COPY postcss.config.js ./
+COPY vite.config.ts ./
 
 # Instala as dependências
 RUN npm install @mui/material @emotion/react @emotion/styled lucide-react react-router-dom && \
@@ -13,7 +14,7 @@ RUN npm install @mui/material @emotion/react @emotion/styled lucide-react react-
     npx tailwindcss init -p
 
 # Instala o serve como dependência do projeto
-RUN npm install serve
+#RUN npm install serve
 
 # Instala as demais dependências
 RUN npm install
@@ -28,5 +29,9 @@ RUN npm run build
 # Expose dynamic port
 EXPOSE $PORT
 
-# Use the environment variable PORT
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "$PORT"]
+RUN npm install typescript
+
+# Start command
+CMD ["npm", "run", "preview"]
+
+#CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "$PORT"]

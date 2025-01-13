@@ -8,4 +8,12 @@ export default defineConfig({
     host: '0.0.0.0', // Permite acesso pela rede
     port: 5173,      // Porta fixa
   },
+  build: {
+    outDir: 'dist',
+  },
+
+  preview: {
+    host: true,
+    port: 5173,
+  },
 })
