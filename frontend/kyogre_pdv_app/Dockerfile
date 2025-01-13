@@ -25,7 +25,8 @@ COPY . .
 RUN npm run build
 
 # Expose port
-EXPOSE 5173
+# Expose dynamic port
+EXPOSE $PORT
 
-# Start command
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# Use the environment variable PORT
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "$PORT"]
