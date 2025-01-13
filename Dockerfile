@@ -10,8 +10,10 @@ COPY postcss.config.js ./
 # Instala as dependências
 RUN npm install @mui/material @emotion/react @emotion/styled lucide-react react-router-dom && \
     npm install -D tailwindcss postcss autoprefixer && \
-    npx tailwindcss init -p && \
-    npm install serve -g
+    npx tailwindcss init -p
+
+# Instala o serve como dependência do projeto (não global)
+RUN npm install serve
 
 # Instala as demais dependências
 RUN npm install
@@ -22,10 +24,8 @@ COPY . .
 # Gera o build da aplicação
 RUN npm run build
 
-# Expõe a porta que o serve utilizará
-EXPOSE 3000
+# Expose port (using PORT environment variable from Render)
+EXPOSE $PORT
 
-# Comando para iniciar a aplicação
-CMD ["npm", "run", "dev"]
-
-#CMD ["npx", "serve", "-s", "dist", "-l", "3000"]
+# Start command usando npx para garantir que encontre o serve
+CMD ["sh", "-c", "npx serve -s dist -l $PORT"]
