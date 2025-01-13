@@ -16,7 +16,7 @@ export function Sidebar() {
     <div className="h-screen w-64 bg-purple-700 text-white p-4 fixed left-0 top-0">
       <div className="flex items-center gap-2 mb-8 p-2">
         <Coffee className="h-8 w-8" />
-        <h1 className="text-xl font-bold">Ruby Delivery</h1>
+        <h1 className="text-xl font-bold">Ruby Delivery PDV App v3</h1>
       </div>
 
       <nav className="space-y-2">

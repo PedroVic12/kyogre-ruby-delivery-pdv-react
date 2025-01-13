@@ -30,7 +30,7 @@ export default function App() {
               <div className="min-h-screen bg-gray-50">
                 <Sidebar />
                 <Header />
-                <div className="ml-64 pt-16">
+                <div className="pt-16">
                   <Routes>
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
                     <Route path="/dashboard" element={<DashboardPage />} />
