@@ -23,7 +23,7 @@ import { Header } from './components/Header';
 
 import './index.css';
 
-import TabelasMesasPage from './pages/app_garcom/mesasPage';
+import TabelasMesasPage from './pages/app_garcom/mesasPage' 
 
 export default function App() {
   return (
