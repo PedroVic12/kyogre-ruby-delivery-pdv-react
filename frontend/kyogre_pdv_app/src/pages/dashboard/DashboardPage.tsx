@@ -2,6 +2,8 @@ import { useOrderStack } from '../../hooks/useOrderStack';
 import { OrderColumn } from '../../components/dashboard/OrderColumn';
 import { ChevronRight } from 'lucide-react';
 
+import "../../index.css"
+
 export function DashboardPage() {
   const { 
     preparingOrders,
@@ -13,7 +15,7 @@ export function DashboardPage() {
   return (
     <div className="ml-64 pt-16 p-6">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Gerenciamento de Pedidos</h1>
-      
+      <div className="bg-red-500 text-white p-4">Teste de Tailwind</div>
       <div className="grid grid-cols-3 gap-6">
         <OrderColumn
           title="Pedidos sendo Preparados"
