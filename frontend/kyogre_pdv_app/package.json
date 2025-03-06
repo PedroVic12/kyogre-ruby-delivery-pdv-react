@@ -16,8 +16,10 @@
     "@mui/material": "^6.3.1",
     "ionic": "^5.4.16",
     "lucide-react": "^0.471.2",
+    "plotly.js": "^3.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-plotly.js": "^2.6.0",
     "react-router-dom": "^7.1.1",
     "serve": "^14.2.4"
   },
