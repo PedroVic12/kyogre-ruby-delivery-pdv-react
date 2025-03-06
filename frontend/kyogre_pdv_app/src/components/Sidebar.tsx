@@ -23,7 +23,13 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
       <div className="flex items-center gap-2 mb-8 p-2">
         <Coffee className="h-8 w-8" />
         <h1 className="text-xl font-bold">Ruby Delivery PDV App v4</h1>
-        <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
+     
+      </div>
+
+
+      <div className="flex items-center justify-center">
+              
+      <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
             <Plus className="h-5 w-5 text-black-600" />
           </button>
           <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
