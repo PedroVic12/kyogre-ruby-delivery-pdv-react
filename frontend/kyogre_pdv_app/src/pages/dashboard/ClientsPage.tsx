@@ -1,5 +1,4 @@
 // src/pages/dashboard/ClientsPage.tsx
-import React from 'react';
 import Graficos from '../../components/ui/Graficos';
 
 const mockData = {
