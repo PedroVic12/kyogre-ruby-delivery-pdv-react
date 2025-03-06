@@ -28,7 +28,7 @@ export default function App() {
           <Route
             path="/dashboard/*"
             element={
-              <div className="flex min-h-screen bg-gray-80">
+              <div className="flex min-h-screen bg-gray-120">
                 <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
                 <div className={`flex-1 transition-all ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
                   <Header 
@@ -41,9 +41,8 @@ export default function App() {
                       <Route path="produtos" element={<MenuPage />} />
                       <Route path="clientes" element={<ClientsPage />} />
                       <Route path="pedidos" element={<HomePage />} />
-                      <Route path="cadastro" element={<LoginPage />} />
                       <Route path="atendimento" element={<ChatPage />} />
-                      <Route path="garcom" element={<TabelasMesasPage />} />
+
                     </Routes>
                   </div>
                 </div>
@@ -51,7 +50,7 @@ export default function App() {
             }
           />
           
-          {/* Template 3 (Cardapio Digital) */}
+          {/*  Template 3 (Cardapio Digital) - APENAS TELAS FORA DO DASHBOARD */}
           <Route
             path="/*"
             element={
@@ -59,6 +58,9 @@ export default function App() {
                 <Routes>
                   <Route path="cardapio" element={<CardapioDigitalPage />} />
                   <Route path="product/:id" element={<ProductDetailsPage />} />
+                  <Route path="login" element={<LoginPage />} />
+                  <Route path="garcom" element={<TabelasMesasPage />} />
+
                 </Routes>
               </div>
             }

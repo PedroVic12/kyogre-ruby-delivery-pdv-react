@@ -11,8 +11,9 @@ export function LoginPage() {
     setIsLogin(true);
   };
 
-  return (
-    <div className="ml-64 pt-16 min-h-screen bg-gray-50 flex items-center justify-center">
+  return (    
+
+    <div className="ml-2 pt-16 min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="w-full max-w-md">
         {isLogin ? (
           <div className="bg-white p-8 rounded-xl shadow-sm">

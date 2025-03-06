@@ -1,4 +1,4 @@
-import { BarChart, LineChart,  } from 'lucide-react';
+import { BarChart, LineChart } from 'lucide-react';
 
 const mockData = {
   weekly: [
@@ -19,10 +19,11 @@ const mockData = {
 
 export function ClientsPage() {
   return (
-    <div className="ml-64 pt-16 p-6">
+    <div className="ml-2 pt-8 p-2">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Análise de Clientes</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Gráfico de Pedidos por Semana */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <BarChart className="h-5 w-5 text-purple-600" />
@@ -33,7 +34,7 @@ export function ClientsPage() {
               <div key={day.name} className="flex flex-col items-center gap-2">
                 <div 
                   className="w-12 bg-purple-600 rounded-t-lg transition-all hover:bg-purple-700"
-                  style={{ height: `${(day.orders / 30) * 100}%` }}
+                  style={{ height: `${(day.orders / 30) * 100}%` }} // Ajuste a altura com base no valor máximo
                 />
                 <span className="text-sm text-gray-600">{day.name}</span>
                 <span className="text-sm font-medium">{day.orders}</span>
@@ -42,6 +43,7 @@ export function ClientsPage() {
           </div>
         </div>
 
+        {/* Gráfico de Tendência Mensal */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <LineChart className="h-5 w-5 text-purple-600" />
@@ -52,7 +54,7 @@ export function ClientsPage() {
               <div key={month.name} className="flex flex-col items-center gap-2">
                 <div 
                   className="w-16 bg-green-500 rounded-t-lg transition-all hover:bg-green-600"
-                  style={{ height: `${(month.orders / 210) * 100}%` }}
+                  style={{ height: `${(month.orders / 210) * 100}%` }} // Ajuste a altura com base no valor máximo
                 />
                 <span className="text-sm text-gray-600">{month.name}</span>
                 <span className="text-sm font-medium">{month.orders}</span>

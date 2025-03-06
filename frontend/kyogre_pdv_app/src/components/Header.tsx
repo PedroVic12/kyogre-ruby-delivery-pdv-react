@@ -18,7 +18,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
             className="p-2 hover:bg-gray-100 rounded-full flex items-center justify-center"
             aria-label="Toggle sidebar"
           >
-            <Menu className="h-5 w-5 text-gray-600" />
+            <Menu className="h-5 w-5 text-gray900" />
           </button>
           <h2 className="text-xl font-semibold text-gray-900">Dashboard</h2>
         </div>

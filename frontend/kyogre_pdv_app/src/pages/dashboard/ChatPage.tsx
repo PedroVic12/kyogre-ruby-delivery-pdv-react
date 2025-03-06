@@ -36,7 +36,7 @@ export function ChatPage() {
   };
 
   return (
-    <div className="ml-64 pt-16 h-screen bg-gray-50">
+    <div className="pt-4 h-screen bg-gray-500">
       <div className="max-w-3xl mx-auto p-6 h-[calc(100vh-4rem)]">
         <div className="bg-white rounded-xl shadow-sm h-full flex flex-col">
           <div className="p-4 border-b">

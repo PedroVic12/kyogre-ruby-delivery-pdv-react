@@ -10,13 +10,13 @@ interface SidebarProps {
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const menuItems = [
     { icon: Home, label: 'Home', href: '/dashboard' },
-    { icon: LayoutDashboard, label: 'Produtos', href: '/dashboard/produtos' },
+    { icon: LayoutDashboard, label: 'Produtos Cardapio', href: '/dashboard/produtos' },
     { icon: Book, label: 'Cardápio Digital', href: '/cardapio' },
     { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
-    { icon: UserPlus, label: 'Cadastro', href: '/dashboard/cadastro' },
+    { icon: UserPlus, label: 'Cadastro', href: '/login' },
     { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
-    { icon: Users, label: 'App Garçom', href: '/dashboard/garcom' },
+    { icon: Users, label: 'App Garçom', href: '/garcom' },
   ];
   
   return (
