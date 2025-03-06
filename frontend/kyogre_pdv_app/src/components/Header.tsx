@@ -10,11 +10,11 @@ export function Header({ toggleSidebar }: HeaderProps) {
       <div className="h-full flex items-center justify-between px-6">
         <div className="flex items-center">
           <h2 className="text-xl font-semibold text-gray-900">Dashboard</h2>
-          <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
-            <Plus className="h-5 w-5 text-gray-600" />
+          <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-black-100 rounded-full">
+            <Plus className="h-5 w-5 text-black-600" />
           </button>
-          <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
-            <Minus className="h-5 w-5 text-gray-600" />
+          <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-black-100 rounded-full">
+            <Minus className="h-5 w-5 text-black-600" />
           </button>
         </div>
 
