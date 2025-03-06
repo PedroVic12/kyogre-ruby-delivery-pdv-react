@@ -9,10 +9,9 @@ COPY postcss.config.js ./
 COPY vite.config.ts ./
 
 # Instala as dependências
-RUN npm install @mui/material @emotion/react @emotion/styled lucide-react react-router-dom && \
+RUN npm install @mui/material @ionic/react @emotion/react @emotion/styled lucide-react react-router-dom && \
     npm install -D tailwindcss postcss autoprefixer && \
-    npx tailwindcss init -p @ionic/cli @ionic/react
-
+    npx tailwindcss init -p 
 # Instala o serve como dependência do projeto
 #RUN npm install serve
 

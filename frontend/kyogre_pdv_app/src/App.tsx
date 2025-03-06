@@ -16,7 +16,14 @@ import { CartProvider } from './contexts/CartContext';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 
+
+
+
+
+
 import './index.css';
+
+import TabelasMesasPage from './pages/app_garcom/mesasPage';
 
 export default function App() {
   return (
@@ -35,12 +42,15 @@ export default function App() {
                 <Header />
                 <div className="pt-16">
                   <Routes>
-                    <Route path="dashboard" element={<DashboardPage />} />
+                    <Route path="/" element={<DashboardPage />} />
                     <Route path="produtos" element={<MenuPage />} />
                     <Route path="clientes" element={<ClientsPage />} />
                     <Route path="pedidos" element={<OrdersPage />} />
                     <Route path="cadastro" element={<LoginPage />} />
                     <Route path="atendimento" element={<ChatPage />} />
+                    <Route path="cadastro" element={<LoginPage />} />
+                    <Route path="garcom" element={<TabelasMesasPage />} />
+
                   </Routes>
                 </div>
               </div>
@@ -55,6 +65,7 @@ export default function App() {
                 <Routes>
                   <Route path="cardapio" element={<CardapioDigitalPage />} />
                   <Route path="product/:id" element={<ProductDetailsPage />} />
+
                 </Routes>
               </div>
             }
