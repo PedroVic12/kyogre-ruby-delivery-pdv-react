@@ -6,7 +6,7 @@ interface SidebarProps {
   toggleSidebar: () => void;
 }
 
-export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
+export function Sidebar({ isOpen,  }: SidebarProps) {
   const menuItems = [
     { icon: Home, label: 'Home', href: '/dashboard' },
     { icon: LayoutDashboard, label: 'Produtos', href: '/dashboard/produtos' },
