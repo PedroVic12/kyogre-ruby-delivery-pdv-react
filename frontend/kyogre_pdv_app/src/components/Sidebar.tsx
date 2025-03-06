@@ -1,5 +1,6 @@
+// Sidebar.jsx
 import { Link } from 'react-router-dom';
-import { Home, LayoutDashboard, Book, Users, UserPlus, Coffee, HeadphonesIcon, Plus, Minus  } from 'lucide-react';
+import { Home, LayoutDashboard, Book, Users, UserPlus, Coffee, HeadphonesIcon, Menu } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -17,40 +18,42 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Users, label: 'App Garçom', href: '/dashboard/garcom' },
   ];
-
+  
   return (
-    <div className={`h-screen w-64 bg-purple-700 text-white p-4 fixed left-0 top-0 transition-transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-      <div className="flex items-center gap-2 mb-8 p-2">
-        <Coffee className="h-8 w-8" />
-        <h1 className="text-xl font-bold">Ruby Delivery PDV App v4</h1>
-     
-      </div>
-
-
-      <div className="flex items-center justify-center">
-              
-      <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
-            <Plus className="h-5 w-5 text-black-600" />
-          </button>
-          <button onClick={toggleSidebar} className="ml-2 p-2 hover:bg-gray-100 rounded-full">
-            <Minus className="h-5 w-5 text-black-600" />
-          </button>
-      </div>
-
-      {isOpen && (
-        <nav className="space-y-2">
+    <div 
+      className={`h-screen fixed left-0 top-0 z-30 bg-purple-700 text-white shadow-lg transition-all duration-300 ${
+        isOpen ? 'w-64' : 'w-0 overflow-hidden'
+      }`}
+    >
+      <div className="flex flex-col h-full">
+        <div className="flex items-center gap-2 p-4 mb-6">
+          <Coffee className="h-8 w-8" />
+          <h1 className="text-xl font-bold">Ruby Delivery PDV App v4</h1>
+        </div>
+        
+        <nav className="flex-1 px-3 space-y-1">
           {menuItems.map((item) => (
             <Link
               key={item.href}
               to={item.href}
               className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-600 transition-colors"
             >
-              <item.icon className="h-5 w-5" />
-              <span>{item.label}</span>
+              <item.icon className="h-5 w-5 flex-shrink-0" />
+              <span className="truncate">{item.label}</span>
             </Link>
           ))}
         </nav>
-      )}
+        
+        <div className="p-4 border-t border-purple-600">
+          <button 
+            onClick={toggleSidebar}
+            className="w-full p-2 flex items-center justify-center bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors"
+          >
+            <Menu className="h-5 w-5" />
+            <span className="ml-2">Fechar Menu</span>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ export function MenuPage() {
   } = useMenuState();
 
   return (
-    <div className="ml-64 pt-16 p-6">
+    <div className="ml-2 pt-8 p-2">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Gerenciar Cardápio</h1>
         <button

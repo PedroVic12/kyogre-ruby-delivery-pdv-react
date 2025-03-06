@@ -96,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({ searchTerm, setSearchTerm }) => (
         <Menu className="h-6 w-6" />
         <h1 className="text-xl font-semibold">Mapa de mesas</h1>
       </div>
-      <div className="relative">
+      <div >
         <input
           type="text"
           placeholder="Buscar..."
