@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 
 // Definindo a interface para o pedido
 interface Order {

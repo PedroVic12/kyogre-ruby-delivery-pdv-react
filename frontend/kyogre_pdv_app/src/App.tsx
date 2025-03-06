@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { MenuPage } from './pages/dashboard/MenuPage';
@@ -26,6 +27,7 @@ import './index.css';
 import TabelasMesasPage from './pages/app_garcom/mesasPage' 
 
 export default function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Estado para controlar a visibilidade do Sidebar
   return (
     <Router>
       <CartProvider>
@@ -38,8 +40,9 @@ export default function App() {
             path="/dashboard/*"
             element={
               <div className="min-h-screen bg-gray-50">
-                <Sidebar />
-                <Header />
+              <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+              <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />           
+                
                 <div className="pt-16">
                   <Routes>
                     <Route path="/" element={<DashboardPage />} />
