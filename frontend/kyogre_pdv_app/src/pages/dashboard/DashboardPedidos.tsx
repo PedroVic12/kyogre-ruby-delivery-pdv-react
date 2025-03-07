@@ -147,20 +147,27 @@ interface NewOrderDialogProps {
     onAccept: () => void;
 }
 
+// Modificar o componente NewOrderDialog para mostrar quantos pedidos novos existem
 function NewOrderDialog({ isOpen, onClose, onAccept }: NewOrderDialogProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-6 rounded-md shadow-lg">
-                <h2 className="text-lg font-semibold mb-4">Novo Pedido Recebido!</h2>
-                <p className="mb-4">Um novo pedido chegou. Deseja aceitá-lo e colocá-lo em preparo?</p>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
+                <h2 className="text-lg font-semibold mb-4">Novos Pedidos Recebidos!</h2>
+                <p className="mb-4">Você tem novos pedidos aguardando aceitação. Deseja aceitá-los e colocá-los em preparo?</p>
                 <div className="flex justify-end gap-4">
-                    <button onClick={onClose} className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">
-                        Fechar
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+                    >
+                        Depois
                     </button>
-                    <button onClick={onAccept} className="px-4 py-2 bg-indigo-500 text-white hover:bg-indigo-600 rounded-md">
-                        Aceitar Pedido
+                    <button
+                        onClick={onAccept}
+                        className="px-4 py-2 bg-green-500 text-white hover:bg-green-600 rounded-md"
+                    >
+                        Aceitar Pedidos
                     </button>
                 </div>
             </div>
@@ -175,11 +182,13 @@ export function DashboardPedidosPage() {
     const [pedidosCozinha, setPedidosCozinha] = useState<Order[]>([]);
     const [pedidosEntrega, setPedidosEntrega] = useState<Order[]>([]);
     const [pedidosFinalizados, setPedidosFinalizados] = useState<Order[]>([]);
+    const [pedidosPendentes, setPedidosPendentes] = useState<Order[]>([]); // Novos pedidos que ainda não foram aceitos
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [newOrdersCount, setNewOrdersCount] = useState(0);
+    const [, setNewOrdersCount] = useState(0);
     const [isNewOrderDialogOpen, setIsNewOrderDialogOpen] = useState(false);
     const [lastOrdersLength, setLastOrdersLength] = useState(0);
+    const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
 
     const API_ENDPOINT = 'http://localhost:8000/pedidos/'; // Rota da sua API para buscar pedidos
 
@@ -196,21 +205,11 @@ export function DashboardPedidosPage() {
                 throw new Error(`Erro ao buscar pedidos: ${response.status} - ${response.statusText}`);
             }
 
-            // Problema: você está chamando response.json() duas vezes
-            // A primeira chamada consome o corpo da resposta e retorna uma Promise
-            // A segunda chamada não tem mais o que consumir
-
-            // Remova este console.log ou modifique-o:
-            // console.log(response.status);
-            // console.log(response.json()); // Isso consome o corpo da resposta!
-
-            // Em vez disso, faça:
             const responseText = await response.text();
             console.log("Resposta bruta da API:", responseText);
 
             let data: Order[] = [];
             try {
-                // Tente fazer o parse do JSON
                 data = JSON.parse(responseText);
                 console.log("Dados parseados com sucesso:", data);
             } catch (parseError) {
@@ -218,17 +217,34 @@ export function DashboardPedidosPage() {
                 throw new Error(`Resposta inválida da API: ${responseText}`);
             }
 
-            // Verificar se há novos pedidos comparando o tamanho da lista
-            console.log("Quantidade de pedidos recebidos:", data.length);
-            console.log("Quantidade anterior de pedidos:", lastOrdersLength);
+            // Verificar se há novos pedidos
+            if (data.length > lastOrdersLength) {
+                // Encontrar os novos pedidos (aqueles que não estavam na lista anterior)
+                const novos = data.filter(pedido => {
+                    // Verifica se este pedido não está em nenhuma das listas existentes
+                    const emProcesso = pedidosEmProcesso.some(p => p.id === pedido.id);
+                    const emCozinha = pedidosCozinha.some(p => p.id === pedido.id);
+                    const emEntrega = pedidosEntrega.some(p => p.id === pedido.id);
+                    const emFinalizado = pedidosFinalizados.some(p => p.id === pedido.id);
+                    const emPendentes = pedidosPendentes.some(p => p.id === pedido.id);
 
-            if (data.length > lastOrdersLength && lastOrdersLength !== 0) {
-                setNewOrdersCount(data.length - lastOrdersLength);
-                setIsNewOrderDialogOpen(true); // Abre o dialog de novo pedido
+                    return !emProcesso && !emCozinha && !emEntrega && !emFinalizado && !emPendentes;
+                });
+
+                if (novos.length > 0) {
+                    console.log("Novos pedidos encontrados:", novos.length);
+                    setNewOrdersCount(novos.length);
+                    setNovosPedidos(novos);
+                    setIsNewOrderDialogOpen(true);
+
+                    // Adicionar à lista de pendentes
+                    setPedidosPendentes(prev => [...prev, ...novos]);
+                }
             }
-            setLastOrdersLength(data.length); // Atualiza o tamanho da lista anterior
 
-            // Processar e separar os pedidos por status
+            setLastOrdersLength(data.length);
+
+            // Processar e separar os pedidos por status (excluindo os pendentes)
             console.log("Separando pedidos por status...");
             const processando = data.filter(order => order.status === 'Em Processo');
             const cozinha = data.filter(order => order.status === 'Cozinha');
@@ -253,27 +269,47 @@ export function DashboardPedidosPage() {
         }
     };
 
-
-    const handleAcceptNewOrder = () => {
+    const handleAcceptNewOrder = async () => {
         setIsNewOrderDialogOpen(false);
+
+        // Para cada novo pedido, atualize o status para "Em Processo"
+        for (const pedido of novosPedidos) {
+            try {
+                const UPDATE_API_ENDPOINT = `http://localhost:8000/pedidos/${pedido.id}`;
+                const response = await fetch(UPDATE_API_ENDPOINT, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ...pedido,
+                        status: 'Em Processo'
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao aceitar pedido ${pedido.id}`);
+                }
+
+                console.log(`Pedido ${pedido.id} aceito com sucesso!`);
+            } catch (error) {
+                console.error(`Erro ao aceitar pedido:`, error);
+            }
+        }
+
+        // Limpar a lista de novos pedidos
+        setNovosPedidos([]);
         setNewOrdersCount(0);
-        // Aqui você pode adicionar lógica adicional ao aceitar um novo pedido, se necessário.
+
+        // Atualizar a lista de pedidos
+        fetchOrders();
     };
 
     const handleCloseNewOrderDialog = () => {
         setIsNewOrderDialogOpen(false);
-        setNewOrdersCount(0);
+        // Não limpa os novos pedidos, apenas fecha o diálogo
     };
 
-
-    const getNextStatus = (currentStatus: string) => {
-        switch (currentStatus) {
-            case 'Em Processo': return 'Cozinha';
-            case 'Cozinha': return 'Entrega';
-            case 'Entrega': return 'Finalizado';
-            default: return currentStatus; // Ou defina um status padrão ou tratamento de erro
-        }
-    };
 
 
     // Função para avançar o status do pedido (simulada - você precisa implementar no backend)

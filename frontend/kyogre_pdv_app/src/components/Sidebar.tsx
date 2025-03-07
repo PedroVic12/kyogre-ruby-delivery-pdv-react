@@ -15,8 +15,8 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
     { icon: Users, label: 'Kanban', href: '/dashboard/kanban' },
-    // { icon: UserPlus, label: 'Cadastro', href: '/login' },
-    // { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
+    { icon: UserPlus, label: 'Cadastro', href: '/login' },
+    { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Users, label: 'App Garçom', href: '/garcom' },
 
   ];
