@@ -48,7 +48,7 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
     }
 
     return (
-        <div className="bg-gray-50 rounded-md p-4 shadow-sm border relative">
+        <div className="bg-gray-400 rounded-md p-4 shadow-sm border relative">
             {/* Cabeçalho do Card - Sempre visível */}
             <div
                 className="flex justify-between items-center cursor-pointer"
@@ -129,7 +129,7 @@ interface OrderColumnProps {
 
 function OrderColumn({ title, orders, color, onAdvance, buttonIcon }: OrderColumnProps) {
     return (
-        <div className={`w-72 p-4 rounded-md bg-gray-100 flex flex-col items-start border-t-4 ${color}`}>
+        <div className={`w-72 p-4 rounded-md bg-gray-200 flex flex-col items-start border-t-4 ${color}`}>
             <h2 className="text-xl font-semibold mb-2">{title} - ({orders.length})</h2>
             <div className="w-full space-y-3">
                 {orders.map((order) => (
@@ -372,7 +372,7 @@ export function DashboardPedidosPage() {
                 <OrderColumn
                     title="Em Processo"
                     orders={pedidosEmProcesso}
-                    color="border-blue-500"
+                    color="border-blue-500 bg-blue-100"
                     onAdvance={advanceOrder}
                     buttonIcon={<ChevronRight />}
                 />
