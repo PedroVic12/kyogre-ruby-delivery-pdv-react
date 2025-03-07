@@ -29,5 +29,67 @@
             "data": "07/03/2025",
             "hora": " 15:34:03"
         }
+    },
+    {
+        "id": 2,
+        "nome_cliente": "Pedro",
+        "telefone": "5521999289987",
+        "endereco": "Campo grande",
+        "complemento": "Sem Complemento.",
+        "forma_pagamento": "Dinheiro",
+        "status": "pendente",
+        "total_pagar": 126.0,
+        "carrinho": [
+            {
+                "quantidade": 1,
+                "nome": "Americano",
+                "preco": 24.0
+            },
+            {
+                "quantidade": 1,
+                "nome": "Bauru",
+                "preco": 42.0
+            },
+            {
+                "quantidade": 2,
+                "nome": "Fil\u00e9 de Carne",
+                "preco": 30.0
+            }
+        ],
+        "data_pedido": {
+            "data": "07/03/2025",
+            "hora": "15:59:16"
+        }
+    },
+    {
+        "id": 3,
+        "nome_cliente": "Pedro",
+        "telefone": "5521999289987",
+        "endereco": "Campo grande",
+        "complemento": "Sem Complemento.",
+        "forma_pagamento": "Dinheiro",
+        "status": "Em Processo",
+        "total_pagar": 126.0,
+        "carrinho": [
+            {
+                "quantidade": 1,
+                "nome": "Americano",
+                "preco": 24.0
+            },
+            {
+                "quantidade": 1,
+                "nome": "Bauru",
+                "preco": 42.0
+            },
+            {
+                "quantidade": 2,
+                "nome": "Fil\u00e9 de Carne",
+                "preco": 30.0
+            }
+        ],
+        "data_pedido": {
+            "data": "07/03/2025",
+            "hora": " 16:01:31"
+        }
     }
 ]

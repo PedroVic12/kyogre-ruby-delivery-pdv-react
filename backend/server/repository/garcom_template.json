@@ -1,0 +1,28 @@
+{
+    "id": 7830,
+    "nome_cliente": "Pedro",
+    "forma_pagamento": "Dinheiro",
+    "status": "Em Processo",
+    "total_pagar": 126,
+    "data_pedido": {
+        "data": "04/09/2024",
+        "hora": " 14:11:18"
+    },
+    "carrinho": [
+        {
+            "quantidade": 1,
+            "nome": "Americano",
+            "preco": 24
+        },
+        {
+            "quantidade": 1,
+            "nome": "Bauru",
+            "preco": 42
+        },
+        {
+            "quantidade": 2,
+            "nome": "Filé de Carne",
+            "preco": 30
+        }
+    ]
+}

@@ -3,3 +3,7 @@ uvicorn
 sqlalchemy
 pydantic
 dotenv
+jwt
+smtplib
+python-multipart
+supabase
