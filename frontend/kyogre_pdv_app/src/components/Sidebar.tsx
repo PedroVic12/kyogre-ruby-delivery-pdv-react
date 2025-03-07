@@ -14,23 +14,24 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: Book, label: 'Cardápio Digital', href: '/cardapio' },
     { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
-    { icon: UserPlus, label: 'Cadastro', href: '/login' },
-    { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
+    { icon: Users, label: 'Kanban', href: '/dashboard/kanban' },
+    // { icon: UserPlus, label: 'Cadastro', href: '/login' },
+    // { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Users, label: 'App Garçom', href: '/garcom' },
+
   ];
-  
+
   return (
-    <div 
-      className={`h-screen fixed left-0 top-0 z-30 bg-purple-700 text-white shadow-lg transition-all duration-300 ${
-        isOpen ? 'w-64' : 'w-0 overflow-hidden'
-      }`}
+    <div
+      className={`h-screen fixed left-0 top-0 z-30 bg-purple-700 text-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 overflow-hidden'
+        }`}
     >
       <div className="flex flex-col h-full">
-        <div className="flex items-center gap-2 p-4 mb-6">
+        <div className="flex items-center gap-2 p-4 mb-2">
           <Coffee className="h-8 w-8" />
           <h1 className="text-xl font-bold">Ruby Delivery PDV App v4</h1>
         </div>
-        
+
         <nav className="flex-1 px-3 space-y-1">
           {menuItems.map((item) => (
             <Link
@@ -43,9 +44,9 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             </Link>
           ))}
         </nav>
-        
+
         <div className="p-4 border-t border-purple-600">
-          <button 
+          <button
             onClick={toggleSidebar}
             className="w-full p-2 flex items-center justify-center bg-purple-600 hover:bg-purple-500 rounded-lg transition-colors"
           >

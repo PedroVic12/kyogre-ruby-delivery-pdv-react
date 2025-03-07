@@ -14,27 +14,34 @@ import { Header } from './components/Header';
 import './index.css';
 import TabelasMesasPage from './pages/app_garcom/mesasPage';
 import { HomePage } from './pages/dashboard/HomePage';
+import { DashboardPedidosPage } from './pages/dashboard/DashboardPedidos';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  
+
   return (
     <Router>
       <CartProvider>
         <Routes>
           <Route path="/" element={<Navigate to="dashboard" replace />} />
-          
+
           {/* Rotas Admin Dashboard (Template 2) */}
           <Route
             path="/dashboard/*"
             element={
               <div className="flex min-h-screen bg-gray-120">
+
+                {/* Sidebar */}
                 <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
                 <div className={`flex-1 transition-all ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
-                  <Header 
-                    toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} 
+
+                  {/* Header */}
+                  <Header
+                    toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
                     isSidebarOpen={isSidebarOpen}
                   />
+
+                  {/* Rotas Admin Dashboard (Template 2) */}
                   <div className="p-6 pt-16">
                     <Routes>
                       <Route path="/" element={<DashboardPage />} />
@@ -42,6 +49,7 @@ export default function App() {
                       <Route path="clientes" element={<ClientsPage />} />
                       <Route path="pedidos" element={<HomePage />} />
                       <Route path="atendimento" element={<ChatPage />} />
+                      <Route path="kanban" element={<DashboardPedidosPage />} />
 
                     </Routes>
                   </div>
@@ -49,7 +57,7 @@ export default function App() {
               </div>
             }
           />
-          
+
           {/*  Template 3 (Cardapio Digital) - APENAS TELAS FORA DO DASHBOARD */}
           <Route
             path="/*"
