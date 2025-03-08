@@ -76,7 +76,7 @@ EXPOSE 8000
 EXPOSE 5173
 
 # Command to run both FastAPI backend and Vite frontend simultaneously
-CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & cd /app/frontend && npm run preview -- --host 0.0.0.0 --port 5173"
+CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & cd /app/frontend && npm install && npm run preview -- --host 0.0.0.0 --port 5173"
 
 
 #! como usar

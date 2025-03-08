@@ -1,5 +1,6 @@
 # Kyogre Ruby Delivery
 
+
 ## Overview
 Kyogre Ruby Delivery is a web application designed for managing a digital menu for food delivery services. It allows users to create, update, and manage products and categories, providing a seamless experience for both restaurant owners and customers.
 
