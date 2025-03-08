@@ -45,22 +45,6 @@ try:
     read_all_result = items_crud.read_all()
     print("\nResultado READ ALL:", read_all_result)
 
-    # Exemplo de READ BY ID (supondo que um ID exista, ex: ID 1)
-    # *** IMPORTANTE: Verifique se o ID '1' realmente existe na sua tabela 'items'
-    # *** após inserir os dados. Se não existir, READ BY ID(1) pode não retornar nada ou dar erro.
-    record_id_para_ler = 1
-    read_by_id_result = items_crud.read_by_id(record_id_para_ler)
-    print(f"\nResultado READ BY ID ({record_id_para_ler}):", read_by_id_result)
-
-    # Exemplo de UPDATE (supondo que um ID exista, ex: ID 1)
-    # *** Adapte os campos e valores para atualização conforme necessário
-    record_id_para_atualizar = 1
-    atualizacoes = {
-        'preco': 25.00,                   # Atualizando o preço
-        'descricao': 'Hamburguer muito saboroso!' # Atualizando a descrição
-    }
-    update_result = items_crud.update(record_id_para_atualizar, atualizacoes)
-    print(f"\nResultado UPDATE ({record_id_para_atualizar}):", update_result)
 
     # Exemplo de DELETE (supondo que um ID exista, ex: ID 1 - tenha cuidado ao deletar registros!)
     # *** TENHA CERTEZA de que você quer deletar o registro com ID '1' antes de executar

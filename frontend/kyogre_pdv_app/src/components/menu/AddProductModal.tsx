@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { Switch } from '../ui/Switch';
+import BotaoLoaderMUI from '../BotaoLoaderMUI';
+import { purple } from '@mui/material/colors';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -8,22 +10,60 @@ interface AddProductModalProps {
   onAdd: (product: any) => void;
 }
 
-export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps) {
+export function AddProductModal({ isOpen, onClose, }: AddProductModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     description: '',
     category: '',
     isAvailable: true,
-    imageUrl: '',
+    imageUrl: 'https://picsum.photos/200/300',
   });
+  const [isLoading,] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd(formData);
-    onClose();
+
+    const novoProduto = {
+      nome_produto: formData.name, // Use 'nome_produto' to match your backend Pydantic model
+      preco: parseFloat(formData.price), // Convert price to a number (float)
+      categoria: formData.category,   // Use 'categoria' to match your backend Pydantic model
+      url_imagem: formData.imageUrl, // Use 'url_imagem'
+      descricao: formData.description, // Use 'descricao'
+      disponivel: formData.isAvailable, // Use 'disponivel'
+    };
+
+    try {
+      const response = await fetch('http://localhost:8000/api/produtos/', { // Your FastAPI endpoint
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(novoProduto),
+      });
+
+      if (!response.ok) {
+        // Handle error responses (including 422)
+        const errorData = await response.json(); // Get detailed error from API
+        console.error("Erro ao criar produto:", errorData); // Log detailed error to console
+        alert(`Erro ao criar produto: ${errorData.detail || 'Erro desconhecido'}`); // Show user-friendly error
+        return; // Stop processing if there was an error
+      }
+
+      // If response is ok (product created successfully)
+      const data = await response.json();
+      console.log("Produto criado com sucesso!", data);
+      alert("Produto criado com sucesso!"); // Show success message
+      onClose(); // Close the modal on success
+      // Optionally: Update product list on the page here if needed
+
+    } catch (error) {
+      // Handle network errors or exceptions during fetch
+      console.error("Erro de requisição:", error);
+      alert("Erro de requisição ao servidor."); // Generic request error message
+    }
   };
 
   return (
@@ -87,7 +127,8 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
             </label>
             <input
               type="url"
-              value={formData.imageUrl}
+              //value={formData.imageUrl}
+              value="https://picsum.photos/200/300"
               onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
               className="w-full px-3 py-2 border rounded-lg focus:ring-purple-500 focus:border-purple-500"
             />
@@ -118,15 +159,30 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
               type="button"
               onClick={onClose}
               className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+              disabled={isLoading}
             >
               Cancelar
             </button>
-            <button
+            <BotaoLoaderMUI
+              isLoading={isLoading}
+                onClick={() => {}}
+              text="Adicionar"
+              loadingText="Adicionando..."
+              variant="contained"
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 rounded-lg"
-            >
-              Adicionar
-            </button>
+              size="small"
+              sx={{ 
+                bgcolor: purple[600], 
+                '&:hover': { 
+                  bgcolor: purple[700] 
+                },
+                borderRadius: '0.5rem',
+                fontSize: '0.875rem',
+                fontWeight: 500,
+                py: '0.5rem',
+                px: '1rem'
+              }}
+            />
           </div>
         </form>
       </div>

@@ -6,6 +6,8 @@ import CreateItem from "./pages/items/CreateItem";
 import ShowItem from "./pages/items/ShowItem";
 import UpdateItem from "./pages/items/UpdateItem";
 
+import { Button,  IconButton } from '@mui/material';
+
 export default function ControleEstoquePage() {
   const [currentPage, setCurrentPage] = useState("home");
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -34,8 +36,8 @@ export default function ControleEstoquePage() {
       backgroundColor: '#2c2c2d'
     },
     estoqueTitle: {
-      fontSize: '3rem',
-      fontWeight: '300',
+      fontSize: '1.5rem',
+      fontWeight: '900',
       margin: '1rem 0'
     },
     estoqueNav: {
@@ -43,13 +45,9 @@ export default function ControleEstoquePage() {
     },
     estoqueNavLink: {
       display: 'inline-block',
-      color: '#fefefe',
       padding: '1rem',
-      textDecoration: 'none',
-      backgroundColor: 'transparent',
-      border: 'none',
       cursor: 'pointer',
-      fontSize: '1rem',
+      fontSize: '1.2rem',
       transition: 'background-color 0.2s'
     },
     estoqueNavLinkHover: {
@@ -415,7 +413,7 @@ export default function ControleEstoquePage() {
         <header style={styles.estoqueHeader} className="estoque-module-header">
           <h1 style={styles.estoqueTitle} className="estoque-module-title">Controle Estoque - REACT 2025 </h1>
           <nav style={styles.estoqueNav} className="estoque-module-nav">
-            <button 
+            <Button 
               style={{
                 ...styles.estoqueNavLink,
                 ...(hoveredButton === 'home' ? styles.estoqueNavLinkHover : {})
@@ -426,8 +424,8 @@ export default function ControleEstoquePage() {
               onMouseLeave={() => setHoveredButton(null)}
             >
               Início
-            </button>
-            <button 
+            </Button>
+            <Button 
               style={{
                 ...styles.estoqueNavLink,
                 ...(hoveredButton === 'items' ? styles.estoqueNavLinkHover : {})
@@ -438,8 +436,8 @@ export default function ControleEstoquePage() {
               onMouseLeave={() => setHoveredButton(null)}
             >
               Itens
-            </button>
-            <button 
+            </Button>
+            <Button 
               style={{
                 ...styles.estoqueNavLink,
                 ...(hoveredButton === 'new' ? styles.estoqueNavLinkHover : {})
@@ -450,7 +448,7 @@ export default function ControleEstoquePage() {
               onMouseLeave={() => setHoveredButton(null)}
             >
               Novo Item
-            </button>
+            </Button>
           </nav>
         </header>
         <main style={styles.estoqueMain} className="estoque-module-main">

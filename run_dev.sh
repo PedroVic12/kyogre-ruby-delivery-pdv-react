@@ -7,10 +7,17 @@ npm run dev & # Inicia o servidor de desenvolvimento do Vite em background
 
 echo "Iniciando o Backend (FastAPI com Uvicorn)..."
 cd ../../backend/server
-pip install -r requirements.txt # Garante que as dependências do backend estão instaladas
+pip install -r requirements.txt --break-system-packages # Garante que as dependências do backend estão instaladas
+
+
+clear
+
 uvicorn main:app --reload --host 0.0.0.0 --port 8000 & # Inicia o backend FastAPI em background com hot-reload
 
 echo "Aguardando 5 segundos para os servidores iniciarem..."
+
+
+
 sleep 3 # Espera um pouco para os servidores subirem
 
 echo "Servidores iniciados!"

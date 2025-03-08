@@ -2,6 +2,8 @@ import { useRef, useState } from "react"
 import { PropTypes } from "prop-types"
 import StockItem, { CATEGORIES } from "../entities/StockItem"
 import useStock from "../hooks/useStock"
+import BotaoLoaderMUI from "../../../../src/components/BotaoLoaderMUI"
+import { Box, Alert, Collapse } from "@mui/material"
 
 ItemForm.propTypes = {
     itemToUpdate: PropTypes.object,
@@ -20,6 +22,8 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
     const [item, setItem] = useState(itemToUpdate ? itemToUpdate : defaultItem)
     const { addItem, updateItem } = useStock()
     const inputRef = useRef(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [feedback, setFeedback] = useState({ message: "", type: "" }) // type pode ser "success" ou "error"
 
     const handleChange = (ev) => {
         setItem(currentState => {
@@ -30,35 +34,76 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
         })
     }
 
-    const handleSubmit = (ev) => {
+    const handleSubmit = async (ev) => {
         ev.preventDefault()
+        setIsLoading(true)
+        setFeedback({ message: "", type: "" })
+        
+        console.log("Iniciando submissão do formulário...")
+        console.log("Dados do item:", item)
 
         try {
             if (itemToUpdate) {
+                console.log("Atualizando item existente com ID:", itemToUpdate.id)
                 updateItem(itemToUpdate.id, item)
-                alert("Item atualizado com sucesso!")
+                setFeedback({ 
+                    message: "Item atualizado com sucesso!", 
+                    type: "success" 
+                })
+                console.log("Item atualizado com sucesso!")
+                
                 if (onSubmitSuccess) {
-                    onSubmitSuccess()
+                    // Pequeno delay para mostrar a mensagem de sucesso antes de redirecionar
+                    setTimeout(() => {
+                        onSubmitSuccess()
+                    }, 1500)
                 }
             } else {
+                console.log("Criando novo item...")
                 const validItem = new StockItem(item)
                 addItem(validItem)
                 setItem(defaultItem)
-                alert("Item cadastrado com sucesso")
+                setFeedback({ 
+                    message: "Item cadastrado com sucesso", 
+                    type: "success" 
+                })
+                console.log("Novo item criado com sucesso! ID:", validItem.id)
+                
                 if (onSubmitSuccess) {
-                    onSubmitSuccess()
+                    // Pequeno delay para mostrar a mensagem de sucesso antes de redirecionar
+                    setTimeout(() => {
+                        onSubmitSuccess()
+                    }, 1500)
                 }
             }
         } catch (error) {
-            console.log(error.message)
-            alert("Erro: " + error.message)
+            console.error("Erro ao processar o item:", error.message)
+            setFeedback({ 
+                message: "Erro: " + error.message, 
+                type: "error" 
+            })
         } finally {
-            inputRef.current.focus()
+            // Simular um pequeno delay para mostrar o loading
+            setTimeout(() => {
+                setIsLoading(false)
+                inputRef.current.focus()
+            }, 800)
         }
     }
 
     return (
         <form onSubmit={handleSubmit}>
+            <Collapse in={feedback.message !== ""}>
+                <Box sx={{ mb: 2 }}>
+                    <Alert 
+                        severity={feedback.type === "success" ? "success" : "error"}
+                        onClose={() => setFeedback({ message: "", type: "" })}
+                    >
+                        {feedback.message}
+                    </Alert>
+                </Box>
+            </Collapse>
+            
             <div className="row">
                 <div>
                     <label htmlFor="name">Nome</label>
@@ -79,8 +124,7 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
                         name="quantity"
                         id="quantity"
                         required
-                        min={0}
-                        step={1}
+                        min={1}
                         value={item.quantity}
                         onChange={handleChange}
                     />
@@ -92,7 +136,7 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
                         name="price"
                         id="price"
                         required
-                        min={0.00}
+                        min={0}
                         step={0.01}
                         value={item.price}
                         onChange={handleChange}
@@ -107,20 +151,19 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
                         value={item.category}
                         onChange={handleChange}
                     >
-                        <option disabled value="">Selecione uma categoria...</option>
+                        <option value="">Selecione uma categoria</option>
                         {CATEGORIES.map((category) => (
-                        <option
-                            key={category}
-                            value={category}
-                            defaultChecked={item.category === category}
-                        >
-                            {category}
-                        </option>
+                            <option
+                                key={category}
+                                value={category}
+                            >
+                                {category}
+                            </option>
                         ))}
                     </select>
                 </div>
             </div>
-            <div className="form-control">
+            <div>
                 <label htmlFor="description">Descrição</label>
                 <textarea
                     name="description"
@@ -129,11 +172,20 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
                     rows={6}
                     value={item.description}
                     onChange={handleChange}
-                ></textarea>
+                />
             </div>
-            <button className="button is-primary is-large">
-                Salvar
-            </button>
+            <Box sx={{ mt: 2 }}>
+                <BotaoLoaderMUI
+                    isLoading={isLoading}
+                    onClick={() => {}}
+                    text={itemToUpdate ? "Atualizar" : "Salvar"}
+                    loadingText="Processando..."
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    type="submit"
+                />
+            </Box>
         </form>
     )
 }

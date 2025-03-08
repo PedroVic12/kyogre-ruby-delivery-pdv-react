@@ -51,10 +51,9 @@ class SupabaseCRUD:
         """
         try:
             response = self.supabase.table(self.table_name).insert(data).execute()
-            if response.error:
-                return {"error": response.error}
-            else:
-                return {"data": response.data, "message": "Registro criado com sucesso!"}
+    
+            return {"data": response.data, "message": "Registro criado com sucesso!"} # MANTIDO - ajustado o retorno para sempre ter message
+
         except Exception as e:
             return {"error": str(e)}
 
@@ -67,10 +66,8 @@ class SupabaseCRUD:
         """
         try:
             response = self.supabase.table(self.table_name).select("*").execute()
-            if response.error:
-                return {"error": response.error}
-            else:
-                return {"data": response.data}
+    
+            return {"data": response.data}
         except Exception as e:
             return {"error": str(e)}
 
@@ -128,13 +125,11 @@ class SupabaseCRUD:
         """
         try:
             response = self.supabase.table(self.table_name).delete().eq("id", record_id).execute()
-            if response.error:
-                return {"error": response.error}
-            else:
-                return {"message": f"Registro com ID {record_id} deletado com sucesso!"}
+            return {"message": f"Registro com ID {record_id} deletado com sucesso!"}
         except Exception as e:
             return {"error": str(e)}
 
+tabelas_array = ["cardapio","pedidos","produtos","usuarios"]
 
 
 router = APIRouter()
@@ -142,7 +137,7 @@ router = APIRouter()
 # *** Dependência para criar uma instância de SupabaseCRUD para 'produtos' ***
 def get_produtos_crud() -> SupabaseCRUD:
     """Dependência para criar e fornecer uma instância de SupabaseCRUD para a tabela 'produtos'."""
-    return SupabaseCRUD(supabase_client=supabase, table_name="produtos") # *** Use o NOME DA SUA TABELA AQUI ("produtos") ***
+    return SupabaseCRUD(supabase_client=supabase, table_name="cardapio") # *** Use o NOME DA SUA TABELA AQUI ("produtos") ***
 
 # Modelo Pydantic para validação de dados de produto (use o mesmo que já definiu)
 class ProdutoCreate(BaseModel): # Reutilizando ProdutoCreate que já definimos antes

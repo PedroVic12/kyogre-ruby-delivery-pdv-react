@@ -17,6 +17,7 @@ RUN npm install --force \
     @mui/material \
     @emotion/react \
     @emotion/styled \
+    @mui/icons-material \
     @ionic/react \
     lucide-react \
     plotly.js \

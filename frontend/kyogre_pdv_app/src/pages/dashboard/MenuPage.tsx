@@ -1,59 +1,81 @@
 import { MenuCategory } from '../../components/menu/MenuCategory';
 import { AddProductModal } from '../../components/menu/AddProductModal';
-//import { useMenuState } from '../../hooks/useMenuState';
-import { useState } from 'react';
-import { Category } from '../../types/menu';
-import { createProduct, updateCategoryProducts } from '../../utils/menu';
+import { useState, useEffect } from 'react';
+import { Category, Product } from '../../types/menu';
+import { Button, CircularProgress, Box, Paper, Typography, Collapse, IconButton, Stack } from '@mui/material';
+import { green, blue, red } from '@mui/material/colors';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { cardapioService } from '../../controllers/cardapio_controller';
 
-const initialCategories: Category[] = [
-  {
-    id: '1',
-    name: 'Hamburguer',
-    products: [
-      {
-        id: '1',
-        name: 'Big Mac',
-        price: 40.99,
-        imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500',
-        description: 'Delicioso hambúrguer com dois andares',
-        isAvailable: true
-      }
-    ]
-  },
-  {
-    id: '2',
-    name: 'Pizza',
-    products: []
-  },
-  {
-    id: '3',
-    name: 'Sucos',
-    products: []
-  },
-  {
-    id: '4',
-    name: 'Salgados',
-    products: []
-  }
-];
 
 export function useMenuState() {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAddProduct = (formData: any) => {
-    const newProduct = createProduct(formData);
-    setCategories(
-      updateCategoryProducts(categories, formData.category, (products) => [...products, newProduct])
-    );
+  useEffect(() => {
+    carregarProdutos();
+  }, []);
+
+  const carregarProdutos = async () => {
+    try {
+      const produtos = await cardapioService.buscarProdutos();
+      
+      // Agrupa produtos por categoria
+      const categoriaMap = new Map<string, Product[]>();
+      produtos.forEach(produto => {
+        if (!categoriaMap.has(produto.categoria)) {
+          categoriaMap.set(produto.categoria, []);
+        }
+        categoriaMap.get(produto.categoria)?.push({
+          id: produto.id,
+          name: produto.nome_produto,
+          price: produto.preco,
+          imageUrl: produto.url_imagem,
+          description: produto.descricao,
+          isAvailable: produto.disponivel
+        });
+      });
+
+      // Converte o Map para o formato de categorias
+      const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, products]) => ({
+        id: name,
+        name,
+        products
+      }));
+
+      setCategories(novasCategorias);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Erro ao carregar produtos:', error);
+      setIsLoading(false);
+    }
   };
 
-  const handleDeleteProduct = (categoryId: string, productId: string) => {
-    setCategories(
-      updateCategoryProducts(categories, categoryId, (products) =>
-        products.filter(product => product.id !== productId)
-      )
-    );
+  const handleAddProduct = async (formData: any) => {
+    try {
+      const novoProduto = await cardapioService.criarProduto({
+        nome_produto: formData.name,
+        preco: formData.price,
+        categoria: formData.category,
+        url_imagem: formData.imageUrl,
+        descricao: formData.description,
+        disponivel: true
+      });
+      await carregarProdutos(); // Recarrega os produtos
+    } catch (error) {
+      console.error('Erro ao adicionar produto:', error);
+    }
+  };
+
+  const handleDeleteProduct = async (categoryId: string, productId: string) => {
+    try {
+      await cardapioService.deletarProduto(productId);
+      await carregarProdutos(); // Recarrega os produtos
+    } catch (error) {
+      console.error('Erro ao deletar produto:', error);
+    }
   };
 
   return {
@@ -61,22 +83,40 @@ export function useMenuState() {
     isModalOpen,
     setIsModalOpen,
     handleAddProduct,
-    handleDeleteProduct
+    handleDeleteProduct,
+    isLoading
   };
 }
 
-
-
 //! Front end de gerenciador do cardapio
-
 
 function TestePedidoButton() {
   const [mensagem, setMensagem] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [detalhesResposta, setDetalhesResposta] = useState<any>(null);
+  const [mostrarDetalhes, setMostrarDetalhes] = useState(false);
+
+  // Limpar mensagem após 8 segundos quando houver sucesso ou erro
+  useEffect(() => {
+    if (status === 'success' || status === 'error') {
+      const timer = setTimeout(() => {
+        setMensagem('');
+        setStatus('idle');
+      }, 8000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
 
   const fazerPedido = async () => {
     setIsLoading(true);
+    setStatus('loading');
     setMensagem('Enviando pedido...');
+    setDetalhesResposta(null);
+    setMostrarDetalhes(false);
+    
+    console.log('Iniciando envio do pedido de teste...');
 
     const pedidoData = {
       "id": 1861,
@@ -110,36 +150,143 @@ function TestePedidoButton() {
       ]
     };
 
+    console.log('Dados do pedido:', pedidoData);
+
     try {
-      const resposta = await fetch('http://localhost:8000/api/produtos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
+      const resposta = await fetch('http://localhost:8000/api/pedidos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        
         body: JSON.stringify(pedidoData),
       });
 
+      console.log('Resposta recebida:', resposta.status);
+
       if (resposta.ok) {
         const data = await resposta.json();
-        setMensagem(`Pedido criado com sucesso! Resposta da API: ${JSON.stringify(data)}`);
+        console.log('Pedido criado com sucesso:', data);
+        setMensagem(`Pedido criado com sucesso!`);
+        setStatus('success');
+        setDetalhesResposta(data);
+        alert('Pedido criado com sucesso!');
       } else {
         const erroTexto = await resposta.text();
-        setMensagem(`Erro ao criar pedido. Status: ${resposta.status}. Detalhes: ${erroTexto}`);
+        console.error('Erro ao criar pedido:', erroTexto);
+        setMensagem(`Erro ao criar pedido. Status: ${resposta.status}`);
+        setStatus('error');
+        try {
+          setDetalhesResposta(JSON.parse(erroTexto));
+        } catch {
+          setDetalhesResposta({ mensagem: erroTexto });
+        }
+        alert(`Erro ao criar pedido. Status: ${resposta.status}`);
       }
     } catch (error) {
+      console.error('Exceção ao enviar requisição:', error);
       setMensagem(`Erro ao enviar requisição: ${error}`);
+      setStatus('error');
+      setDetalhesResposta({ mensagem: String(error) });
+      alert(`Erro ao enviar requisição: ${error}`);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Cores para diferentes estados
+  const getStatusColor = () => {
+    switch (status) {
+      case 'success': return green[500];
+      case 'error': return red[500];
+      case 'loading': return blue[500];
+      default: return 'inherit';
+    }
+  };
+
   return (
-    <div>
-      <button onClick={fazerPedido} disabled={isLoading}>
-        {isLoading ? 'Enviando...' : 'Fazer Pedido de Teste (POST)'}
-      </button>
-      {mensagem && <p>{mensagem}</p>}
-    </div>
+    <Box sx={{ mb: 4 }}>
+      <Box sx={{ position: 'relative' }}>
+        <Button
+          variant="contained"
+          sx={{
+            bgcolor: isLoading ? 'grey.400' : blue[600],
+            '&:hover': {
+              bgcolor: isLoading ? 'grey.400' : blue[700],
+            },
+            color: 'white',
+            px: 3,
+            py: 1,
+            borderRadius: 2,
+          }}
+          disabled={isLoading}
+          onClick={fazerPedido}
+        >
+          {isLoading ? 'Enviando...' : 'Fazer Pedido de Teste (POST)'}
+        </Button>
+        {isLoading && (
+          <CircularProgress
+            size={24}
+            sx={{
+              color: blue[500],
+              position: 'absolute',
+              top: '50%',
+              left: '24px',
+              marginTop: '-12px',
+              marginLeft: '-12px',
+            }}
+          />
+        )}
+      </Box>
+      
+      {mensagem && (
+        <Paper 
+          elevation={3}
+          sx={{
+            mt: 2,
+            p: 2,
+            bgcolor: getStatusColor(),
+            color: 'white',
+            borderRadius: 1,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {status === 'loading' && (
+              <CircularProgress size={20} sx={{ color: 'white' }} />
+            )}
+            <Typography variant="body1">{mensagem}</Typography>
+            
+            {detalhesResposta && (
+              <IconButton 
+                size="small" 
+                sx={{ ml: 'auto', color: 'white' }}
+                onClick={() => setMostrarDetalhes(!mostrarDetalhes)}
+              >
+                {mostrarDetalhes ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            )}
+          </Box>
+          
+          <Collapse in={mostrarDetalhes}>
+            <Box 
+              sx={{ 
+                mt: 2, 
+                p: 1, 
+                bgcolor: 'rgba(0, 0, 0, 0.1)', 
+                borderRadius: 1,
+                maxHeight: 200,
+                overflow: 'auto',
+                fontFamily: 'monospace',
+                fontSize: '0.8rem',
+                whiteSpace: 'pre-wrap'
+              }}
+            >
+              {JSON.stringify(detalhesResposta, null, 2)}
+            </Box>
+          </Collapse>
+        </Paper>
+      )}
+    </Box>
   );
 }
 
@@ -149,7 +296,8 @@ export function MenuPage() {
     isModalOpen,
     setIsModalOpen,
     handleAddProduct,
-    handleDeleteProduct
+    handleDeleteProduct,
+    isLoading
   } = useMenuState();
 
   return (
@@ -157,33 +305,42 @@ export function MenuPage() {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Gerenciar Cardápio</h2>
 
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
-        >
-          Adicionar Novo Produto
-        </button>
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Adicionar Novo Produto
+          </Button>
+          
+          <TestePedidoButton />
+          
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => alert('Funcionalidade em desenvolvimento')}
+          >
+            Adicionar Categoria
+          </Button>
+        </Stack>
       </div>
 
-      <TestePedidoButton />
-      <button
-        onClick={() => alert('Adicionar Nova Categoria')}
-        className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
-      >
-        Adicionar Categoria
-      </button>
-
-
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {categories.map((category) => (
-          <MenuCategory
-            key={category.id}
-            category={category}
-            onDeleteProduct={handleDeleteProduct}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" p={4}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {categories.map((category) => (
+            <MenuCategory
+              key={category.id}
+              category={category}
+              onDeleteProduct={handleDeleteProduct}
+            />
+          ))}
+        </div>
+      )}
 
       <AddProductModal
         isOpen={isModalOpen}

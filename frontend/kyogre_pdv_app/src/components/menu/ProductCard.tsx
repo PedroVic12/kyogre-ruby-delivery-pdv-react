@@ -14,7 +14,7 @@ export function ProductCard({ product, categoryColor, onDelete }: ProductCardPro
   return (
     <div className={`flex items-center justify-between p-3 rounded-lg ${categoryColor}`}>
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 bg-white rounded-lg overflow-hidden">
+        <div className="w-20 h-12 bg-white rounded-lg overflow-hidden">
           {product.imageUrl && (
             <img
               src={product.imageUrl}
