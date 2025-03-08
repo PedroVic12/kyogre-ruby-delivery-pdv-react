@@ -18,7 +18,8 @@ class RayquazaServer:
         # Configurar CORS
         self.app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],  # Em produção, defina origens específicas
+            #allow_origins=["*"],  # Em produção, defina origens específicas
+            allow_origins=["https://ruby-delivery-app.onrender.com", "http://localhost:5173"],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -36,11 +37,25 @@ class RayquazaServer:
     
     def setup_routes(self):
         # Rotas de Pedidos
-        self.pedidos_controller.register_routes(self.app)
-        
-        #self.login_controller.register_routes(self.app)
-        #self.produtos_controller.register_routes(self.app)
-        
+        # Não precisamos mais registrar as rotas diretamente, vamos usar um Router principal
+
+        # Criar um APIRouter principal com prefixo /api
+        api_router = APIRouter(prefix="/api")
+
+        # Registrar o router de pedidos DENTRO do router principal /api
+        api_router.include_router(self.pedidos_controller.router)
+
+        # Incluir o router principal (/api) no app FastAPI
+        self.app.include_router(api_router)
+
+        # ... outras rotas (se tiverem um prefixo diferente, como /auth, etc., seguiriam o mesmo padrão)
+        # Ex:
+        # auth_router = APIRouter(prefix="/auth")
+        # auth_router.include_router(self.login_controller.router)
+        # api_router.include_router(auth_router) # Incluir rotas de auth DENTRO de /api TAMBÉM se desejado
+        # self.app.include_router(api_router) # Incluímos apenas api_router no app principal neste exemplo
+
+            
         # Rota de status da API
         @self.app.get("/")
         async def root():

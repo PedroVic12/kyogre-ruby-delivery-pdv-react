@@ -190,7 +190,7 @@ export function DashboardPedidosPage() {
     const [lastOrdersLength, setLastOrdersLength] = useState(0);
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
 
-    const API_ENDPOINT = 'http://localhost:8000/pedidos/'; // Rota da sua API para buscar pedidos
+    const API_ENDPOINT = 'http://localhost:8000/api/pedidos/'; // Rota da sua API para buscar pedidos
 
     const fetchOrders = async () => {
         setIsLoading(true);
