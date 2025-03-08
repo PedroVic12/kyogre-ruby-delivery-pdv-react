@@ -1,21 +1,20 @@
-
 # ==============================
 # BUILD DO FRONTEND (VITE)
 # ==============================
 FROM node:20.13.1-bookworm-slim AS build-frontend
 
-WORKDIR /app/frontend/kyogre_pdv_app  
+WORKDIR /app/frontend/kyogre_pdv_app
 
 # Copia os arquivos de configuração do frontend - NOW FROM CORRECT PATH
 COPY frontend/kyogre_pdv_app/package*.json ./
 COPY frontend/kyogre_pdv_app/tailwind.config.js ./
 COPY frontend/kyogre_pdv_app/postcss.config.js ./
 COPY frontend/kyogre_pdv_app/vite.config.ts ./
-COPY frontend/kyogre_pdv_app/tsconfig.json ./  
+COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
 # Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
 RUN npm install && \
-    npm install @mui/material plotly.js react-plotly.js @ionic/react @emotion/react @emotion/styled lucide-react react-router-dom && \
+    npm install @mui/material @emotion/react @emotion/styled @ionic/react lucide-react plotly.js react-plotly.js react-router-dom react-dom && \
     npm install -D tailwindcss postcss autoprefixer && \
     npx tailwindcss init -p
 
@@ -26,7 +25,6 @@ COPY frontend/kyogre_pdv_app/. .
 
 # Gera o build do frontend
 RUN npm run build
-
 
 
 # ==============================
@@ -43,17 +41,16 @@ WORKDIR /app/backend/server
 COPY backend/server/requirements.txt .
 
 # Instala as dependências do FastAPI
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
 
 # Copia o código fonte do backend
-COPY backend/server . 
-
+COPY backend/server .
 
 
 # ==============================
 # FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
 # ==============================
-FROM node:20.13.1-bookworm-slim AS final 
+FROM node:20.13.1-bookworm-slim AS final
 
 WORKDIR /app
 
@@ -73,7 +70,7 @@ COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Instalar dependências do backend
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages
 
 # Expor portas para o Nginx (80) e backend (8000)
 EXPOSE 80
