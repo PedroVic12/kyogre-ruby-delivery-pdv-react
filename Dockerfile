@@ -3,31 +3,28 @@
 # ==============================
 FROM node:20.13.1-bookworm-slim AS build-frontend
 
-WORKDIR /app/frontend
+WORKDIR /app/frontend/kyogre_pdv_app  
 
-# Navigate to the frontend app directory inside the container
-WORKDIR /app/frontend/kyogre_pdv_app
-
-# Copia os arquivos de configuração do frontend
+# Copia os arquivos de configuração do frontend - NOW FROM CORRECT PATH
 COPY frontend/kyogre_pdv_app/package*.json ./
 COPY frontend/kyogre_pdv_app/tailwind.config.js ./
 COPY frontend/kyogre_pdv_app/postcss.config.js ./
 COPY frontend/kyogre_pdv_app/vite.config.ts ./
+COPY frontend/kyogre_pdv_app/tsconfig.json ./  # ENSURE tsconfig.json IS COPIED!
 
-# Instala as dependências do frontend
-RUN npm install
-
-RUN npm install @mui/material plotly.js react-plotly.js @ionic/react @emotion/react @emotion/styled lucide-react react-router-dom
-RUN npm install -D tailwindcss postcss autoprefixer
-RUN npx tailwindcss init -p
+# Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
+RUN npm install && \
+    npm install @mui/material plotly.js react-plotly.js @ionic/react @emotion/react @emotion/styled lucide-react react-router-dom && \
+    npm install -D tailwindcss postcss autoprefixer && \
+    npx tailwindcss init -p
 
 RUN npm install typescript
 
+# Copia o código fonte do frontend - COPY SOURCE AFTER DEPENDENCIES INSTALLED
+COPY frontend/kyogre_pdv_app/. .
+
 # Gera o build do frontend
 RUN npm run build
-
-# Copia o código fonte do frontend
-COPY frontend/kyogre_pdv_app/. .
 
 
 
