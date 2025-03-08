@@ -14,7 +14,7 @@ COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
 # Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
 RUN npm install && \
-    npm install @mui/material plotly.js react-plotly.js @ionic/react @emotion/react @emotion/styled lucide-react react-router-dom && \
+    npm install @mui/material @emotion/react @emotion/styled @ionic/react lucide-react plotly.js react-plotly.js react-router-dom react-dom && \
     npm install -D tailwindcss postcss autoprefixer && \
     npx tailwindcss init -p
 
@@ -42,7 +42,7 @@ WORKDIR /app/backend/server
 COPY backend/server/requirements.txt .
 
 # Instala as dependências do FastAPI
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
 
 # Copia o código fonte do backend
 COPY backend/server . 
@@ -59,28 +59,31 @@ WORKDIR /app
 # Install Python and pip in the final image (as it's based on Node.js now)
 RUN apt-get update && apt-get install nginx python3 python3-pip -y
 
-# Create directories for backend and frontend
-RUN mkdir backend frontend
+# Criar diretórios para backend e frontend
+RUN mkdir -p /app/backend /app/frontend/dist
 
-# Copy built backend from build-backend stage
+# Copiar o backend compilado
 COPY --from=build-backend /app/backend/server /app/backend
 
-# Copy built frontend from build-frontend stage (the 'dist' folder)
-COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend
-COPY --from=build-frontend /app/frontend/kyogre_pdv_app/ /app/frontend
+# Copiar o frontend compilado (apenas a pasta dist)
+COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 
-# Install backend dependencies in the final stage (using pip)
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages 
+# Copiar a configuração do Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expor portas for backend (8000) and frontend (5173 - preview uses this by default, adjust if needed)
+# Instalar dependências do backend
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages
+
+# Expor portas para o Nginx (80) e backend (8000)
+EXPOSE 80
 EXPOSE 8000
-EXPOSE 5173
 
-# Command to run both FastAPI backend and Vite frontend simultaneously
-#CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & cd /app/frontend && npm install && npm run preview -- --host 0.0.0.0 --port 5173"
+# Script de inicialização
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
-#Proxy para o FastAPI com Nginx
-CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & nginx -g 'daemon off;' & cd /app/frontend && npm run preview -- --host 0.0.0.0 --port 5173"
+# Comando para iniciar o Nginx e o backend
+CMD ["/app/start.sh"]
 
 #! como usar
 #docker build -t kyogre-app .
