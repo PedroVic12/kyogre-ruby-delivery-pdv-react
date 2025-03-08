@@ -275,7 +275,7 @@ export function DashboardPedidosPage() {
         // Para cada novo pedido, atualize o status para "Em Processo"
         for (const pedido of novosPedidos) {
             try {
-                const UPDATE_API_ENDPOINT = `http://localhost:8000/pedidos/${pedido.id}`;
+                const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${pedido.id}`;
                 const response = await fetch(UPDATE_API_ENDPOINT, {
                     method: 'PUT',
                     headers: {
@@ -314,7 +314,7 @@ export function DashboardPedidosPage() {
 
     // Função para avançar o status do pedido (simulada - você precisa implementar no backend)
     const advanceOrder = async (orderId: number, nextStatus: string) => {
-        const UPDATE_API_ENDPOINT = `http://localhost:8000/pedidos/${orderId}/status`; // Rota de exemplo para atualizar status
+        const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status`; // Rota de exemplo para atualizar status
         try {
             const response = await fetch(UPDATE_API_ENDPOINT, {
                 method: 'PUT', // Usando PUT conforme solicitado
