@@ -22,7 +22,6 @@ RUN npm install \
     plotly.js \
     react-plotly.js \
     react-router-dom \
-    react-dom \
     tailwindcss \
     postcss \
     autoprefixer \

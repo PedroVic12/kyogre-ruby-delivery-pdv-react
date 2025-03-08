@@ -16,8 +16,7 @@ import TabelasMesasPage from '../app/app_garcom_pdv/mesasPage';
 import { HomePage } from './pages/dashboard/HomePage';
 import { DashboardPedidosPage } from './pages/dashboard/DashboardPedidos';
 import PaginaComponentes from './pages/UI/pagina_componentes.js';
-import RootLayout from '../app/controle_estoque/src/pages/RootLayout.jsx';
-import Home from '../app/controle_estoque/src/pages/Home.jsx';
+
 import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage.jsx';
 
 export default function App() {
