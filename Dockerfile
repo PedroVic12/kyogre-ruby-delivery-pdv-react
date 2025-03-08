@@ -67,6 +67,7 @@ COPY --from=build-backend /app/backend/server /app/backend
 
 # Copy built frontend from build-frontend stage (the 'dist' folder)
 COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend
+COPY --from=build-frontend /app/frontend/kyogre_pdv_app/ /app/frontend
 
 # Install backend dependencies in the final stage (using pip)
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages 
