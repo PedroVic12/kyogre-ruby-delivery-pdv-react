@@ -1,7 +1,15 @@
 import ItemForm from "../../components/ItemForm";
+import PropTypes from "prop-types";
 
-export default function CreateItem() {
+CreateItem.propTypes = {
+    onItemCreated: PropTypes.func
+};
+
+export default function CreateItem({ onItemCreated }) {
     return (
-        <ItemForm />
-    )
+        <div>
+            <h1>Novo Item</h1>
+            <ItemForm onSubmitSuccess={onItemCreated} />
+        </div>
+    );
 }

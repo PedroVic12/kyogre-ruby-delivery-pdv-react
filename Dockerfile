@@ -95,7 +95,11 @@ RUN npm run build
 
 EXPOSE 80
 EXPOSE 8000
-CMD ["/app/start.sh"]
+
+
+CMD nginx -g 'daemon off;' & uvicorn main:app --host 0.0.0.0 --port 8000 & npm run dev
+
+#CMD ["/app/start.sh"]
 
 #! como usar
 #docker build -t kyogre-app .

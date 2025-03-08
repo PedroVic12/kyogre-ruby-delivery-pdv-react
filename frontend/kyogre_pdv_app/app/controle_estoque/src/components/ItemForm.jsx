@@ -4,10 +4,11 @@ import StockItem, { CATEGORIES } from "../entities/StockItem"
 import useStock from "../hooks/useStock"
 
 ItemForm.propTypes = {
-    itemToUpdate: PropTypes.object
+    itemToUpdate: PropTypes.object,
+    onSubmitSuccess: PropTypes.func
 }
 
-export default function ItemForm({ itemToUpdate }) {
+export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
     const defaultItem = {
         name: "",
         description: "",
@@ -36,14 +37,21 @@ export default function ItemForm({ itemToUpdate }) {
             if (itemToUpdate) {
                 updateItem(itemToUpdate.id, item)
                 alert("Item atualizado com sucesso!")
+                if (onSubmitSuccess) {
+                    onSubmitSuccess()
+                }
             } else {
                 const validItem = new StockItem(item)
                 addItem(validItem)
                 setItem(defaultItem)
                 alert("Item cadastrado com sucesso")
+                if (onSubmitSuccess) {
+                    onSubmitSuccess()
+                }
             }
         } catch (error) {
             console.log(error.message)
+            alert("Erro: " + error.message)
         } finally {
             inputRef.current.focus()
         }

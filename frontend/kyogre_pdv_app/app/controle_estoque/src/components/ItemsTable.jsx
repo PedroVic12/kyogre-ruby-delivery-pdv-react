@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom"
 import useStock from "../hooks/useStock"
 import DeleteButton from "./DeleteButton"
+import PropTypes from "prop-types"
 
-export default function ItemsTable() { 
+ItemsTable.propTypes = {
+    onItemSelect: PropTypes.func
+}
+
+export default function ItemsTable({ onItemSelect }) { 
     const { items } = useStock()
 
     return (
@@ -24,12 +28,12 @@ export default function ItemsTable() {
                         <td>{item.quantity} unid.</td>
                         <td>{item.category}</td>
                         <td>
-                        <Link to={`/items/${item.id}`} className="button is-primary is-small">
+                        <button 
+                            className="button is-primary is-small"
+                            onClick={() => onItemSelect && onItemSelect(item.id)}
+                        >
                             Ver
-                        </Link>
-                        <Link to={`/items/${item.id}/update`} className="button is-small">
-                            Atualizar
-                        </Link>
+                        </button>
                         <DeleteButton 
                             itemName={item.name}
                             itemId={item.id}
