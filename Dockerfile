@@ -1,6 +1,6 @@
 FROM node:18-alpine as BUILD_IMAGE
 
-WORKDIR /app/frontend/kyogre_pdv_app
+WORKDIR /app
 
 # Copia os arquivos de configuração
 COPY package*.json ./
