@@ -69,7 +69,7 @@ COPY --from=build-backend /app/backend/server /app/backend
 COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend
 
 # Install backend dependencies in the final stage (using pip)
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages 
 
 # Expor portas for backend (8000) and frontend (5173 - preview uses this by default, adjust if needed)
 EXPOSE 8000
