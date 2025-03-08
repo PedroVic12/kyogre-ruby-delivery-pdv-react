@@ -52,7 +52,7 @@ COPY backend/server . .
 # ==============================
 # FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
 # ==============================
-FROM node:20.13.1-bookworm-slim AS final  # Using Node.js base image for final stage
+FROM node:20.13.1-bookworm-slim AS final 
 
 WORKDIR /app
 
@@ -77,3 +77,11 @@ EXPOSE 5173
 
 # Command to run both FastAPI backend and Vite frontend simultaneously
 CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & cd /app/frontend && npm run preview -- --host 0.0.0.0 --port 5173"
+
+
+#! como usar
+#docker build -t kyogre-app .
+#docker run -p 8000:8000 -p 5173:5173 kyogre-app
+
+#! para rodar o docker com o compose
+#docker compose up -d
