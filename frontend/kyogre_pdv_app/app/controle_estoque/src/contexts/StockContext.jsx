@@ -7,10 +7,10 @@ StockContext.Provider.propTypes = {
     children: PropTypes.node
 }
 
-export function StockContextProvider({children}) {
+export function StockContextProvider({ children }) {
     const [items, setItems] = useState(() => {
         const storedItems = localStorage.getItem('obc-react-stock')
-        if(!storedItems) return []
+        if (!storedItems) return []
         const items = JSON.parse(storedItems)
         items.forEach((item) => {
             item.createdAt = new Date(item.createdAt)
