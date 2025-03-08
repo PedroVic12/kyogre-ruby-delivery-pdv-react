@@ -176,6 +176,8 @@ function NewOrderDialog({ isOpen, onClose, onAccept }: NewOrderDialogProps) {
 }
 
 
+
+
 // Componente DashboardPage (Página Dashboard)
 export function DashboardPedidosPage() {
     const [pedidosEmProcesso, setPedidosEmProcesso] = useState<Order[]>([]);
