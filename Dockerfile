@@ -1,7 +1,7 @@
 # ==============================
 # BUILD DO FRONTEND (VITE)
 # ==============================
-FROM node:18-alpine AS build-frontend
+FROM node:20.13.1-bookworm-slim AS build-frontend
 
 WORKDIR /app/frontend
 
@@ -23,6 +23,8 @@ RUN npx tailwindcss init -p
 
 # Copia o código fonte do frontend
 COPY frontend/kyogre_pdv_app/. .
+
+RUN npm install typescript
 
 # Gera o build do frontend
 RUN npm run build
@@ -64,6 +66,8 @@ COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend
 
 # Install backend dependencies in the final stage
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt
+RUN npm install
+
 
 # Expor portas para backend (8000) e frontend (5173 - preview uses this by default, adjust if needed)
 EXPOSE 8000
