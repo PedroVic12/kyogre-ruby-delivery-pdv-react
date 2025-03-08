@@ -1,5 +1,6 @@
 # controllers/pedidos_controller.py
 from fastapi import APIRouter, HTTPException
+from fastapi.middleware.cors import CORSMiddleware  # Adicione esta importação
 from typing import List
 from datetime import datetime
 import json
@@ -12,6 +13,15 @@ class PedidosController:
         self.database_file = "pedidos.json"
     
     def register_routes(self, app):
+
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["http://localhost:5173"],  # Adicione a origem do seu frontend
+            allow_credentials=True,
+            allow_methods=["*"],  # Permite todos os métodos (GET, POST, PUT, DELETE, etc)
+            allow_headers=["*"],  # Permite todos os headers
+        )
+         
         # Listar todos os pedidos
         @self.router.get("/", response_model=List[Pedido])
         async def listar_pedidos():

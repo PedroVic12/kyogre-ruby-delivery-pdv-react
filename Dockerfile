@@ -45,7 +45,7 @@ COPY backend/server/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia o código fonte do backend
-COPY backend/server . .
+COPY backend/server . 
 
 
 
@@ -80,7 +80,7 @@ EXPOSE 5173
 #CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & cd /app/frontend && npm install && npm run preview -- --host 0.0.0.0 --port 5173"
 
 #Proxy para o FastAPI com Nginx
-CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & nginx -g 'daemon off;'"
+CMD /bin/bash -c "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 & nginx -g 'daemon off;' & cd /app/frontend && npm run preview -- --host 0.0.0.0 --port 5173"
 
 #! como usar
 #docker build -t kyogre-app .
