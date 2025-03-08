@@ -1,5 +1,5 @@
 # ==============================
-# BUILD DO FRONTEND (VITE)
+# BUILD DO FRONTEND (VITE) - Mantemos como ESTAVA (stage separado de build)
 # ==============================
 FROM node:20.13.1-bookworm-slim AS build-frontend
 
@@ -12,7 +12,7 @@ COPY frontend/kyogre_pdv_app/postcss.config.js ./
 COPY frontend/kyogre_pdv_app/vite.config.ts ./
 COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
-# Instala as dependências do frontend (TUDO EM UM COMANDO RUN)
+# Instala as dependências do frontend
 RUN npm install \
     @mui/material \
     @emotion/react \
@@ -38,11 +38,11 @@ RUN npm run build
 
 
 # ==============================
-# BUILD DO BACKEND (FASTAPI)
+# BUILD DO BACKEND (FASTAPI) - Mantemos como ESTAVA (stage separado de build)
 # ==============================
 FROM python:3.10 AS build-backend
 
-WORKDIR /app/backend/server # WORKDIR SIMPLIFICADO
+WORKDIR /app/backend/server
 
 # Copia os arquivos do backend
 COPY backend/server/requirements.txt .
@@ -55,11 +55,16 @@ COPY backend/server .
 
 
 # ==============================
-# FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
+# FINALIZAÇÃO - IMAGEM FINAL BASEADA EM DEBIAN (INSTALAÇÃO MANUAL DE TUDO)
 # ==============================
-FROM tiangolo/uvicorn-gunicorn-nginx:python3.10-slim AS final 
+FROM debian:bookworm-slim AS final 
 
 WORKDIR /app
+
+# Instalar Node.js, npm, Python, pip e Nginx - TUDO MANUALMENTE NA IMAGEM FINAL
+RUN apt-get update && \
+    apt-get install -y nginx python3 python3-pip npm && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copiar o backend compilado
 COPY --from=build-backend /app/backend/server /app/backend
@@ -70,11 +75,24 @@ COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 # Copiar a configuração do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Ajustar permissões do frontend (IMPORTANTE PARA NGINX SERVIR ARQUIVOS)
+# Ajustar permissões do frontend
 RUN chown -R www-data:www-data /app/frontend/dist && \
     chmod -R 755 /app/frontend/dist
 
-# Expor porta do backend (NGINX JÁ EXPOE A 80)
+# Instalar dependências do backend (NOVAMENTE NA IMAGEM FINAL)
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages
+
+# ==========================================================================
+# RENDERIZAR O FRONTEND AQUI NA IMAGEM FINAL (CONFORME PEDIDO - MENOS OTIMIZADO)
+# ==========================================================================
+WORKDIR /app/frontend/kyogre_pdv_app 
+COPY frontend/kyogre_pdv_app ./      
+RUN npm install                    
+RUN npm run build                  
+# ==========================================================================
+
+# Expor portas
+EXPOSE 80
 EXPOSE 8000
 
 # Script de inicialização
@@ -86,7 +104,7 @@ CMD ["/app/start.sh"]
 
 #! como usar
 #docker build -t kyogre-app .
-#docker run -p 8000:8000 -p 80:80 kyogre-app
+#docker run -p 8000:8000 -p 5173:5173 kyogre-app
 
 #! para rodar o docker com o compose
 #docker compose up -d
