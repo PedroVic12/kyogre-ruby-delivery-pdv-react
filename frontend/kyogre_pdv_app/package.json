@@ -2,7 +2,6 @@
   "name": "kyogre_pdv_app",
   "private": true,
   "version": "0.0.0",
-  "proxy": "http://localhost:8000",
   "type": "module",
   "scripts": {
     "dev": "vite",

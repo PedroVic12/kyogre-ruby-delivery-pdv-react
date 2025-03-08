@@ -12,13 +12,13 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: Home, label: 'Home', href: '/dashboard' },
     { icon: LayoutDashboard, label: 'Produtos Cardapio', href: '/dashboard/produtos' },
     { icon: Book, label: 'Cardápio Digital', href: '/cardapio' },
-    { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
+   // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
     { icon: Users, label: 'Kanban', href: '/dashboard/kanban' },
-    { icon: UserPlus, label: 'Cadastro', href: '/login' },
-    { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
-    { icon: Users, label: 'App Garçom', href: '/garcom' },
-    { icon: Users, label: 'Controle Estoque', href: '/controle_estoque' },
+    //{ icon: UserPlus, label: 'Cadastro', href: '/login' },
+    //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
+    { icon: HeadphonesIcon, label: 'App Garçom', href: '/garcom' },
+    { icon: UserPlus, label: 'Controle Estoque', href: '/controle_estoque' },
     { icon: Users, label: 'Pagina Componentes', href: '/pagina_componentes' },
   ];
 

@@ -54,8 +54,12 @@ FROM node:20.13.1-bookworm-slim AS final
 
 WORKDIR /app
 
-# Install Python and pip in the final image (as it's based on Node.js now)
-RUN apt-get update && apt-get install nginx python3 python3-pip -y
+# Instalar Python, pip e Nginx com permissões corretas
+RUN apt-get update && \
+    apt-get install -y nginx python3 python3-pip && \
+    chown -R www-data:www-data /var/lib/nginx && \
+    mkdir -p /app/backend /app/frontend/dist && \
+    rm -rf /var/lib/apt/lists/*
 
 # Criar diretórios para backend e frontend
 RUN mkdir -p /app/backend /app/frontend/dist
@@ -68,6 +72,11 @@ COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 
 # Copiar a configuração do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Ajustar permissões
+RUN chown -R www-data:www-data /app/frontend/dist && \
+    chmod -R 755 /app/frontend/dist
+
 
 # Instalar dependências do backend
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages

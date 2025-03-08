@@ -1,22 +1,21 @@
+#!/bin/bash
 
+echo "Iniciando o Frontend (Vite Dev Server)..."
 cd frontend/kyogre_pdv_app
-npm run dev
+npm install # Garante que as dependências do frontend estão instaladas
+npm run dev & # Inicia o servidor de desenvolvimento do Vite em background
 
-echo "Frontend rodando na porta 5173"
+echo "Iniciando o Backend (FastAPI com Uvicorn)..."
+cd ../../backend/server
+pip install -r requirements.txt # Garante que as dependências do backend estão instaladas
+uvicorn main:app --reload --host 0.0.0.0 --port 8000 & # Inicia o backend FastAPI em background com hot-reload
 
-cd ../..
+echo "Aguardando 5 segundos para os servidores iniciarem..."
+sleep 3 # Espera um pouco para os servidores subirem
 
-cd backend/server
-python3 -m uvicorn main:app --reload
+echo "Servidores iniciados!"
+echo "Frontend rodando em: http://localhost:5173"
+echo "Backend (API) rodando em: http://localhost:8000"
 
-echo "Backend rodando na porta 8000"
-
-cd ../..
-
-cd nginx
-nginx -g "daemon off;"
-
-echo "Nginx rodando na porta 80"
-
-
-
+# Mantém o script rodando para os servidores continuarem ativos
+tail -f /dev/null
