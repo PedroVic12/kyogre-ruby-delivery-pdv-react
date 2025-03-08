@@ -52,9 +52,12 @@ COPY backend/server . .
 # ==============================
 # FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
 # ==============================
-FROM python:3.10 AS final
+FROM node:20.13.1-bookworm-slim AS final  # Using Node.js base image for final stage
 
 WORKDIR /app
+
+# Install Python and pip in the final image (as it's based on Node.js now)
+RUN apt-get update && apt-get install python3 python3-pip -y
 
 # Create directories for backend and frontend
 RUN mkdir backend frontend
@@ -65,12 +68,10 @@ COPY --from=build-backend /app/backend/server /app/backend
 # Copy built frontend from build-frontend stage (the 'dist' folder)
 COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend
 
-# Install backend dependencies in the final stage
+# Install backend dependencies in the final stage (using pip)
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt
-RUN npm install
 
-
-# Expor portas para backend (8000) e frontend (5173 - preview uses this by default, adjust if needed)
+# Expor portas for backend (8000) and frontend (5173 - preview uses this by default, adjust if needed)
 EXPOSE 8000
 EXPOSE 5173
 
