@@ -1,19 +1,19 @@
 # ==============================
-# BUILD DO FRONTEND (VITE) - Mantemos como ESTAVA (stage separado de build)
+# BUILD DO FRONTEND (VITE)
 # ==============================
 FROM node:20.13.1-bookworm-slim AS build-frontend
 
 WORKDIR /app/frontend/kyogre_pdv_app
 
-# Copia os arquivos de configuração do frontend
+# Copia os arquivos de configuração do frontend - NOW FROM CORRECT PATH
 COPY frontend/kyogre_pdv_app/package*.json ./
 COPY frontend/kyogre_pdv_app/tailwind.config.js ./
 COPY frontend/kyogre_pdv_app/postcss.config.js ./
 COPY frontend/kyogre_pdv_app/vite.config.ts ./
 COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
-# Instala as dependências do frontend
-RUN npm install \
+# Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
+RUN npm install --force \  
     @mui/material \
     @emotion/react \
     @emotion/styled \
@@ -22,6 +22,7 @@ RUN npm install \
     plotly.js \
     react-plotly.js \
     react-router-dom \
+    react-dom \
     tailwindcss \
     postcss \
     autoprefixer \
@@ -29,7 +30,9 @@ RUN npm install \
 
 RUN npx tailwindcss init -p
 
-# Copia o código fonte do frontend
+RUN npm install typescript
+
+# Copia o código fonte do frontend - COPY SOURCE AFTER DEPENDENCIES INSTALLED
 COPY frontend/kyogre_pdv_app/. .
 
 # Gera o build do frontend
@@ -37,10 +40,13 @@ RUN npm run build
 
 
 # ==============================
-# BUILD DO BACKEND (FASTAPI) - Mantemos como ESTAVA (stage separado de build)
+# BUILD DO BACKEND (FASTAPI)
 # ==============================
 FROM python:3.10 AS build-backend
 
+WORKDIR /app/backend
+
+# Navigate to the backend server directory inside the container
 WORKDIR /app/backend/server
 
 # Copia os arquivos do backend
@@ -54,21 +60,21 @@ COPY backend/server .
 
 
 # ==============================
-# FINALIZAÇÃO - IMAGEM FINAL BASEADA EM DEBIAN (INSTALAÇÃO MANUAL DE TUDO)
+# FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
 # ==============================
-FROM debian:bookworm-slim AS final 
+FROM node:20.13.1-bookworm-slim AS final 
 
 WORKDIR /app
 
-# Instalar Node.js, npm, Python, pip e Nginx - TUDO MANUALMENTE NA IMAGEM FINAL
+# Instalar Python e Nginx - NODE.JS e NPM JÁ VÊM NA IMAGEM BASE
 RUN apt-get update && \
-    apt-get install -y nginx python3 python3-pip npm && \
+    apt-get install -y nginx python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
 
 # Copiar o backend compilado
 COPY --from=build-backend /app/backend/server /app/backend
 
-# Copiar o frontend compilado (apenas a pasta dist)
+# Copiar o frontend compilado
 COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 
 # Copiar a configuração do Nginx
@@ -81,24 +87,14 @@ RUN chown -R www-data:www-data /app/frontend/dist && \
 # Instalar dependências do backend (NOVAMENTE NA IMAGEM FINAL)
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages
 
-# ==========================================================================
 # RENDERIZAR O FRONTEND AQUI NA IMAGEM FINAL (CONFORME PEDIDO - MENOS OTIMIZADO)
-# ==========================================================================
-WORKDIR /app/frontend/kyogre_pdv_app 
-COPY frontend/kyogre_pdv_app ./      
-RUN npm install                    
-RUN npm run build                  
-# ==========================================================================
+WORKDIR /app/frontend/kyogre_pdv_app
+COPY frontend/kyogre_pdv_app ./
+RUN npm install
+RUN npm run build
 
-# Expor portas
 EXPOSE 80
 EXPOSE 8000
-
-# Script de inicialização
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
-
-# Comando para iniciar o Nginx e o backend
 CMD ["/app/start.sh"]
 
 #! como usar

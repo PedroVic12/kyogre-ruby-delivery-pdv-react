@@ -1,14 +1,16 @@
 version: "3.9"
 services:
   frontend:
-    build: . # Contexto de build é a pasta atual (onde está o Dockerfile)
+    build: . # Context is current directory (where Dockerfile is)
     ports:
       - "80:80"
       - "5173:5173"
     depends_on:
       - backend
+    container_name: frontend-container
 
-  backend:
-    build: ./backend/server
+  backend: # <--- **CRITICAL: SERVICE NAMED 'backend' MUST BE DEFINED HERE**
+    build: ./backend/server # Context for backend Dockerfile
     ports:
       - "8000:8000"
+    container_name: backend-container
