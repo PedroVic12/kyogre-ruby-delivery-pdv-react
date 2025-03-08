@@ -71,6 +71,13 @@ The project is organized into two main directories: `frontend` and `backend`.
     * **Final Image**: Combines the built frontend and backend, installs Python dependencies for the backend, and exposes ports for both the frontend (5173) and backend (8000).
     * **Multi-service setup:** This is a great way to separate concerns and make your application easily scalable
 
+## N8N
+
+```bash
+docker volume create n8n_data
+docker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+```
+
 ## Setup and Installation
 
 ### Prerequisites
