@@ -1,7 +1,73 @@
 import { MenuCategory } from '../../components/menu/MenuCategory';
 import { AddProductModal } from '../../components/menu/AddProductModal';
-import { useMenuState } from '../../hooks/useMenuState';
+//import { useMenuState } from '../../hooks/useMenuState';
 import { useState } from 'react';
+import { Category } from '../../types/menu';
+import { createProduct, updateCategoryProducts } from '../../utils/menu';
+
+const initialCategories: Category[] = [
+  {
+    id: '1',
+    name: 'Hamburguer',
+    products: [
+      {
+        id: '1',
+        name: 'Big Mac',
+        price: 40.99,
+        imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500',
+        description: 'Delicioso hambúrguer com dois andares',
+        isAvailable: true
+      }
+    ]
+  },
+  {
+    id: '2',
+    name: 'Pizza',
+    products: []
+  },
+  {
+    id: '3',
+    name: 'Sucos',
+    products: []
+  },
+  {
+    id: '4',
+    name: 'Salgados',
+    products: []
+  }
+];
+
+export function useMenuState() {
+  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddProduct = (formData: any) => {
+    const newProduct = createProduct(formData);
+    setCategories(
+      updateCategoryProducts(categories, formData.category, (products) => [...products, newProduct])
+    );
+  };
+
+  const handleDeleteProduct = (categoryId: string, productId: string) => {
+    setCategories(
+      updateCategoryProducts(categories, categoryId, (products) =>
+        products.filter(product => product.id !== productId)
+      )
+    );
+  };
+
+  return {
+    categories,
+    isModalOpen,
+    setIsModalOpen,
+    handleAddProduct,
+    handleDeleteProduct
+  };
+}
+
+
+
+//! Front end de gerenciador do cardapio
 
 
 function TestePedidoButton() {
@@ -89,16 +155,25 @@ export function MenuPage() {
   return (
     <div className="ml-2 pt-8 p-2">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Gerenciar Cardápio</h1>
+        <h2 className="text-2xl font-bold text-gray-900">Gerenciar Cardápio</h2>
 
-        <TestePedidoButton />
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
         >
-          Adicionar Produto
+          Adicionar Novo Produto
         </button>
       </div>
+
+      <TestePedidoButton />
+      <button
+        onClick={() => alert('Adicionar Nova Categoria')}
+        className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+      >
+        Adicionar Categoria
+      </button>
+
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {categories.map((category) => (

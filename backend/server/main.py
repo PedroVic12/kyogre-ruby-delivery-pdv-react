@@ -18,8 +18,8 @@ class RayquazaServer:
         # Configurar CORS
         self.app.add_middleware(
             CORSMiddleware,
-            #allow_origins=["*"],  # Em produção, defina origens específicas
-            allow_origins=["https://ruby-delivery-app.onrender.com", "http://localhost:5173"],
+            allow_origins=["*"],  # Em produção, defina origens específicas
+            #allow_origins=["https://ruby-delivery-app.onrender.com", "http://localhost:5173"],
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
