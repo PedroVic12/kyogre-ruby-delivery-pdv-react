@@ -18,7 +18,8 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: UserPlus, label: 'Cadastro', href: '/login' },
     { icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Users, label: 'App Garçom', href: '/garcom' },
-
+    { icon: Users, label: 'Controle Estoque', href: '/controle_estoque' },
+    { icon: Users, label: 'Pagina Componentes', href: '/pagina_componentes' },
   ];
 
   return (

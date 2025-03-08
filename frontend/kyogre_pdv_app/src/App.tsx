@@ -16,6 +16,7 @@ import TabelasMesasPage from '../app/app_garcom_pdv/mesasPage';
 import { HomePage } from './pages/dashboard/HomePage';
 import { DashboardPedidosPage } from './pages/dashboard/DashboardPedidos';
 import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage.jsx';
+import PaginaComponentes from './pages/UI/pagina_componentes.js';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -69,8 +70,8 @@ export default function App() {
                   <Route path="product/:id" element={<ProductDetailsPage />} />
                   <Route path="login" element={<LoginPage />} />
                   <Route path="garcom" element={<TabelasMesasPage />} />
-                  <Route path="Controle Estoque" element={ <ControleEstoquePage />} />
-
+                  <Route path="controle_estoque" element={ <ControleEstoquePage />} />
+                  <Route path="pagina_componentes" element={ <PaginaComponentes />} />
 
                 </Routes>
               </div>
