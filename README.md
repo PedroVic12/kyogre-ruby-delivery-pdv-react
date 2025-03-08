@@ -97,7 +97,7 @@ The project is organized into two main directories: `frontend` and `backend`.
     npm install #or yarn install
     ```
 
-3.  **Backend Setup:**
+3.  **Backend Setup:**    
 
     ```bash
     cd backend/server
