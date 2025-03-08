@@ -3,13 +3,13 @@
 # ==============================
 FROM node:18-alpine AS build_frontend
 
-WORKDIR /app/frontend
+WORKDIR /app/frontend/kyogre_pdv_app
 
 # Copia os arquivos de configuração
-COPY frontend/kyogre_pdv_app/package*.json ./
-COPY frontend/kyogre_pdv_app/tailwind.config.js ./
-COPY frontend/kyogre_pdv_app/postcss.config.js ./
-COPY frontend/kyogre_pdv_app/vite.config.ts ./
+COPY package*.json ./
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
+COPY vite.config.ts ./
 
 # Instala as dependências do frontend
 RUN npm install && \
@@ -18,7 +18,7 @@ RUN npm install && \
     npx tailwindcss init -p 
 
 # Copia o código fonte do frontend
-COPY frontend/kyogre_pdv_app . .
+COPY . .
 
 # Gera o build do frontend
 RUN npm run build
@@ -28,7 +28,7 @@ RUN npm run build
 # ==============================
 FROM python:3.10 AS build_backend
 
-WORKDIR /app/backend
+WORKDIR /app/backend/server
 
 # Copia os arquivos do backend
 COPY backend/server/requirements.txt .
