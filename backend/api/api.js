@@ -1,62 +1,53 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const pedidosController = require('./controllers/pedido_controller'); // Importa o controlador de pedidos
 
-const app = express();
-const PORT = 1998;
+class RaichuWebServer {
+    constructor() {
+        this.app = express();
+        this.app.use(cors({ // Configuração do CORS (similar ao FastAPI)
+            origin: '*', // ⚠️ PARA TESTE LOCAL. EM PRODUÇÃO, DEFINA ORIGENS ESPECÍFICAS!
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Métodos permitidos
+            allowedHeaders: ['Content-Type', 'Authorization'] // Headers permitidos
+        }));
+        this.app.use(express.json()); // Middleware para parsear JSON no body das requisições
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+        this.pedidosController = new pedidosController(); // Instancia o controlador de pedidos
 
-// Database setup
-const db = new sqlite3.Database('./menu.db', (err) => {
-    if (err) {
-        console.error(err.message);
+        this.setupRoutes();
     }
-    console.log('Connected to the menu database.');
-});
 
-// Create table if not exists for orders
-db.run(`CREATE TABLE IF NOT EXISTS orders (
-    id_pedido INTEGER PRIMARY KEY AUTOINCREMENT,
-    data TEXT NOT NULL,
-    nome TEXT NOT NULL,
-    telefone TEXT NOT NULL,
-    endereco TEXT NOT NULL,
-    complemento TEXT,
-    formaPagamento TEXT NOT NULL,
-    status TEXT NOT NULL,
-    totalPagar REAL NOT NULL
-)`);
+    setupRoutes() {
+        // Rota base da API (prefixo /api)
+        const apiRouter = express.Router();
 
-// GET endpoint to retrieve all orders
-app.get('/orders', (req, res) => {
-    db.all('SELECT * FROM orders', [], (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(rows);
-    });
-});
+        // Inclui as rotas do controlador de pedidos dentro de /api
+        apiRouter.use('/pedidos', this.pedidosController.router);
 
-// POST endpoint to create a new order
-app.post('/orders', (req, res) => {
-    const { data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar } = req.body;
-    db.run(`INSERT INTO orders (data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, 
-    [data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar], 
-    function(err) {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.status(201).json({ id_pedido: this.lastID, data, nome, telefone, endereco, complemento, formaPagamento, status, totalPagar });
-    });
-});
+        // Monta o router /api no app principal
+        this.app.use('/api', apiRouter);
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+        // Rota de status da API (fora do prefixo /api, na raiz)
+        this.app.get('/', (req, res) => {
+            res.json({ status: 'online', message: 'Raichu Web Server PDV API está funcionando!' });
+        });
+    }
+
+    run(port = 8000) {
+        this.app.listen(port, () => {
+            console.log(`Raichu Web Server PDV API rodando em http://localhost:${port}`);
+        });
+    }
+}
+
+// Cria instância do servidor
+const server = new RaichuWebServer();
+
+// Para ser chamado ao executar o arquivo diretamente
+if (require.main === module) {
+    server.run(); // Inicia o servidor na porta 8000 (padrão)
+}
+
+// Exporta o app Express (se precisar usar em testes ou outros módulos)
+module.exports = server.app;
