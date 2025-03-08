@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000'
+  baseURL: '/api'
 });
 
 
@@ -40,7 +40,7 @@ let dados = {
 
 const criarPedido = async (dados) => {
   try {
-    const response = await api.post('/api/pedidos', dados);
+    const response = await api.post('pedidos', dados);
     return response.data;
   } catch (error) {
     console.error('Erro:', error);
@@ -48,7 +48,7 @@ const criarPedido = async (dados) => {
   }
 };
 
-//criarPedido(dados);
+criarPedido(dados);
 
 
 export default criarPedido;

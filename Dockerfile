@@ -1,3 +1,4 @@
+
 # ==============================
 # BUILD DO FRONTEND (VITE)
 # ==============================
@@ -14,7 +15,7 @@ COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
 # Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
 RUN npm install && \
-    npm install @mui/material @emotion/react @emotion/styled @ionic/react lucide-react plotly.js react-plotly.js react-router-dom react-dom && \
+    npm install @mui/material plotly.js react-plotly.js @ionic/react @emotion/react @emotion/styled lucide-react react-router-dom && \
     npm install -D tailwindcss postcss autoprefixer && \
     npx tailwindcss init -p
 
@@ -42,7 +43,7 @@ WORKDIR /app/backend/server
 COPY backend/server/requirements.txt .
 
 # Instala as dependências do FastAPI
-RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia o código fonte do backend
 COPY backend/server . 
@@ -72,7 +73,7 @@ COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Instalar dependências do backend
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
 # Expor portas para o Nginx (80) e backend (8000)
 EXPOSE 80
