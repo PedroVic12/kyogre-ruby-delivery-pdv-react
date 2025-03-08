@@ -5,22 +5,32 @@ FROM node:20.13.1-bookworm-slim AS build-frontend
 
 WORKDIR /app/frontend/kyogre_pdv_app
 
-# Copia os arquivos de configuração do frontend - NOW FROM CORRECT PATH
+# Copia os arquivos de configuração do frontend
 COPY frontend/kyogre_pdv_app/package*.json ./
 COPY frontend/kyogre_pdv_app/tailwind.config.js ./
 COPY frontend/kyogre_pdv_app/postcss.config.js ./
 COPY frontend/kyogre_pdv_app/vite.config.ts ./
 COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
-# Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
-RUN npm install && \
-    npm install @mui/material @emotion/react @emotion/styled @ionic/react lucide-react plotly.js react-plotly.js react-router-dom react-dom && \
-    npm install -D tailwindcss postcss autoprefixer && \
-    npx tailwindcss init -p
+# Instala as dependências do frontend (TUDO EM UM COMANDO RUN)
+RUN npm install \
+    @mui/material \
+    @emotion/react \
+    @emotion/styled \
+    @ionic/react \
+    lucide-react \
+    plotly.js \
+    react-plotly.js \
+    react-router-dom \
+    react-dom \
+    tailwindcss \
+    postcss \
+    autoprefixer \
+    -D
 
-RUN npm install typescript
+RUN npx tailwindcss init -p
 
-# Copia o código fonte do frontend - COPY SOURCE AFTER DEPENDENCIES INSTALLED
+# Copia o código fonte do frontend
 COPY frontend/kyogre_pdv_app/. .
 
 # Gera o build do frontend
@@ -32,10 +42,7 @@ RUN npm run build
 # ==============================
 FROM python:3.10 AS build-backend
 
-WORKDIR /app/backend
-
-# Navigate to the backend server directory inside the container
-WORKDIR /app/backend/server
+WORKDIR /app/backend/server # WORKDIR SIMPLIFICADO
 
 # Copia os arquivos do backend
 COPY backend/server/requirements.txt .
@@ -50,19 +57,9 @@ COPY backend/server .
 # ==============================
 # FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
 # ==============================
-FROM node:20.13.1-bookworm-slim AS final
+FROM tiangolo/uvicorn-gunicorn-nginx:python3.10-slim AS final 
 
 WORKDIR /app
-
-# Instalar Python, pip e Nginx com permissões corretas
-RUN apt-get update && \
-    apt-get install -y nginx python3 python3-pip && \
-    chown -R www-data:www-data /var/lib/nginx && \
-    mkdir -p /app/backend /app/frontend/dist && \
-    rm -rf /var/lib/apt/lists/*
-
-# Criar diretórios para backend e frontend
-RUN mkdir -p /app/backend /app/frontend/dist
 
 # Copiar o backend compilado
 COPY --from=build-backend /app/backend/server /app/backend
@@ -73,16 +70,11 @@ COPY --from=build-frontend /app/frontend/kyogre_pdv_app/dist /app/frontend/dist
 # Copiar a configuração do Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Ajustar permissões
+# Ajustar permissões do frontend (IMPORTANTE PARA NGINX SERVIR ARQUIVOS)
 RUN chown -R www-data:www-data /app/frontend/dist && \
     chmod -R 755 /app/frontend/dist
 
-
-# Instalar dependências do backend
-RUN pip install --no-cache-dir -r /app/backend/requirements.txt --break-system-packages
-
-# Expor portas para o Nginx (80) e backend (8000)
-EXPOSE 80
+# Expor porta do backend (NGINX JÁ EXPOE A 80)
 EXPOSE 8000
 
 # Script de inicialização
@@ -94,7 +86,7 @@ CMD ["/app/start.sh"]
 
 #! como usar
 #docker build -t kyogre-app .
-#docker run -p 8000:8000 -p 5173:5173 kyogre-app
+#docker run -p 8000:8000 -p 80:80 kyogre-app
 
 #! para rodar o docker com o compose
 #docker compose up -d

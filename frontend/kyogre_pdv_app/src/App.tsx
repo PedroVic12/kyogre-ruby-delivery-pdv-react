@@ -15,70 +15,72 @@ import './index.css';
 import TabelasMesasPage from '../app/app_garcom_pdv/mesasPage';
 import { HomePage } from './pages/dashboard/HomePage';
 import { DashboardPedidosPage } from './pages/dashboard/DashboardPedidos';
-import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage.jsx';
 import PaginaComponentes from './pages/UI/pagina_componentes.js';
+import RootLayout from '../app/controle_estoque/src/pages/RootLayout.jsx';
+import Home from '../app/controle_estoque/src/pages/Home.jsx';
+import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage.jsx';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <Router>
-      <CartProvider>
-        <Routes>
-          <Route path="/" element={<Navigate to="dashboard" replace />} />
+      <Router>
+        <CartProvider>
+          <Routes>
+            <Route path="/" element={<Navigate to="dashboard" replace />} />
 
-          {/* Rotas Admin Dashboard (Template 2) */}
-          <Route
-            path="/dashboard/*"
-            element={
-              <div className="flex min-h-screen bg-gray-120">
+            {/* Rotas Admin Dashboard (Template 2) */}
+            <Route
+              path="/dashboard/*"
+              element={
+                <div className="flex min-h-screen bg-gray-120">
 
-                {/* Sidebar */}
-                <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-                <div className={`flex-1 transition-all ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
+                  {/* Sidebar */}
+                  <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+                  <div className={`flex-1 transition-all ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
 
-                  {/* Header */}
-                  <Header
-                    toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                    isSidebarOpen={isSidebarOpen}
-                  />
+                    {/* Header */}
+                    <Header
+                      toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                      isSidebarOpen={isSidebarOpen}
+                    />
 
-                  {/* Rotas Admin Dashboard (Template 2) */}
-                  <div className="p-6 pt-16">
-                    <Routes>
-                      <Route path="/" element={<DashboardPage />} />
-                      <Route path="produtos" element={<MenuPage />} />
-                      <Route path="clientes" element={<ClientsPage />} />
-                      <Route path="pedidos" element={<HomePage />} />
-                      <Route path="atendimento" element={<ChatPage />} />
-                      <Route path="kanban" element={<DashboardPedidosPage />} />
+                    {/* Rotas Admin Dashboard (Template 2) */}
+                    <div className="p-6 pt-16">
+                      <Routes>
+                        <Route path="/" element={<DashboardPage />} />
+                        <Route path="produtos" element={<MenuPage />} />
+                        <Route path="clientes" element={<ClientsPage />} />
+                        <Route path="pedidos" element={<HomePage />} />
+                        <Route path="atendimento" element={<ChatPage />} />
+                        <Route path="kanban" element={<DashboardPedidosPage />} />
 
-                    </Routes>
+                      </Routes>
+                    </div>
                   </div>
                 </div>
-              </div>
-            }
-          />
+              }
+            />
 
-          {/*  Template 3 (Cardapio Digital) - APENAS TELAS FORA DO DASHBOARD */}
-          <Route
-            path="/*"
-            element={
-              <div className="min-h-screen bg-gray-50">
-                <Routes>
-                  <Route path="cardapio" element={<CardapioDigitalPage />} />
-                  <Route path="product/:id" element={<ProductDetailsPage />} />
-                  <Route path="login" element={<LoginPage />} />
-                  <Route path="garcom" element={<TabelasMesasPage />} />
-                  <Route path="controle_estoque" element={ <ControleEstoquePage />} />
-                  <Route path="pagina_componentes" element={ <PaginaComponentes />} />
+            {/*  Template 3 (Cardapio Digital) - APENAS TELAS FORA DO DASHBOARD */}
+            <Route
+              path="/*"
+              element={
+                <div className="min-h-screen bg-gray-50">
+                  <Routes>
+                    <Route path="cardapio" element={<CardapioDigitalPage />} />
+                    <Route path="product/:id" element={<ProductDetailsPage />} />
+                    <Route path="login" element={<LoginPage />} />
+                    <Route path="garcom" element={<TabelasMesasPage />} />
+                    <Route path="controle_estoque" element={<ControleEstoquePage />} />
+                    <Route path="pagina_componentes" element={ <PaginaComponentes />} />
 
-                </Routes>
-              </div>
-            }
-          />
-        </Routes>
-      </CartProvider>
-    </Router>
+                  </Routes>
+                </div>
+              }
+            />
+          </Routes>
+        </CartProvider>
+      </Router>
   );
 }

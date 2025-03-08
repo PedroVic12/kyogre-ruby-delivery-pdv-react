@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  frontend:
+    build: . # Contexto de build é a pasta atual (onde está o Dockerfile)
+    ports:
+      - "80:80"    # Porta 80 do host para porta 80 do container (Nginx)
+      - "5173:5173" # Porta 5173 para acesso direto ao Vite Dev Server (opcional, para desenvolvimento rápido)
+    depends_on:
+      - backend # Garante que o backend inicie antes do frontend (se precisar)
+    container_name: frontend-container # Nome opcional para o container frontend
+
+  backend:
+    build: ./backend/server # Contexto de build é a pasta backend/server (onde está o Dockerfile do backend)
+    ports:
+      - "8000:8000"  # Porta 8000 do host para porta 8000 do container (FastAPI)
+    container_name: backend-container # Nome opcional para o container backend
