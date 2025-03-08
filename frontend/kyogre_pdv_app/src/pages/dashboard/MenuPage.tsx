@@ -111,7 +111,7 @@ function TestePedidoButton() {
     };
 
     try {
-      const resposta = await fetch('http://localhost:8000/api/pedidos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
+      const resposta = await fetch('http://localhost:8000/api/produtos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

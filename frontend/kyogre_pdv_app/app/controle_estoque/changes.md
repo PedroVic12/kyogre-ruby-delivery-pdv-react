@@ -10,6 +10,8 @@
 6. **Injeção de Estilos para Componentes Filhos**: Adicionada injeção de estilos CSS para garantir que os componentes filhos mantenham a aparência original.
 7. **Correção das Funcionalidades de Edição e Exclusão**: Modificados os componentes para corrigir a navegação entre as páginas e garantir o funcionamento correto das operações de edição e exclusão.
 8. **Correção da Navegação entre Páginas**: Substituídos os links do React Router por botões com callbacks para garantir a navegação correta entre as páginas.
+9. **Melhorias na Página de Detalhes do Produto**: Adicionado layout mais bonito e organizado com cards, espaçamento adequado e informações bem estruturadas.
+10. **IDs de Produto de 3 Dígitos**: Modificada a entidade `StockItem` para gerar IDs aleatórios de 3 dígitos (100-999).
 
 ## Detalhes das Alterações
 
@@ -30,12 +32,16 @@
 ### Componentes de Edição e Exclusão
 
 - **DeleteButton.jsx**: Modificado para aceitar um callback `onDelete` que é chamado após a exclusão bem-sucedida.
-- **ShowItem.jsx**: Modificado para aceitar callbacks `onBack` e `onEdit` para navegação.
+- **ShowItem.jsx**: Modificado para aceitar callbacks `onBack` e `onEdit` para navegação. Adicionado layout mais bonito com cards, espaçamento adequado e informações bem estruturadas.
 - **UpdateItem.jsx**: Modificado para aceitar um callback `onBack` para navegação após a atualização.
 - **ItemForm.jsx**: Modificado para aceitar um callback `onSubmitSuccess` que é chamado após a submissão bem-sucedida.
 - **ItemsTable.jsx**: Substituídos os links do React Router por botões que chamam o callback `onItemSelect`.
 - **ListItems.jsx**: Modificado para aceitar e passar o callback `onItemSelect` para o `ItemsTable`.
 - **CreateItem.jsx**: Modificado para aceitar e passar o callback `onItemCreated` para o `ItemForm`.
+
+### Entidades
+
+- **StockItem.js**: Modificada a geração de IDs para criar IDs aleatórios de 3 dígitos (100-999) em vez de IDs de 8 dígitos.
 
 ### App.tsx
 

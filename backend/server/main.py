@@ -12,10 +12,17 @@ class RayquazaServer:
             version="1.1.3"
         )
 
+        origins = [
+            "https://ruby-delivery-app.onrender.com",  # Domínio do seu frontend no Render.com (IMPORTANTE: HTTPS!)
+            "http://localhost",          # Para testes locais (opcional)
+            "http://localhost:5173",     # Para testes locais com Vite dev server (opcional)
+        ]
+
         # Configurar CORS - ADICIONE AQUI NO ARQUIVO PRINCIPAL
         self.app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],  # Em produção, defina origens específicas
+           # allow_origins=["*"],  # Em produção, defina origens específicas
+            allow_origins=origins,
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
