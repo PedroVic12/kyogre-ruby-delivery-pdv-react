@@ -10,7 +10,7 @@ COPY frontend/kyogre_pdv_app/package*.json ./
 COPY frontend/kyogre_pdv_app/tailwind.config.js ./
 COPY frontend/kyogre_pdv_app/postcss.config.js ./
 COPY frontend/kyogre_pdv_app/vite.config.ts ./
-COPY frontend/kyogre_pdv_app/tsconfig.json ./  # ENSURE tsconfig.json IS COPIED!
+COPY frontend/kyogre_pdv_app/tsconfig.json ./  
 
 # Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
 RUN npm install && \
