@@ -4,7 +4,7 @@ import uvicorn
 from typing import List
 from models.pedido_model import Pedido, PedidoCreate
 
-from controllers.pedidos_controller import pedidos_controller # Importe a INSTÂNCIA exportada!
+from controllers.pedidos_controller import PedidosController # Importe a INSTÂNCIA exportada!
 
 class RayquazaServer:
     def __init__(self):
@@ -24,7 +24,7 @@ class RayquazaServer:
         )
 
         # Usar a INSTÂNCIA importada de pedidos_controller
-        self.pedidos_controller = pedidos_controller
+        self.pedidos_controller = PedidosController()
 
         # Configurar rotas (DIRETAMENTE NO APP, SEM APIRouter para pedidos nesta abordagem)
         self.setup_routes()
