@@ -21,13 +21,15 @@ RUN npm install @mui/material plotly.js react-plotly.js @ionic/react @emotion/re
 RUN npm install -D tailwindcss postcss autoprefixer
 RUN npx tailwindcss init -p
 
-# Copia o código fonte do frontend
-COPY frontend/kyogre_pdv_app/. .
-
 RUN npm install typescript
 
 # Gera o build do frontend
 RUN npm run build
+
+# Copia o código fonte do frontend
+COPY frontend/kyogre_pdv_app/. .
+
+
 
 # ==============================
 # BUILD DO BACKEND (FASTAPI)
@@ -47,6 +49,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia o código fonte do backend
 COPY backend/server . .
+
+
 
 # ==============================
 # FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
