@@ -30,7 +30,7 @@ RUN npm install --force \
 
 RUN npx tailwindcss init -p
 
-RUN npm install typescript
+#RUN npm install typescript
 
 # Copia o código fonte do frontend - COPY SOURCE AFTER DEPENDENCIES INSTALLED
 COPY frontend/kyogre_pdv_app/. .
