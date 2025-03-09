@@ -359,7 +359,7 @@ export function MenuPage() {
               category={category}
               onDeleteProduct={handleDeleteProduct}
               onDeleteCategory={handleDeleteCategory} // Passa a função para deletar categoria
-             // onEditProduct={handleEditProduct} // Passa a função para editar produto (por enquanto não usado)
+              onEditProduct={handleAddProduct} // Passa a função para editar produto (por enquanto não usado)
             />
           ))}
         </div>
