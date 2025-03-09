@@ -129,7 +129,7 @@ interface OrderColumnProps {
 
 function OrderColumn({ title, orders, color, onAdvance, buttonIcon }: OrderColumnProps) {
     return (
-        <div className={`w-72 p-4 rounded-md bg-gray-200 flex flex-col items-start border-t-4 ${color}`}>
+        <div className={`w-full sm:w-72 p-4 rounded-md bg-gray-200 flex flex-col items-start border-t-4 ${color}`}> {/*  Changed width to w-full sm:w-72 */}
             <h2 className="text-xl font-semibold mb-2">{title} - ({orders.length})</h2>
             <div className="w-full space-y-3">
                 {orders.map((order) => (
@@ -360,7 +360,7 @@ export function DashboardPedidosPage() {
 
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen"> {/* Changed padding to be responsive p-4 sm:p-6*/}
             <h1 className="text-2xl font-semibold mb-6 text-gray-800">Gerenciamento de Pedidos</h1>
 
             <NewOrderDialog
@@ -369,8 +369,8 @@ export function DashboardPedidosPage() {
                 onAccept={handleAcceptNewOrder}
             />
 
-
-            <div className="flex gap-4 overflow-x-auto">
+            {/* Changed the div for better responsiveness */}
+            <div className="flex flex-col sm:flex-row gap-4 overflow-x-auto">
                 <OrderColumn
                     title="Em Processo"
                     orders={pedidosEmProcesso}

@@ -34,7 +34,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
             <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
               <User className="h-5 w-5 text-purple-600" />
             </div>
-            <span className="hidden md:inline text-sm font-medium text-gray-700">Admin</span>
+            <span className="hidden md:inline text-sm font-medium text-gray-900">Admin</span>
           </div>
         </div>
       </div>

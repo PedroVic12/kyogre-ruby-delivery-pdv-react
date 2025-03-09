@@ -6,7 +6,7 @@ import CreateItem from "./pages/items/CreateItem";
 import ShowItem from "./pages/items/ShowItem";
 import UpdateItem from "./pages/items/UpdateItem";
 
-import { Button,  IconButton } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 
 export default function ControleEstoquePage() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -56,7 +56,7 @@ export default function ControleEstoquePage() {
     estoqueMain: {
       flex: '1 0 auto',
       padding: '0 2rem',
-      backgroundColor: '#2c2c2d'
+      backgroundColor: 'rgba(255, 255, 255, 0.49)'
     },
     estoqueFooter: {
       padding: '1rem 2rem',
@@ -239,25 +239,25 @@ export default function ControleEstoquePage() {
         return <Home />;
       case "listItems":
         return (
-          <ListItems 
+          <ListItems
             onItemSelect={(id) => {
               setSelectedItemId(id);
               setCurrentPage("showItem");
-            }} 
+            }}
           />
         );
       case "createItem":
         return (
-          <CreateItem 
+          <CreateItem
             onItemCreated={() => {
               setCurrentPage("listItems");
-            }} 
+            }}
           />
         );
       case "showItem":
         return selectedItemId ? (
-          <ShowItem 
-            itemId={selectedItemId} 
+          <ShowItem
+            itemId={selectedItemId}
             onBack={() => setCurrentPage("listItems")}
             onEdit={(id) => {
               setSelectedItemId(id);
@@ -267,8 +267,8 @@ export default function ControleEstoquePage() {
         ) : <Home />;
       case "updateItem":
         return selectedItemId ? (
-          <UpdateItem 
-            itemId={selectedItemId} 
+          <UpdateItem
+            itemId={selectedItemId}
             onBack={() => setCurrentPage("showItem")}
           />
         ) : <Home />;
@@ -284,7 +284,7 @@ export default function ControleEstoquePage() {
   const injectStyles = () => {
     // Criar um elemento style
     const styleElement = document.createElement('style');
-    
+
     // Definir o CSS para os componentes filhos
     styleElement.textContent = `
       .estoque-module-container .main {
@@ -392,10 +392,10 @@ export default function ControleEstoquePage() {
         width: 100%;
       }
     `;
-    
+
     // Adicionar o elemento style ao head
     document.head.appendChild(styleElement);
-    
+
     // Retornar uma função para remover o estilo quando o componente for desmontado
     return () => {
       document.head.removeChild(styleElement);
@@ -413,11 +413,11 @@ export default function ControleEstoquePage() {
         <header style={styles.estoqueHeader} className="estoque-module-header">
           <h1 style={styles.estoqueTitle} className="estoque-module-title">Controle Estoque - REACT 2025 </h1>
           <nav style={styles.estoqueNav} className="estoque-module-nav">
-            <Button 
+            <Button
               style={{
                 ...styles.estoqueNavLink,
                 ...(hoveredButton === 'home' ? styles.estoqueNavLinkHover : {})
-              }} 
+              }}
               className="estoque-module-nav-link"
               onClick={() => setCurrentPage("home")}
               onMouseEnter={() => setHoveredButton('home')}
@@ -425,11 +425,11 @@ export default function ControleEstoquePage() {
             >
               Início
             </Button>
-            <Button 
+            <Button
               style={{
                 ...styles.estoqueNavLink,
                 ...(hoveredButton === 'items' ? styles.estoqueNavLinkHover : {})
-              }} 
+              }}
               className="estoque-module-nav-link"
               onClick={() => setCurrentPage("listItems")}
               onMouseEnter={() => setHoveredButton('items')}
@@ -437,11 +437,11 @@ export default function ControleEstoquePage() {
             >
               Itens
             </Button>
-            <Button 
+            <Button
               style={{
                 ...styles.estoqueNavLink,
                 ...(hoveredButton === 'new' ? styles.estoqueNavLinkHover : {})
-              }} 
+              }}
               className="estoque-module-nav-link"
               onClick={() => setCurrentPage("createItem")}
               onMouseEnter={() => setHoveredButton('new')}
