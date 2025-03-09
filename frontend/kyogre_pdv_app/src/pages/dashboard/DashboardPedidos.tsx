@@ -48,7 +48,7 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
     }
 
     return (
-        <div className="bg-gray-400 rounded-md p-4 shadow-sm border relative">
+        <div className="bg-gray-300 rounded-md p-4 shadow-sm border relative">
             {/* Cabeçalho do Card - Sempre visível */}
             <div
                 className="flex justify-between items-center cursor-pointer"
@@ -56,7 +56,7 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
             >
                 <div>
                     <h3 className="font-semibold text-lg">Pedido #{order.id}</h3>
-                    <p className="text-gray-600">Cliente: {order.nome_cliente}</p>
+                    <p className="text-black-900">Cliente: {order.nome_cliente}</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className={`text-sm ${isExpanded ? 'rotate-180' : ''} transition-transform`}>
@@ -69,9 +69,9 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
             {isExpanded && (
                 <div className="mt-4 space-y-3">
                     <div className="space-y-2">
-                        <p className="text-gray-700">Telefone: {order.telefone}</p>
-                        <p className="text-gray-700">Endereço: {order.endereco}</p>
-                        <p className="text-gray-700">Complemento: {order.complemento}</p>
+                        <p className="text-black-900">Telefone: {order.telefone}</p>
+                        <p className="text-black-900">Endereço: {order.endereco}</p>
+                        <p className="text-black-900">Complemento: {order.complemento}</p>
                     </div>
 
                     <div className="mt-3">
@@ -87,9 +87,9 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
                     </div>
 
                     <div className="pt-3 border-t">
-                        <p className="text-gray-700">Forma de Pagamento: {order.forma_pagamento}</p>
+                        <p className="text-black-900">Forma de Pagamento: {order.forma_pagamento}</p>
                         <p className="font-semibold text-lg">Total: R$ {order.total_pagar.toFixed(2)}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-900">
                             Data: {order.data_pedido.data} às {order.data_pedido.hora}
                         </p>
                     </div>
@@ -129,7 +129,7 @@ interface OrderColumnProps {
 
 function OrderColumn({ title, orders, color, onAdvance, buttonIcon }: OrderColumnProps) {
     return (
-        <div className={`w-full sm:w-72 p-4 rounded-md bg-gray-200 flex flex-col items-start border-t-4 ${color}`}> {/*  Changed width to w-full sm:w-72 */}
+        <div className={`w-full sm:w-72 p-4 rounded-md ${color} flex flex-col items-start border-t-8 ${color}`}> {/*  Changed width to w-full sm:w-72 */}
             <h2 className="text-xl font-semibold mb-2">{title} - ({orders.length})</h2>
             <div className="w-full space-y-3">
                 {orders.map((order) => (
@@ -380,21 +380,21 @@ export function DashboardPedidosPage() {
                 <OrderColumn
                     title="Cozinha"
                     orders={pedidosCozinha}
-                    color="border-yellow-500"
+                    color="border-yellow-500 bg-yellow-100"
                     onAdvance={advanceOrder}
                     buttonIcon={<ChevronRight />}
                 />
                 <OrderColumn
                     title="Entrega"
                     orders={pedidosEntrega}
-                    color="border-green-500"
+                    color="border-green-700 bg-green-200"
                     onAdvance={advanceOrder}
                     buttonIcon={<ChevronRight />}
                 />
                 <OrderColumn
                     title="Finalizado"
                     orders={pedidosFinalizados}
-                    color="border-gray-400"
+                    color="border-gray-500 bg-gray-300"
                 />
             </div>
         </div>
