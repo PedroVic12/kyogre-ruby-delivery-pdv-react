@@ -359,8 +359,8 @@ export function DashboardPedidosPage() {
 
 
     return (
-        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen"> {/* Changed padding to be responsive p-4 sm:p-6*/}
-            <h1 className="text-2xl font-semibold mb-6 text-gray-800">Gerenciamento de Pedidos</h1>
+        <div className="p-6 sm:p-6  min-h-screen"> {/* Changed padding to be responsive p-4 sm:p-6*/}
+            <h1 className="text-2xl font-semibold mb-6 mt-6 text-gray-900">Gerenciamento de Pedidos</h1>
 
             <NewOrderDialog
                 isOpen={isNewOrderDialogOpen}
