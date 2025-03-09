@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Minus, NavigationIcon } from 'lucide-react';
 import PedidoController from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
-import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab } from '@mui/material';
+import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, AppBar, Toolbar, Typography } from '@mui/material';
 
 const MENU_ITEMS = [
   {
@@ -146,7 +146,8 @@ const CardapioPDV = () => {
   const [customerName, setCustomerName] = useState('');
   const [customersCount, setCustomersCount] = useState(1);
   const [isCartOpen, setIsCartOpen] = useState(false);
-    const menuTabs = ['sucos', 'pizzas', 'hamburguers','refrigerantes', 'acompanhamentos'];
+  const [totalItems, setTotalItems] = useState(0);
+  const menuTabs = ['sucos', 'pizzas', 'hamburguers','refrigerantes', 'acompanhamentos'];
   const tabsRef = useRef<HTMLDivElement>(null); // Reference to the tabs container
 
   useEffect(() => {
@@ -188,15 +189,20 @@ const CardapioPDV = () => {
       }
       return [...current, { ...item, quantity: 1 }];
     });
+    setTotalItems(prev => prev + 1); // Incrementa o contador
   };
-
+  
   const removeFromCart = (itemId: number) => {
     setCart(current => {
       const existing = current.find(i => i.id === itemId);
       if (existing && existing.quantity > 1) {
+        setTotalItems(prev => prev - 1); // Decrementa o contador
         return current.map(i =>
           i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i
         );
+      }
+      if (existing) {
+        setTotalItems(prev => prev - existing.quantity); // Remove todos os itens
       }
       return current.filter(i => i.id !== itemId);
     });
@@ -225,7 +231,6 @@ const CardapioPDV = () => {
     <div className="min-h-screen bg-gray-300 flex flex-col md:flex-row">
 
 
- 
 
       {/* Cart Section (Mobile - Modal) */}
       <Dialog open={isCartOpen} onClose={handleCloseCart} fullWidth maxWidth="sm">
@@ -372,10 +377,15 @@ const CardapioPDV = () => {
 
         {/* Tabs for Categories */}
         <div ref={tabsRef} className="overflow-x-auto mb-6">
-           
-      <header  className='h-16 bg-gray-400 shadow-sm  transition-all duration-300' >
-            <h2 className="text-xl font-semibold text-gray-900">Cardapio PDV</h2>
-      </header>
+            <AppBar position="static" style={{ backgroundColor: '#424242' }}>
+            <Toolbar>
+              <Typography variant="h6" style={{ flexGrow: 1 }}>
+                Cardapio PDV
+              </Typography>
+            </Toolbar>
+          </AppBar>
+ 
+     
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
@@ -419,15 +429,15 @@ const CardapioPDV = () => {
 
         {/* Mobile Cart Button */}
         <Fab
-          variant="extended"
-          size="medium"
-          color="primary"
-          className="md:hidden fixed top-20 left-20 bg-blue-600 text-white "
-          onClick={handleOpenCart}
-        >
-          <NavigationIcon />
-          Fazer Pedido 
-        </Fab>
+            variant="extended"
+            size="medium"
+            color="primary"
+            className="md:hidden fixed top-20 left-20 bg-blue-600 text-white"
+            onClick={handleOpenCart}
+          >
+            <NavigationIcon />
+            Fazer Pedido {totalItems > 0 && `(${totalItems})`} {/* Exibe o contador */}
+          </Fab>
       </main>
     </div>
   );
