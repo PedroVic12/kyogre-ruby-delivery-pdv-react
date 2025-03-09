@@ -36,7 +36,7 @@ export function AddProductModal({ isOpen, onClose, }: AddProductModalProps) {
     };
 
     try {
-      const response = await fetch('http://localhost:8000/api/produtos/', { // Your FastAPI endpoint
+      const response = await fetch('https://docker-raichu.onrender.com/api/produtos/', { // Your FastAPI endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

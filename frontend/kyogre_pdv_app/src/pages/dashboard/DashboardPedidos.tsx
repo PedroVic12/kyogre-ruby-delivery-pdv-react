@@ -192,8 +192,7 @@ export function DashboardPedidosPage() {
     const [lastOrdersLength, setLastOrdersLength] = useState(0);
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
 
-    const API_ENDPOINT = 'http://localhost:8000/api/pedidos/'; // Rota da sua API para buscar pedidos
-
+    const API_ENDPOINT = 'https://docker-raichu.onrender.com/api/pedidos/'; // Rota da sua API para buscar pedidos
     const fetchOrders = async () => {
         setIsLoading(true);
         setError(null);
@@ -277,7 +276,7 @@ export function DashboardPedidosPage() {
         // Para cada novo pedido, atualize o status para "Em Processo"
         for (const pedido of novosPedidos) {
             try {
-                const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${pedido.id}`;
+                const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${pedido.id}`;
                 const response = await fetch(UPDATE_API_ENDPOINT, {
                     method: 'PUT',
                     headers: {
@@ -316,7 +315,7 @@ export function DashboardPedidosPage() {
 
     // Função para avançar o status do pedido (simulada - você precisa implementar no backend)
     const advanceOrder = async (orderId: number, nextStatus: string) => {
-        const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status`; // Rota de exemplo para atualizar status
+        const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status`; // Rota de exemplo para atualizar status
         try {
             const response = await fetch(UPDATE_API_ENDPOINT, {
                 method: 'PUT', // Usando PUT conforme solicitado

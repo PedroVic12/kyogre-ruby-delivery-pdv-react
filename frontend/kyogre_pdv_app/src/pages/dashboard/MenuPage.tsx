@@ -171,7 +171,7 @@ function TestePedidoButton() {
     console.log('Dados do pedido:', pedidoData);
 
     try {
-      const resposta = await fetch('http://localhost:8000/api/pedidos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
+      const resposta = await fetch('https://docker-raichu.onrender.com/api/pedidos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
