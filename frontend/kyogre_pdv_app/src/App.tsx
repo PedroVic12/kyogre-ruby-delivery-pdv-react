@@ -21,7 +21,7 @@ import CardapioPDV from '../app/app_garcom_pdv/pages/CardapioPDV.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 
 export default function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <Router>

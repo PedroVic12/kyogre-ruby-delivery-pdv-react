@@ -16,8 +16,9 @@ interface Produto {
   /**
    * Classe responsável por gerenciar as chamadas à API
    */
+  
   class CardapioService {
-    private baseUrl: string = 'http://localhost:8000/api';
+    private baseUrl: string = 'https://docker-raichu.onrender.com/api';
   
     /**
      * Busca todos os produtos do cardápio
