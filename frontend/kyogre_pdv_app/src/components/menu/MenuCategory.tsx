@@ -10,18 +10,25 @@ const categoryColors: Record<CategoryName, string> = {
   'Sucos': 'bg-yellow-50 border-yellow-200',
   'Salgados': 'bg-red-50 border-red-200'
 };
+
+
 interface MenuCategoryProps {
   category: Category;
   onDeleteProduct: (categoryId: string, productId: string) => void;
   onDeleteCategory: (categoryId: string) => void; // Adicione prop para deletar categoria
+  onEditProduct: (productId: string) => void; // Adicione prop para editar produto
 }
 
 export function MenuCategory({ category, onDeleteProduct, onDeleteCategory }: MenuCategoryProps) { // Adicione onDeleteCategory nas props
   const colorClass = categoryColors[category.name as CategoryName] || 'bg-gray-50 border-gray-200';
 
+  function onEditProduct(id: string, id1: string): void {
+    console.log('Editar produto', id, id1);
+  }
+
   return (
     <div className={`rounded-xl shadow-md overflow-hidden border ${colorClass} **w-full md:w-auto**`}> {/* Ajuste largura para responsividade */}
-      <div className={`**p-6** border-b flex justify-between items-center **text-xl**`}> {/* Aumente padding e tamanho da fonte */}
+      <div className={`**p86** border-b flex justify-between items-center **text-xl**`}> {/* Aumente padding e tamanho da fonte */}
         <h2 className="**text-xl** font-semibold text-gray-900">{category.name}</h2> {/* Mantenha ou ajuste o tamanho do título */}
         <div className="flex items-center gap-2">
           <button
@@ -41,6 +48,7 @@ export function MenuCategory({ category, onDeleteProduct, onDeleteCategory }: Me
             product={product}
             categoryColor={colorClass}
             onDelete={() => onDeleteProduct(category.id, product.id)}
+            onEdit={() => onEditProduct(category.id, product.id)}
           />
         ))}
       </div>

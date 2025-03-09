@@ -26,7 +26,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
 
   return (
     <div
-      className={`h-screen fixed left-0 top-0 z-30 bg-blue-900 text-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 overflow-hidden'
+      className={`h-screen fixed left-0 top-0 z-25 bg-blue-900 text-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 overflow-hidden'
         }`}
     >
       <div className="flex flex-col h-full">
@@ -36,7 +36,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
 
           </IconButton>
-          <h1 className="text-xl font-bold">Ruby Delivery PDV App v5</h1>
+          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App v5</h2>
         </div>
 
         <nav className="flex-1 px-3 space-y-1">
