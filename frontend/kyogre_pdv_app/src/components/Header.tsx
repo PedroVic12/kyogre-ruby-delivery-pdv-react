@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
   return (
-    <header className={`h-16 bg-white shadow-sm fixed top-0 right-0 left-0 z-20 transition-all duration-300 ${
+    <header className={`h-16 bg-purple-700 shadow-sm fixed top-0 right-0 left-0 z-20 transition-all duration-300 ${
       isSidebarOpen ? 'md:left-64' : 'left-0'
     }`}>
       <div className="h-full flex items-center justify-between px-4 md:px-6">

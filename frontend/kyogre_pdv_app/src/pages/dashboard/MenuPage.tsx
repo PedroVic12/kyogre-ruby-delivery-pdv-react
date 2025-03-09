@@ -63,13 +63,14 @@ export function useMenuState() {
         descricao: formData.description,
         disponivel: true
       });
+      console.log('Produto adicionado com sucesso:', novoProduto);
       await carregarProdutos(); // Recarrega os produtos
     } catch (error) {
       console.error('Erro ao adicionar produto:', error);
     }
   };
 
-  const handleDeleteProduct = async (categoryId: string, productId: string) => {
+  const handleDeleteProduct = async ( productId: string) => {
     try {
       await cardapioService.deletarProduto(productId);
       await carregarProdutos(); // Recarrega os produtos
@@ -78,15 +79,32 @@ export function useMenuState() {
     }
   };
 
+  const handleDeleteCategory = async (categoryId: string) => {
+    // TODO: Implementar lógica para deletar categoria (backend e frontend)
+    alert(`Deletar categoria ${categoryId} - Funcionalidade de deletar categoria não implementada no backend ainda.`);
+    console.log(`Deletar categoria ${categoryId}`);
+    // await carregarProdutos(); // Recarrega os produtos após deletar categoria (se implementar backend)
+  };
+
+  const handleEditProduct = async (productId: string, productData: Product) => {
+    // TODO: Implementar lógica para editar produto (modal de edição, chamada à API, etc.)
+    alert(`Editar produto ${productData.name} (ID: ${productId}) - Funcionalidade de editar produto não implementada ainda.`);
+    console.log(`Editar produto ${productId}`, productData);
+  };
+
+
   return {
     categories,
     isModalOpen,
     setIsModalOpen,
     handleAddProduct,
     handleDeleteProduct,
+    handleDeleteCategory, // expose a função para deletar categoria
+    handleEditProduct, // expose a função para editar produto
     isLoading
   };
 }
+
 
 //! Front end de gerenciador do cardapio
 
@@ -290,6 +308,7 @@ function TestePedidoButton() {
   );
 }
 
+
 export function MenuPage() {
   const {
     categories,
@@ -297,11 +316,13 @@ export function MenuPage() {
     setIsModalOpen,
     handleAddProduct,
     handleDeleteProduct,
+    handleDeleteCategory, // pega a função para deletar categoria
+   // handleEditProduct, // pega a função para editar produto
     isLoading
   } = useMenuState();
 
   return (
-    <div className="ml-2 pt-8 p-2">
+    <div className="ml-2 pt-8 p-2 **overflow-x-auto**"> {/* Adiciona scroll horizontal se necessário */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Gerenciar Cardápio</h2>
 
@@ -313,9 +334,9 @@ export function MenuPage() {
           >
             Adicionar Novo Produto
           </Button>
-          
+
           <TestePedidoButton />
-          
+
           <Button
             variant="contained"
             color="secondary"
@@ -331,12 +352,14 @@ export function MenuPage() {
           <CircularProgress />
         </Box>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="**flex flex-col gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4**"> {/* Layout responsivo com flex e grid */}
           {categories.map((category) => (
             <MenuCategory
               key={category.id}
               category={category}
               onDeleteProduct={handleDeleteProduct}
+              onDeleteCategory={handleDeleteCategory} // Passa a função para deletar categoria
+             // onEditProduct={handleEditProduct} // Passa a função para editar produto (por enquanto não usado)
             />
           ))}
         </div>

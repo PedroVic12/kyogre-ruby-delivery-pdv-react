@@ -1,6 +1,8 @@
 // Sidebar.jsx
 import { Link } from 'react-router-dom';
 import { Home, LayoutDashboard, Book, Users, UserPlus, Coffee, HeadphonesIcon, Menu } from 'lucide-react';
+import { IconButton } from '@mui/material';
+import rubyLogo from '../assets/ruby_logo.png'; // <--- IMPORT THE IMAGE HERE
 
 interface SidebarProps {
   isOpen: boolean;
@@ -24,13 +26,17 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
 
   return (
     <div
-      className={`h-screen fixed left-0 top-0 z-30 bg-purple-700 text-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 overflow-hidden'
+      className={`h-screen fixed left-0 top-0 z-30 bg-blue-900 text-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 overflow-hidden'
         }`}
     >
       <div className="flex flex-col h-full">
         <div className="flex items-center gap-2 p-4 mb-2">
-          <Coffee className="h-8 w-8" />
-          <h1 className="text-xl font-bold">Ruby Delivery PDV App v4</h1>
+          <IconButton onClick={toggleSidebar} sx={{ backgroundColor: 'white' }}>
+            
+            <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
+
+          </IconButton>
+          <h1 className="text-xl font-bold">Ruby Delivery PDV App v5</h1>
         </div>
 
         <nav className="flex-1 px-3 space-y-1">
