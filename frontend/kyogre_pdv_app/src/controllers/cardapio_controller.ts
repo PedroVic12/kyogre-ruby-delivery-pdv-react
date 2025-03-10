@@ -4,14 +4,18 @@
  * Interface para representar um produto do cardápio
  */
 interface Produto {
-    id: string;
+    id: number;
     nome_produto: string;
     preco: number;
     categoria: string;
     url_imagem: string;
     descricao: string;
     disponivel: boolean;
-  }
+    adicionais: {
+      nome_adicional: string;
+      preco: number;
+    };
+    }
   
   /**
    * Classe responsável por gerenciar as chamadas à API
@@ -37,7 +41,7 @@ interface Produto {
     /**
      * Cria um novo produto no cardápio
      */
-    async criarProduto(produto: Omit<Produto, 'id'>): Promise<Produto> {
+    async criarProduto(produto: Produto): Promise<Produto> {
       try {
         const response = await fetch(`${this.baseUrl}/produtos/`, {
           method: 'POST',

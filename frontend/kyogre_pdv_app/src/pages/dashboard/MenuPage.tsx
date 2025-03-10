@@ -56,12 +56,17 @@ export function useMenuState() {
   const handleAddProduct = async (formData: any) => {
     try {
       const novoProduto = await cardapioService.criarProduto({
+        id: 0,
         nome_produto: formData.name,
         preco: formData.price,
         categoria: formData.category,
         url_imagem: formData.imageUrl,
         descricao: formData.description,
-        disponivel: true
+        disponivel: true,
+        adicionais: {
+          nome_adicional: '',
+          preco: 0,
+        },
       });
       console.log('Produto adicionado com sucesso:', novoProduto);
       await carregarProdutos(); // Recarrega os produtos

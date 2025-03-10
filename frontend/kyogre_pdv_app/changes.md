@@ -29,3 +29,18 @@
 - Permite a integração de componentes React escritos em JSX em um projeto TypeScript
 - Mantém a verificação de tipos do TypeScript para o restante do código
 - Facilita a migração gradual de JSX para TSX 
+
+## Alterações na Interface do Produto
+
+### Alterações Realizadas:
+
+1. **Adição da Interface Produto**
+   - Adicionada a interface `Produto` no arquivo `src/types/menu.ts` para incluir a propriedade `nome_adicional` e outras propriedades necessárias.
+
+## Alterações no Arquivo MenuPage.tsx
+
+### Alterações Realizadas:
+
+1. **Conversão do Id do Produto para String**
+   - **Arquivo**: `MenuPage.tsx`
+   - **Mudança**: O id do produto foi convertido para string usando `toString()` para evitar erro de tipo. Essa alteração foi feita na linha onde o id é atribuído ao objeto de produto.
