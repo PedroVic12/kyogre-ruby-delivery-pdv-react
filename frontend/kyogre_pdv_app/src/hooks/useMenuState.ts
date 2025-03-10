@@ -4,7 +4,7 @@ import { createProduct, updateCategoryProducts } from '../utils/menu';
 
 const initialCategories: Category[] = [
   {
-    id: '1',
+    id: 1,
     name: 'Hamburguer',
     products: [
       {
@@ -18,17 +18,17 @@ const initialCategories: Category[] = [
     ]
   },
   {
-    id: '2',
+    id: 2,
     name: 'Pizza',
     products: []
   },
   {
-    id: '3',
+    id: 3,
     name: 'Sucos',
     products: []
   },
   {
-    id: '4',
+    id: 4,
     name: 'Salgados',
     products: []
   }
