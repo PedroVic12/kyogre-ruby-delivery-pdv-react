@@ -8,7 +8,7 @@ const initialCategories: Category[] = [
     name: 'Hamburguer',
     products: [
       {
-        id: '1',
+        id: 1,
         name: 'Big Mac',
         price: 40.99,
         imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500',
@@ -45,7 +45,7 @@ export function useMenuState() {
     );
   };
 
-  const handleDeleteProduct = (categoryId: string, productId: string) => {
+  const handleDeleteProduct = (categoryId: number, productId: number) => {
     setCategories(
       updateCategoryProducts(categories, categoryId, (products) =>
         products.filter(product => product.id !== productId)

@@ -2,7 +2,7 @@ import { Product, Category } from '../types/menu';
 
 export function createProduct(formData: any): Product {
   return {
-    id: Date.now().toString(),
+    id: Date.now(),
     name: formData.name,
     price: Number(formData.price),
     description: formData.description,
@@ -13,7 +13,7 @@ export function createProduct(formData: any): Product {
 
 export function updateCategoryProducts(
   categories: Category[],
-  categoryId: string,
+  categoryId: number,
   updater: (products: Product[]) => Product[]
 ): Category[] {
   return categories.map(category => {
