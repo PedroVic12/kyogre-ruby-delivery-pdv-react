@@ -5,8 +5,8 @@ import { Product } from '../../types/menu';
 interface ProductCardProps {
   product: Product;
   categoryColor: string;
-  onDelete: (productId: string) => void; // Modifique onDelete para receber productId
-  onEdit: (productId: string, productData: Product) => void; // Adicione prop para editar
+  onDelete: (productId: number) => void; // Modifique onDelete para receber productId
+  onEdit: (productId: number, productData: Product) => void; // Adicione prop para editar
 }
 
 export function ProductCard({ product, categoryColor, onDelete }: ProductCardProps) { // Adicione onEdit nas props
