@@ -40,7 +40,7 @@ export function useMenuState() {
 
       // Converte o Map para o formato de categorias
       const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, products]) => ({
-        id: name,
+        id: 0,
         name,
         products
       }));
@@ -75,7 +75,7 @@ export function useMenuState() {
     }
   };
 
-  const handleDeleteProduct = async ( productId: string) => {
+  const handleDeleteProduct = async ( productId: number) => {
     try {
       await cardapioService.deletarProduto(productId);
       await carregarProdutos(); // Recarrega os produtos
@@ -84,14 +84,14 @@ export function useMenuState() {
     }
   };
 
-  const handleDeleteCategory = async (categoryId: string) => {
+  const handleDeleteCategory = async (categoryId: number) => {
     // TODO: Implementar lógica para deletar categoria (backend e frontend)
     alert(`Deletar categoria ${categoryId} - Funcionalidade de deletar categoria não implementada no backend ainda.`);
     console.log(`Deletar categoria ${categoryId}`);
     // await carregarProdutos(); // Recarrega os produtos após deletar categoria (se implementar backend)
   };
 
-  const handleEditProduct = async (productId: string, productData: Product) => {
+  const handleEditProduct = async (productId: number, productData: Product) => {
     // TODO: Implementar lógica para editar produto (modal de edição, chamada à API, etc.)
     alert(`Editar produto ${productData.name} (ID: ${productId}) - Funcionalidade de editar produto não implementada ainda.`);
     console.log(`Editar produto ${productId}`, productData);

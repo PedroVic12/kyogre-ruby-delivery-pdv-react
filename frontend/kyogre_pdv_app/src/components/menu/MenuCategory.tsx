@@ -14,15 +14,15 @@ const categoryColors: Record<CategoryName, string> = {
 
 interface MenuCategoryProps {
   category: Category;
-  onDeleteProduct: (categoryId: string, productId: number) => void;
-  onDeleteCategory: (categoryId: string) => void; // Adicione prop para deletar categoria
+  onDeleteProduct: (categoryId: number, productId: number) => void;
+  onDeleteCategory: (categoryId: number) => void; // Adicione prop para deletar categoria
   onEditProduct: (productId: number, productData: any) => void; // Adicione prop para editar produto
 }
 
 export function MenuCategory({ category, onDeleteProduct, onDeleteCategory }: MenuCategoryProps) { // Adicione onDeleteCategory nas props
   const colorClass = categoryColors[category.name as CategoryName] || 'bg-gray-50 border-gray-200';
 
-  function onEditProduct(id: string, id1: number): void {
+  function onEditProduct(id: number, id1: number): void {
     console.log('Editar produto', id, id1);
   }
 

@@ -61,7 +61,7 @@ interface Produto {
     /**
      * Deleta um produto do cardápio
      */
-    async deletarProduto(id: string): Promise<void> {
+    async deletarProduto(id: number): Promise<void> {
       try {
         await fetch(`${this.baseUrl}/produtos/${id}`, {
           method: 'DELETE',
