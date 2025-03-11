@@ -18,6 +18,8 @@ import {
   FormControl,
   InputLabel,
   Stack,
+  SelectChangeEvent,
+  Switch,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -181,7 +183,13 @@ const ProductModal = ({
     price: 0,
     category: '',
     imageUrl: '',
-    description: ''
+    description: '',
+    isAvailable: true,
+    adicionais: {
+      nome_adicional: '',
+      preco: 0
+    }
+    
   });
 
   useEffect(() => {
@@ -192,7 +200,12 @@ const ProductModal = ({
         price: editingProduct.price,
         category: '', // This would come from the category context in a real implementation
         imageUrl: editingProduct.imageUrl || '',
-        description: editingProduct.description || ''
+        description: editingProduct.description || '',
+        isAvailable: editingProduct.isAvailable || false,
+        adicionais: {
+          nome_adicional: '',
+          preco: 0
+        }
       });
     } else {
       setFormData({
@@ -201,7 +214,12 @@ const ProductModal = ({
         price: 0,
         category: categoryOptions[0] || '',
         imageUrl: 'https://picsum.photos/200/300', //!change here
-        description: ''
+        description: '',
+        isAvailable: true,
+        adicionais: {
+          nome_adicional: '',
+          preco: 0
+        }
       });
     }
   }, [editingProduct, categoryOptions, open]);
@@ -211,6 +229,13 @@ const ProductModal = ({
     const value = e.target.value;
     setFormData({ ...formData, [name]: value });
   };
+
+  const handleChangeCategoria = (e: SelectChangeEvent<string>) => {
+    setFormData({ ...formData, category: e.target.value });
+  };
+
+  //const handleChangeIsAvailable = (e: React.ChangeEvent<HTMLInputElement>) => { setFormData({ ...formData, isAvailable: e.target.checked }); };
+
 
   const handleSubmit = () => {
     onSave(formData);
@@ -250,7 +275,7 @@ const ProductModal = ({
                   value={formData.category}
                   labelId="Categoria"
                   label="Categoria"
-                  //onChange={handleChange}
+                  onChange={handleChangeCategoria}
                 >
                   {categoryOptions.map((category) => (
                     <MenuItem key={category} value={category}>{category}</MenuItem>
@@ -278,6 +303,18 @@ const ProductModal = ({
                 onChange={handleChange}
               />
             </Grid>
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700">Disponível</span>
+              <Switch
+                checked={formData.isAvailable}
+                //onChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+              />
+              <span className="text-sm font-medium text-gray-700">Adicionais?</span>
+              <Switch
+                checked={formData.isAvailable}
+                //onChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+              />
+            </div>
           </Grid>
         </Box>
       </DialogContent>
