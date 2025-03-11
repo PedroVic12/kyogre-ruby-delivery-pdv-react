@@ -53,6 +53,14 @@
   - Mensagens de sucesso e erro são automaticamente removidas após 8 segundos.
   - Implementado usando `useEffect` e `setTimeout`.
 
+## Alterações realizadas no CardapioManager.tsx
+
+## 1. Alteração do Tipo do Manipulador de Eventos
+- O tipo do manipulador de eventos foi alterado de `ChangeEvent<HTMLInputElement | { name?: string; value: unknown; }>` para `SelectChangeEvent<string>` para garantir compatibilidade com eventos de seleção.
+
+## 2. Importação do Tipo Correto
+- O tipo `SelectChangeEvent` foi importado do pacote `@mui/material` para uso no componente.
+
 ## Boas Práticas Implementadas
 
 1. **Gerenciamento de Estado**: Uso adequado de `useState` para controlar o estado do componente.
