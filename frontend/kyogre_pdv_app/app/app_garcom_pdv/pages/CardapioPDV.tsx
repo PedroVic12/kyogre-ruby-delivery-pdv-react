@@ -432,7 +432,7 @@ const CardapioPDV = () => {
             variant="extended"
             size="medium"
             color="primary"
-            className="md:hidden fixed top-20 left-20 bg-blue-600 text-white"
+            className="md:hidden fixed top-10 left-20 bg-blue-600 text-white"
             onClick={handleOpenCart}
           >
             <NavigationIcon />

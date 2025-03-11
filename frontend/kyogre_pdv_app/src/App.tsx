@@ -19,6 +19,7 @@ import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage
 import GarcomMesas from '../app/app_garcom_pdv/pages/GarcomMesas.js';
 import CardapioPDV from '../app/app_garcom_pdv/pages/CardapioPDV.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
+import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,9 +42,8 @@ export default function App() {
                   toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
                 />
                 <div
-                  className={`flex-1 transition-all duration-300 ${
-                    isSidebarOpen ? 'md:ml-64' : 'ml-0'
-                  }`}
+                  className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'ml-0'
+                    }`}
                 >
                   {/* Header - responsive adjustments */}
                   <Header
@@ -54,13 +54,15 @@ export default function App() {
                   {/* Dashboard Content - responsive adjustments */}
                   <main className="p-4 sm:p-6 md:p-8 pt-16">
                     <Routes>
-                     {/* <Route index element={<DashboardPage />} />  */}
+                      {/* <Route index element={<DashboardPage />} />  */}
 
                       <Route index element={<DashboardPedidosPage />} /> {/* Index route for /dashboard */}
                       <Route path="produtos" element={<MenuPage />} />
                       <Route path="clientes" element={<ClientsPage />} />
                       <Route path="pedidos" element={<HomePage />} />
                       <Route path="atendimento" element={<ChatPage />} />
+                      <Route path="cardapioManager" element={<CardapioManagerPage isSidebarOpen={isSidebarOpen} />} />
+
                     </Routes>
                   </main>
                 </div>

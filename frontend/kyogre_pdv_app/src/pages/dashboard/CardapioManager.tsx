@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Button, 
-  Card, 
-  IconButton, 
-  Typography, 
-  Menu, 
-  MenuItem, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions, 
-  TextField, 
-  CircularProgress, 
-  Grid, 
-  Select, 
-  FormControl, 
+import {
+  Box,
+  Button,
+  Card,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  CircularProgress,
+  Grid,
+  Select,
+  FormControl,
   InputLabel,
+  Stack,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -27,14 +28,14 @@ import { Category, Product } from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
 
 // ProductCard Component
-const ProductCard = ({ 
-  product, 
-  onEdit, 
-  onDelete 
-}: { 
-  product: Product, 
-  onEdit: (product: Product) => void, 
-  onDelete: (id: number) => void 
+const ProductCard = ({
+  product,
+  onEdit,
+  onDelete
+}: {
+  product: Product,
+  onEdit: (product: Product) => void,
+  onDelete: (id: number) => void
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -50,8 +51,8 @@ const ProductCard = ({
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', p: 1, mb: 1, bgcolor: '#f5f5f5' }}>
       <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {product.imageUrl ? 
-          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%' }} /> : 
+        {product.imageUrl ?
+          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%' }} /> :
           <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
         }
       </Box>
@@ -81,18 +82,18 @@ const ProductCard = ({
 };
 
 // CategoryCard Component
-const CategoryCard = ({ 
-  category, 
-  onAddProduct, 
-  onDeleteCategory, 
-  onEditProduct, 
-  onDeleteProduct 
-}: { 
-  category: Category, 
-  onAddProduct: (categoryName: string) => void, 
-  onDeleteCategory: (categoryId: number) => void, 
-  onEditProduct: (product: Product) => void, 
-  onDeleteProduct: (productId: number) => void 
+const CategoryCard = ({
+  category,
+  onAddProduct,
+  onDeleteCategory,
+  onEditProduct,
+  onDeleteProduct
+}: {
+  category: Category,
+  onAddProduct: (categoryName: string) => void,
+  onDeleteCategory: (categoryId: number) => void,
+  onEditProduct: (product: Product) => void,
+  onDeleteProduct: (productId: number) => void
 }) => {
   // Get background color based on category name
   const getBgColor = () => {
@@ -117,18 +118,18 @@ const CategoryCard = ({
   };
 
   return (
-    <Card sx={{ 
-      height: '100%', 
-      display: 'flex', 
+    <Card sx={{
+      height: '100%',
+      display: 'flex',
       flexDirection: 'column',
       borderRadius: 2,
       overflow: 'hidden'
     }}>
-      <Box sx={{ 
-        bgcolor: getBgColor(), 
-        p: 1, 
-        display: 'flex', 
-        justifyContent: 'space-between', 
+      <Box sx={{
+        bgcolor: getBgColor(),
+        p: 1,
+        display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         color: 'white'
       }}>
@@ -140,19 +141,19 @@ const CategoryCard = ({
           <AddIcon />
         </IconButton>
       </Box>
-      <Box sx={{ 
-        p: 1, 
-        flexGrow: 1, 
+      <Box sx={{
+        p: 1,
+        flexGrow: 1,
         minHeight: 200,
         bgcolor: getContentBgColor(),
         overflowY: 'auto'
       }}>
         {category.products.map((product) => (
-          <ProductCard 
-            key={product.id} 
-            product={product} 
-            onEdit={onEditProduct} 
-            onDelete={onDeleteProduct} 
+          <ProductCard
+            key={product.id}
+            product={product}
+            onEdit={onEditProduct}
+            onDelete={onDeleteProduct}
           />
         ))}
       </Box>
@@ -161,16 +162,16 @@ const CategoryCard = ({
 };
 
 // ProductModal Component
-const ProductModal = ({ 
-  open, 
-  onClose, 
-  onSave, 
+const ProductModal = ({
+  open,
+  onClose,
+  onSave,
   categoryOptions,
-  editingProduct 
-}: { 
-  open: boolean, 
-  onClose: () => void, 
-  onSave: (productData: any) => void, 
+  editingProduct
+}: {
+  open: boolean,
+  onClose: () => void,
+  onSave: (productData: any) => void,
   categoryOptions: string[],
   editingProduct: Product | null
 }) => {
@@ -199,7 +200,7 @@ const ProductModal = ({
         name: '',
         price: 0,
         category: categoryOptions[0] || '',
-        imageUrl: '',
+        imageUrl: 'https://picsum.photos/200/300', //!change here
         description: ''
       });
     }
@@ -248,7 +249,8 @@ const ProductModal = ({
                   name="category"
                   value={formData.category}
                   labelId="Categoria"
-                 // onChange={handleChange}
+                  label="Categoria"
+                  //onChange={handleChange}
                 >
                   {categoryOptions.map((category) => (
                     <MenuItem key={category} value={category}>{category}</MenuItem>
@@ -288,13 +290,13 @@ const ProductModal = ({
 };
 
 // CategoryModal Component
-const CategoryModal = ({ 
-  open, 
-  onClose, 
-  onSave 
-}: { 
-  open: boolean, 
-  onClose: () => void, 
+const CategoryModal = ({
+  open,
+  onClose,
+  onSave
+}: {
+  open: boolean,
+  onClose: () => void,
   onSave: (categoryName: string) => void
 }) => {
   const [categoryName, setCategoryName] = useState('');
@@ -328,7 +330,7 @@ const CategoryModal = ({
 };
 
 // Main Component - replaces your MenuPage component
-export function MenuPage() {
+export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean }) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -344,7 +346,7 @@ export function MenuPage() {
     try {
       setIsLoading(true);
       const produtos = await cardapioService.buscarProdutos();
-      
+
       // Agrupa produtos por categoria
       const categoriaMap = new Map<string, Product[]>();
       produtos.forEach(produto => {
@@ -417,7 +419,7 @@ export function MenuPage() {
           preco: 0
         }
       });
-      
+
       await carregarProdutos(); // Recarrega os produtos
     } catch (error) {
       console.error('Erro ao salvar produto:', error);
@@ -430,43 +432,54 @@ export function MenuPage() {
       alert('Esta categoria já existe!');
       return;
     }
-    
+
     const newCategory: Category = {
       id: Math.max(0, ...categories.map(c => c.id)) + 1,
       name: categoryName,
       products: []
     };
-    
+
     setCategories([...categories, newCategory]);
   };
 
   const categoryNames = categories.map(category => category.name);
 
   return (
-    <div className="ml-2 pt-8 p-2 overflow-x-auto">
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4" component="h1">Gerenciar Cardápio</Typography>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button 
-            variant="contained" 
+    <div className="ml-2 pt-8 p-2">
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
+      <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
+    
+      <Stack
+          direction={{ xs: 'column', sm: 'row' }} // Empilha verticalmente em xs, horizontal em sm e acima
+          spacing={2}
+          sx={{
+            width: { xs: '100%', sm: 'auto' }, // Largura total em xs, auto em sm e acima
+            // Ajuste responsivo da direção e alinhamento baseado em isSidebarOpen (ou largura da tela)
+            flexDirection: isSidebarOpen ? 'column' : { xs: 'column', sm: 'row' }, // Empilha se sidebar aberta (ou em xs), senão, row
+            alignItems: isSidebarOpen ? 'stretch' : 'center', // Estica botões verticalmente se sidebar aberta, alinha ao centro senão
+          }}
+        >
+      
+      <Button
+            variant="contained"
             color="primary"
             startIcon={<AddIcon />}
             onClick={() => setIsProductModalOpen(true)}
           >
             Adicionar Novo Produto
           </Button>
-          
+
           {/* Your TestePedidoButton would go here */}
-          
-          <Button 
-            variant="contained" 
+
+          <Button
+            variant="contained"
             color="secondary"
             startIcon={<AddIcon />}
             onClick={() => setIsCategoryModalOpen(true)}
           >
             Adicionar Categoria
           </Button>
-        </Box>
+        </Stack>
       </Box>
 
       {isLoading ? (
@@ -477,7 +490,7 @@ export function MenuPage() {
         <Grid container spacing={3}>
           {categories.map((category) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={category.id}>
-              <CategoryCard 
+              <CategoryCard
                 category={category}
                 onAddProduct={handleAddProduct}
                 onDeleteCategory={handleDeleteCategory}
@@ -489,7 +502,7 @@ export function MenuPage() {
         </Grid>
       )}
 
-      <ProductModal 
+      <ProductModal
         open={isProductModalOpen}
         onClose={() => setIsProductModalOpen(false)}
         onSave={handleSaveProduct}

@@ -113,7 +113,7 @@ export function useMenuState() {
 
 //! Front end de gerenciador do cardapio
 
-function TestePedidoButton() {
+export function TestePedidoButton() {
   const [mensagem, setMensagem] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');

@@ -1,6 +1,6 @@
 // Sidebar.jsx
 import { Link } from 'react-router-dom';
-import { Home, LayoutDashboard, Book,  UserPlus, Coffee, HeadphonesIcon, Menu } from 'lucide-react';
+import { Home, LayoutDashboard, Book, UserPlus, Coffee, HeadphonesIcon, Menu } from 'lucide-react';
 import { IconButton } from '@mui/material';
 import rubyLogo from '../assets/ruby_logo.png'; // <--- IMPORT THE IMAGE HERE
 
@@ -14,9 +14,10 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     //{ icon: Home, label: 'Home', href: '/dashboard' },
     { icon: Home, label: 'Dashboard', href: '/dashboard' },
     { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
+    { icon: HeadphonesIcon, label: 'Cardapio Manager', href: '/dashboard/cardapioManager' },
     { icon: LayoutDashboard, label: 'Produtos Cardapio', href: '/dashboard/produtos' },
     //{ icon: UserPlus, label: 'Cadastro', href: '/login' },
-       // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
+    // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Coffee, label: 'Cardápio Digital', href: '/cardapio' },
     { icon: HeadphonesIcon, label: 'App Garçom', href: '/app_garcom' },
@@ -29,11 +30,13 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     <div
       className={`h-screen fixed left-0 top-0 z-25 bg-blue-900 text-white shadow-lg transition-all duration-300 ${isOpen ? 'w-64' : 'w-0 overflow-hidden'
         }`}
+        style={{ zIndex: 30 }} // <----------------------- ADICIONANDO zIndex AQUI!
+
     >
       <div className="flex flex-col h-full">
         <div className="flex items-center gap-2 p-4 mb-2">
           <IconButton onClick={toggleSidebar} sx={{ backgroundColor: 'white' }}>
-            
+
             <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
 
           </IconButton>
