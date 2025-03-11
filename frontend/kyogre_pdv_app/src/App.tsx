@@ -1,10 +1,9 @@
-// App.jsx
+// App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState } from 'react';
-//import { DashboardPage } from './pages/dashboard/DashboardPage';
+import { useState, useEffect } from 'react'; // Importe useState e useEffect
 import { MenuPage } from './pages/dashboard/MenuPage';
 import { ClientsPage } from './pages/dashboard/ClientsPage';
-import { LoginPage } from './pages/dashboard/LoginPage';
+import { LoginPageComponent   } from './pages/dashboard/LoginPage'; // Renomeie para LoginPageComponent para evitar conflito
 import { ChatPage } from './pages/dashboard/ChatPage';
 import { CardapioDigitalPage } from './pages/cardapio/CardapioDigitalPage';
 import { ProductDetailsPage } from './pages/cardapio/ProductDetailsPage';
@@ -21,56 +20,71 @@ import CardapioPDV from '../app/app_garcom_pdv/pages/CardapioPDV.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 
-export default function App() {
+//! Debug Mode Switch
+const isDebug = false; // Defina como false para modo de produção
+
+function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado para controle de autenticação
+
+  useEffect(() => {
+    if (isDebug) {
+      // Auto-login em modo debug
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
 
   return (
     <Router>
       <CartProvider>
         <Routes>
-          {/* Redirect root path to dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          {/* Rota raiz agora depende da autenticação */}
+          <Route
+            path="/"
+            element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+          />
 
-          {/* Dashboard Routes (Template 2) - now more responsive */}
+          {/* Dashboard Routes (Template 2) - Rotas protegidas */}
           <Route
             path="/dashboard/*"
             element={
-              <div className="flex min-h-screen bg-gray-100 md:bg-gray-120"> {/*Adjust background color for better contrast and responsiveness*/}
-                {/* Sidebar - responsive adjustments */}
-                <Sidebar
-                  isOpen={isSidebarOpen}
-                  toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                />
-                <div
-                  className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'ml-0'
-                    }`}
-                >
-                  {/* Header - responsive adjustments */}
-                  <Header
+              isAuthenticated ? ( // Renderiza o Dashboard apenas se autenticado
+                <div className="flex min-h-screen bg-gray-100 md:bg-gray-120">
+                  <Sidebar
+                    isOpen={isSidebarOpen}
                     toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-                    isSidebarOpen={isSidebarOpen}
                   />
-
-                  {/* Dashboard Content - responsive adjustments */}
-                  <main className="p-4 sm:p-6 md:p-8 pt-16">
-                    <Routes>
-                      {/* <Route index element={<DashboardPage />} />  */}
-
-                      <Route index element={<DashboardPedidosPage />} /> {/* Index route for /dashboard */}
-                      <Route path="produtos" element={<MenuPage />} />
-                      <Route path="clientes" element={<ClientsPage />} />
-                      <Route path="pedidos" element={<HomePage />} />
-                      <Route path="atendimento" element={<ChatPage />} />
-                      <Route path="cardapioManager" element={<CardapioManagerPage isSidebarOpen={isSidebarOpen} />} />
-
-                    </Routes>
-                  </main>
+                  <div
+                    className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'ml-0'
+                      }`}
+                  >
+                    <Header
+                      toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                      isSidebarOpen={isSidebarOpen}
+                    />
+                    <main className="p-4 sm:p-6 md:p-8 pt-16">
+                      <Routes>
+                        <Route index element={<DashboardPedidosPage />} />
+                        <Route path="produtos" element={<MenuPage />} />
+                        <Route path="clientes" element={<ClientsPage />} />
+                        <Route path="pedidos" element={<HomePage />} />
+                        <Route path="atendimento" element={<ChatPage />} />
+                        <Route path="cardapioManager" element={<CardapioManagerPage isSidebarOpen={isSidebarOpen} />} />
+                      </Routes>
+                    </main>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <Navigate to="/login" replace /> // Redireciona para login se não autenticado
+              )
             }
           />
 
-          {/* Other Routes (Template 3) - responsive adjustments */}
+          {/* Outras Rotas (Template 3) - Login agora é uma rota nomeada */}
           <Route
             path="/*"
             element={
@@ -78,7 +92,7 @@ export default function App() {
                 <Routes>
                   <Route path="cardapio" element={<CardapioDigitalPage />} />
                   <Route path="product/:id" element={<ProductDetailsPage />} />
-                  <Route path="login" element={<LoginPage />} />
+                  <Route path="login" element={<LoginPageComponent isDebug={isDebug} onLoginSuccess={handleLoginSuccess} />} /> {/* Passa isDebug e onLoginSuccess props */}
                   <Route path="controle_estoque" element={<ControleEstoquePage />} />
                   <Route path="pagina_componentes" element={<PaginaComponentes />} />
                   <Route path="app_garcom" element={<GarcomMesas />} />
@@ -93,3 +107,5 @@ export default function App() {
     </Router>
   );
 }
+
+export default App;

@@ -1,6 +1,6 @@
 // Sidebar.jsx
 import { Link } from 'react-router-dom';
-import { Home, LayoutDashboard, Book, UserPlus, Coffee, HeadphonesIcon, Menu } from 'lucide-react';
+import { Home, LayoutDashboard, Book, UserPlus, Coffee,  Menu } from 'lucide-react';
 import { IconButton } from '@mui/material';
 import rubyLogo from '../assets/ruby_logo.png'; // <--- IMPORT THE IMAGE HERE
 
@@ -13,17 +13,19 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const menuItems = [
     //{ icon: Home, label: 'Home', href: '/dashboard' },
     { icon: Home, label: 'Dashboard', href: '/dashboard' },
+    { icon: Book, label: 'Cardapio Manager', href: '/dashboard/cardapioManager' },
     { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
-    { icon: HeadphonesIcon, label: 'Cardapio Manager', href: '/dashboard/cardapioManager' },
-    { icon: LayoutDashboard, label: 'Produtos Cardapio', href: '/dashboard/produtos' },
-    //{ icon: UserPlus, label: 'Cadastro', href: '/login' },
+
+    //{ icon: LayoutDashboard, label: 'Produtos Cardapio', href: '/dashboard/produtos' },
     // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Coffee, label: 'Cardápio Digital', href: '/cardapio' },
-    { icon: HeadphonesIcon, label: 'App Garçom', href: '/app_garcom' },
-    { icon: Coffee, label: 'Cardapio PDV', href: '/cardapio/:mesa' },
+    { icon: LayoutDashboard, label: 'App Garçom', href: '/app_garcom' },
+    //{ icon: Coffee, label: 'Cardapio PDV', href: '/cardapio/:mesa' },
     { icon: UserPlus, label: 'Controle Estoque', href: '/controle_estoque' },
     { icon: Book, label: 'Pagina Componentes', href: '/pagina_componentes' },
+    { icon: UserPlus, label: 'Login', href: '/login' },
+
   ];
 
   return (

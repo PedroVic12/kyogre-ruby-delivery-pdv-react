@@ -191,6 +191,8 @@ const ProductModal = ({
     }
     
   });
+  const [hasAdditionals, setHasAdditionals] = useState(false);
+
 
   useEffect(() => {
     if (editingProduct) {
@@ -234,8 +236,27 @@ const ProductModal = ({
     setFormData({ ...formData, category: e.target.value });
   };
 
-  //const handleChangeIsAvailable = (e: React.ChangeEvent<HTMLInputElement>) => { setFormData({ ...formData, isAvailable: e.target.checked }); };
+// New handler for "Adicional Name" TextField
+const handleChangeAdicionais = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setFormData({
+    ...formData,
+    adicionais: { // Update the nested adicionais object
+      ...formData.adicionais, // Keep existing properties of adicionais
+      nome_adicional: e.target.value // Update nome_adicional
+    }
+  });
+};
 
+// New handler for "Adicional Price" TextField
+const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setFormData({
+    ...formData,
+    adicionais: { // Update the nested adicionais object
+      ...formData.adicionais, // Keep existing properties of adicionais
+      preco: Number(e.target.value) // Update preco (ensure it's a number)
+    }
+  });
+};
 
   const handleSubmit = () => {
     onSave(formData);
@@ -302,20 +323,52 @@ const ProductModal = ({
                 value={formData.description}
                 onChange={handleChange}
               />
-            </Grid>
+          </Grid>
+
+          </Grid>
             <div className="flex items-center justify-between">
+              {/* "Disponível" and "Adicionais?" Switches (from previous step) */}
               <span className="text-sm font-medium text-gray-700">Disponível</span>
               <Switch
                 checked={formData.isAvailable}
-                //onChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+                onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
               />
               <span className="text-sm font-medium text-gray-700">Adicionais?</span>
               <Switch
-                checked={formData.isAvailable}
-                //onChange={(checked) => setFormData({ ...formData, isAvailable: checked })}
+                checked={hasAdditionals}
+                onChange={(e) => setHasAdditionals(e.target.checked)}
               />
             </div>
-          </Grid>
+
+
+
+           {/* Conditionally render Additionals Fields based on hasAdditionals state */}
+           {hasAdditionals && (
+              <> {/* Use a Fragment to group the conditionally rendered Grid items */}
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">Adicionais:</Typography>
+                </Grid>
+                <Grid item xs={6} mb={2} mt={2}>
+                  <TextField
+                    fullWidth
+                    label="Nome do Adicional"
+                    name="nome_adicional" // <-- Name for the additional name field
+                    value={formData.adicionais.nome_adicional} // <-- Bind to formData.adicionais.nome_adicional
+                    onChange={handleChangeAdicionais} // <-- Create handleChangeAdicionais
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Preço do Adicional (R$)"
+                    name="preco_adicional" // <-- Name for the additional price field
+                    type="number"
+                    value={formData.adicionais.preco} // <-- Bind to formData.adicionais.preco
+                    onChange={handleChangeAdicionaisPreco} // <-- Create handleChangeAdicionaisPreco
+                  />
+                </Grid>
+              </>
+            )}
         </Box>
       </DialogContent>
       <DialogActions>
@@ -374,6 +427,7 @@ export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean 
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [, setSelectedCategory] = useState('');
+
 
   useEffect(() => {
     carregarProdutos();
@@ -483,7 +537,7 @@ export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean 
 
   return (
     <div className="ml-2 pt-8 p-2">
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
       <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
     
       <Stack

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StockContextProvider } from "./contexts/StockContext";
 import Home from "./pages/Home";
 import ListItems from "./pages/items/ListItems";
@@ -8,11 +8,13 @@ import UpdateItem from "./pages/items/UpdateItem";
 
 import { Button, IconButton } from '@mui/material';
 
+
+
 export default function ControleEstoquePage() {
   const [currentPage, setCurrentPage] = useState("home");
   const [selectedItemId, setSelectedItemId] = useState(null);
 
-  // Estilos inline completos baseados no CSS original
+  // Estilos inline completos baseados no CSS original (removendo o main para usar Tailwind)
   const styles = {
     estoqueContainer: {
       fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
@@ -52,11 +54,6 @@ export default function ControleEstoquePage() {
     },
     estoqueNavLinkHover: {
       backgroundColor: '#fefefe11'
-    },
-    estoqueMain: {
-      flex: '1 0 auto',
-      padding: '0 2rem',
-      backgroundColor: 'rgba(255, 255, 255, 0.49)'
     },
     estoqueFooter: {
       padding: '1rem 2rem',
@@ -166,7 +163,7 @@ export default function ControleEstoquePage() {
       fontSize: '1.25rem',
       marginTop: '2rem'
     },
-    // Estilos para os componentes filhos
+    // Estilos para os componentes filhos (mantendo, podem ser refatorados individualmente depois)
     childComponentStyles: {
       main: {
         marginTop: '25px',
@@ -280,7 +277,7 @@ export default function ControleEstoquePage() {
   // Função para lidar com o hover dos botões
   const [hoveredButton, setHoveredButton] = useState(null);
 
-  // Injetar estilos nos componentes filhos
+  // Injetar estilos nos componentes filhos (mantendo a injeção para os estilos existentes)
   const injectStyles = () => {
     // Criar um elemento style
     const styleElement = document.createElement('style');
@@ -291,19 +288,19 @@ export default function ControleEstoquePage() {
         margin-top: 25px;
         margin-bottom: 25px;
       }
-      
+
       .estoque-module-container h1 {
         font-size: 3rem;
         font-weight: 300;
         margin-bottom: 1.5rem;
       }
-      
+
       .estoque-module-container .row {
         display: flex;
         flex-wrap: wrap;
         gap: 2rem;
       }
-      
+
       .estoque-module-container .dashboard-card {
         background-color: #1c1a1d;
         box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.25);
@@ -314,36 +311,36 @@ export default function ControleEstoquePage() {
         padding: 1rem 2rem;
         flex: 1 0 16rem;
       }
-      
+
       .estoque-module-container .dashboard-card span {
         display: block;
         font-size: 3rem;
         margin: 1rem 0;
         text-align: center;
       }
-      
+
       .estoque-module-container table {
         border-collapse: collapse;
         margin-top: 2rem;
         width: 100%;
       }
-      
+
       .estoque-module-container thead {
         background-color: #1c1a1d;
         box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.25);
         text-align: left;
       }
-      
-      .estoque-module-container th, 
+
+      .estoque-module-container th,
       .estoque-module-container td {
         padding: 1.25rem;
       }
-      
+
       .estoque-module-container tbody tr:hover {
         background-color: rgba(28, 26, 29, 0.33);
         cursor: default;
       }
-      
+
       .estoque-module-container .button {
         background-color: #5ba7fd;
         border-radius: 0.25rem;
@@ -356,30 +353,30 @@ export default function ControleEstoquePage() {
         text-decoration: none;
         transition: 0.2s;
       }
-      
+
       .estoque-module-container .button + .button {
         margin-left: 0.75rem;
       }
-      
+
       .estoque-module-container .button:hover {
         filter: brightness(0.9);
       }
-      
+
       .estoque-module-container .button.is-small {
         font-size: 0.875rem;
       }
-      
+
       .estoque-module-container .button.is-danger {
         background-color: #ff5258;
       }
-      
+
       .estoque-module-container .recent,
       .estoque-module-container .low {
         flex: 1 0 16rem;
       }
-      
-      .estoque-module-container input, 
-      .estoque-module-container textarea, 
+
+      .estoque-module-container input,
+      .estoque-module-container textarea,
       .estoque-module-container select {
         background-color: #1c1a1d;
         border-radius: 0.25rem;
@@ -451,7 +448,7 @@ export default function ControleEstoquePage() {
             </Button>
           </nav>
         </header>
-        <main style={styles.estoqueMain} className="estoque-module-main">
+        <main className="px-8 bg-white/50 estoque-module-main"> {/* Tailwind classes for responsiveness */}
           {renderPage()}
         </main>
         <footer style={styles.estoqueFooter} className="estoque-module-footer">

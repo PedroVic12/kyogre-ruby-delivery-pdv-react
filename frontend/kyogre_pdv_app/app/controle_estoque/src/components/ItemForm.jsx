@@ -5,6 +5,40 @@ import useStock from "../hooks/useStock"
 import BotaoLoaderMUI from "../../../../src/components/BotaoLoaderMUI"
 import { Box, Alert, Collapse } from "@mui/material"
 
+// CategoryModal Component
+const CategoryModal = ()=>{
+    const [categoryName, setCategoryName] = useState('');
+  
+    const handleSubmit = () => {
+      if (categoryName.trim()) {
+        onSave(categoryName);
+        setCategoryName('');
+        onClose();
+      }
+    };
+  
+    return (
+      <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+        <DialogTitle>Adicionar Nova Categoria</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Nome da Categoria"
+            value={categoryName}
+            onChange={(e) => setCategoryName(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose}>Cancelar</Button>
+          <Button onClick={handleSubmit} variant="contained">Adicionar</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  
+  }
+  
+
 ItemForm.propTypes = {
     itemToUpdate: PropTypes.object,
     onSubmitSuccess: PropTypes.func
@@ -161,6 +195,8 @@ export default function ItemForm({ itemToUpdate, onSubmitSuccess }) {
                             </option>
                         ))}
                     </select>
+                    {/* <CategoryModal></CategoryModal> */}
+
                 </div>
             </div>
             <div>
