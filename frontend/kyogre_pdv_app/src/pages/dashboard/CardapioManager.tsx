@@ -28,6 +28,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Category, Product } from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
+import UploadImage from '../../utils/upload_files_supabase';
 
 // ProductCard Component
 const ProductCard = ({
@@ -192,8 +193,13 @@ const ProductModal = ({
     
   });
   const [hasAdditionals, setHasAdditionals] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(''); // New state for the uploaded image URL
 
-
+ // Callback function to receive the URL from UploadImage
+  const handleUploadSuccess = (url: string) => {
+    setUploadedImageUrl(url);
+    setFormData({ ...formData, imageUrl: url });
+  };
   useEffect(() => {
     if (editingProduct) {
       setFormData({
@@ -305,6 +311,11 @@ const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => 
               </FormControl>
             </Grid>
             <Grid item xs={12}>
+              <UploadImage onUploadSuccess={handleUploadSuccess} /> {/* Pass the callback function */}
+              {/* Display the uploaded image */}
+              {uploadedImageUrl && (
+                <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: '200px' }} />
+              )}
               <TextField
                 fullWidth
                 label="URL da Imagem"

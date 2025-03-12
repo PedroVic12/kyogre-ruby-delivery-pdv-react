@@ -21,7 +21,7 @@ import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 
 // Debug Mode Switch - CENTRALIZADO AQUI
-const isDebug = false; // Defina como false para modo de produção
+const isDebug = true; // Defina como false para modo de produção
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

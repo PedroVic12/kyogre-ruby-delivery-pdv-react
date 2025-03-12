@@ -6,9 +6,8 @@ npm install # Garante que as dependências do frontend estão instaladas
 npm run dev & # Inicia o servidor de desenvolvimento do Vite em background
 
 echo "Iniciando o Backend (FastAPI com Uvicorn)..."
-cd ../../backend/server
+cd ../../../Raichu-Server
 pip install -r requirements.txt --break-system-packages # Garante que as dependências do backend estão instaladas
-
 
 clear
 

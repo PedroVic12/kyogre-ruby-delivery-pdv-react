@@ -1,9 +1,11 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { Button } from '@mui/material';
 
-const UploadImage = () => {
+const UploadImage = ({ onUploadSuccess }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [message, setMessage] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
 
     const handleFileChange = (event) => {
         if (event.target.files && event.target.files.length > 0) {
@@ -21,25 +23,40 @@ const UploadImage = () => {
         formData.append('file', selectedFile);
 
         try {
-            const response = await axios.post('http://localhost:8000/produtos/', formData, {
+            // Corrected URL: Added /api prefix
+            const response = await axios.post('http://localhost:8000/api/storage/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            setMessage('Imagem enviada com sucesso!');
+            alert('Imagem enviada com sucesso!'); // Use setMessage to update the message
+            setImageUrl(response.data.url);
+            onUploadSuccess(response.data.url); // Pass the URL to the parent component
             console.log(response.data);
         } catch (error) {
-            setMessage('Erro ao enviar a imagem.');
+            alert('Erro ao enviar a imagem.'); // Use setMessage to update the message
             console.error(error);
         }
     };
 
     return (
-        <div>
+        <div style={{ 
+            //coloque margem
+            margin: "10px 50px 20px 0"
+         }}>
             <h2>Upload de Imagem</h2>
             <input type="file" accept="image/*" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Enviar</button>
+            <br></br>
+            <br></br>
+            
+            <Button type="button" onClick={handleUpload} variant="contained" color="primary">Enviar</Button>
             {message && <p>{message}</p>}
+            {imageUrl && (
+                <div>
+                    <p>Imagem carregada:</p>
+                    <img src={imageUrl} alt="Uploaded" style={{ maxWidth: '100px' }} />
+                </div>
+            )}
         </div>
     );
 };
