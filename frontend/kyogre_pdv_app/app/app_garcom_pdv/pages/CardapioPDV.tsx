@@ -294,7 +294,7 @@ const CardapioPDV = () => {
             </Toolbar>
           </AppBar>
 
-          <Box sx={{ bgcolor: ' #ffff00' }}>
+          <Box sx={{ bgcolor: 'rgb(0, 76, 255)' }}>
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
