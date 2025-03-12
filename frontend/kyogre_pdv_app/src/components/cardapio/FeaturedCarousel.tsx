@@ -64,8 +64,8 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
           >
             <CardMedia
               component="img"
-              height={isMobile ? "150" : "200"}
-              image={item.url_imagem || ""} // Use url_imagem and provide a default empty string
+              height={isMobile ? "100" : "200"}
+              image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
               alt={item.name}
               sx={{
                 objectFit: 'cover',

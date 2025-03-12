@@ -337,12 +337,12 @@ const CardapioPDV = () => {
         {/* Mobile Cart Button */}
         <Fab
           variant="extended"
-          size="medium"
+          size="large"
           color="primary"
           className="md:hidden fixed top-10 left-20 bg-blue-600 text-white"
           onClick={handleOpenCart}
         >
-          <NavigationIcon />
+          <NavigationIcon className='mr-2'/>
           Fazer Pedido {totalItems > 0 && `(${totalItems})`}
         </Fab>
       </main>

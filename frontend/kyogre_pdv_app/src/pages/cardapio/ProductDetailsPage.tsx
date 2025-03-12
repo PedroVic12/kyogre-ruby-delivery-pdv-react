@@ -122,7 +122,7 @@ export const ProductDetailsPage: React.FC = () => {
       <Container maxWidth="sm" sx={{ mt: 2 }}>
         <Box
           component="img"
-          src={item.url_imagem}
+          src={item.imageUrl}
           alt={item.name}
           sx={{
             width: '100%',

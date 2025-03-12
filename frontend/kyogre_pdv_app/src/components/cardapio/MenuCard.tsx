@@ -7,11 +7,11 @@ import {
   Button,
   Box,
 } from '@mui/material';
-import { MenuItem } from '../../types/MenuItem';
+import { Product } from '../../types/menu'; // Import Product instead of MenuItem
 
 interface MenuCardProps {
-  item: MenuItem;
-  onAddToCart: (item: MenuItem) => void;
+  item: Product; // Change type to Product
+  onAddToCart: (item: Product) => void; // Change type to Product
   onClick: () => void;
 }
 
@@ -22,10 +22,10 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
   };
 
   return (
-    <Card 
-      sx={{ 
-        mb: 2, 
-        display: 'flex', 
+    <Card
+      sx={{
+        mb: 2,
+        display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
         '&:hover': {
@@ -37,7 +37,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
       <CardMedia
         component="img"
         sx={{ width: 140, height: 140, objectFit: 'cover' }}
-        image={item.image}
+        image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
         alt={item.name}
       />
       <CardContent sx={{ flex: 1 }}>
