@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, IconButton, Card, CardMedia, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Product } from '../../types/menu'; // Import Product type
 
-interface CarouselItem {
-  id: number | string;
-  name: string;
-  price: number;
-  image: string;
-}
+
 
 interface FeaturedCarouselProps {
-  items: CarouselItem[];
+  items: Product[]; // Changed to Product[]
 }
 
 export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => {
@@ -26,6 +22,7 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   };
+
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
     if (!isPaused) {
@@ -68,7 +65,7 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
             <CardMedia
               component="img"
               height={isMobile ? "150" : "200"}
-              image={item.image}
+              image={item.url_imagem || ""} // Use url_imagem and provide a default empty string
               alt={item.name}
               sx={{
                 objectFit: 'cover',

@@ -1,46 +1,67 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Container,
   Typography,
   Box,
   AppBar,
   Toolbar,
-  //useTheme,
+  CircularProgress,
 } from '@mui/material';
-
 
 import { Cart } from '../../components/cardapio/Cart';
 import { CartDialog } from '../../components/cardapio/CartDialog';
 import { CategoryTabs } from '../../components/cardapio/CategoryTabs';
 import { SearchBar } from '../../components/cardapio/SearchBar';
 import { FeaturedCarousel } from '../../components/cardapio/FeaturedCarousel';
-import { ProductRepository } from '../../repositories/_ProductRepository';
 import { useCart } from '../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 import { MenuCard } from '../../components/cardapio/MenuCard';
+import ProductCardapioRepository from '../../repositories/cardapio_repository';
+import { Category, Product } from '../../types/menu';
 
 export const CardapioDigitalPage: React.FC = () => {
-  //const theme = useTheme();
   const navigate = useNavigate();
   const { items, total, itemCount, addToCart, removeFromCart, updateQuantity } = useCart();
   const [openCart, setOpenCart] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('sanduiches');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const categories = ProductRepository.getCategories();
-  const allProducts = ProductRepository.getAllProducts();
-  
-  // Get featured products (first 5 products with highest prices)
+  const productRepository = new ProductCardapioRepository();
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedCategories = await productRepository.fetchProducts();
+        setCategories(fetchedCategories);
+        const allProds: Product[] = fetchedCategories.flatMap(cat => cat.products);
+        setAllProducts(allProds);
+        if (fetchedCategories.length > 0) {
+          setSelectedCategory(fetchedCategories[0].name);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
   const featuredProducts = useMemo(() => {
     return [...allProducts]
       .sort((a, b) => b.price - a.price)
       .slice(0, 5);
   }, [allProducts]);
 
-  // Filter products by category and search query
   const filteredProducts = useMemo(() => {
-    const categoryProducts = allProducts.filter(product => 
-      product.category === selectedCategory
+    if (!selectedCategory) return [];
+    const categoryProducts = allProducts.filter(product =>
+      product.categoria === selectedCategory
     );
 
     if (!searchQuery) return categoryProducts;
@@ -51,15 +72,19 @@ export const CardapioDigitalPage: React.FC = () => {
     );
   }, [allProducts, selectedCategory, searchQuery]);
 
-  const handleCardClick = (itemId: string) => {
+  const handleCardClick = (itemId: number) => {
     navigate(`/product/${itemId}`);
   };
 
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen"><CircularProgress /></div>;
+  }
+
   return (
     <Box sx={{ pb: 8 }}>
-      <AppBar 
-        position="static" 
-        sx={{ 
+      <AppBar
+        position="static"
+        sx={{
           background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 100%)',
           color: 'white',
         }}
@@ -101,12 +126,12 @@ export const CardapioDigitalPage: React.FC = () => {
             />
           ))}
           {filteredProducts.length === 0 && (
-            <Typography 
-              variant="body1" 
-              sx={{ 
-                textAlign: 'center', 
-                py: 4, 
-                color: 'text.secondary' 
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: 'center',
+                py: 4,
+                color: 'text.secondary'
               }}
             >
               Nenhum produto encontrado

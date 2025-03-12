@@ -9,9 +9,9 @@ export interface Product {
   name: string;
   price: number;
   imageUrl?: string;
-  description?: string;
+  description: string;
   isAvailable: boolean;
-  adicionais?: Adicional[]; // Changed to an array of Adicional objects
+  adicionais?: Adicional[]; //! Changed to an array of Adicional objects
   categoria?: string;
   url_imagem?: string;
   descricao?: string;
@@ -22,4 +22,9 @@ export interface Category {
   id: number;
   name: string;
   products: Product[];
+}
+
+
+export interface CartItem extends Product {
+  quantity: number;
 }

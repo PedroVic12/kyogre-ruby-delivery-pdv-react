@@ -1,3 +1,4 @@
+// src/components/cardapio/CartDialog.tsx
 import React from 'react';
 import {
   Dialog,
@@ -13,15 +14,15 @@ import {
   Box
 } from '@mui/material';
 import { Minus, Plus, Trash2 } from 'lucide-react';
-import { CartItem } from '../../types/CartItem';
+import { CartItem } from '../../types/menu';
 
 interface CartDialogProps {
   open: boolean;
   onClose: () => void;
   items: CartItem[];
   total: number;
-  onUpdateQuantity: (itemId: string, quantity: number) => void;
-  onRemoveItem: (itemId: string) => void;
+  onUpdateQuantity: (itemId: number, quantity: number) => void; // Changed itemId to number
+  onRemoveItem: (itemId: number) => void; // Changed itemId to number
 }
 
 export const CartDialog: React.FC<CartDialogProps> = ({
