@@ -20,6 +20,7 @@ RUN npm install --force \
     @mui/icons-material \
     @ionic/react \
     lucide-react \
+    axios \
     react-hot-toast \
     plotly.js \
     react-plotly.js \
