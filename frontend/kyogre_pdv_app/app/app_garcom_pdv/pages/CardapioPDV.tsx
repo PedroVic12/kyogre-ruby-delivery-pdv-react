@@ -286,7 +286,7 @@ const CardapioPDV = () => {
       <main className="flex-1 p-4">
         {/* Tabs for Categories */}
         <div ref={tabsRef} className="overflow-x-auto mb-6">
-          <AppBar position="static" style={{ backgroundColor: '#424242' }}>
+          <AppBar position="static" style={{ backgroundColor: '#054f77' }}>
             <Toolbar>
               <Typography variant="h6" style={{ flexGrow: 1 }}>
                 Cardapio PDV
@@ -294,17 +294,23 @@ const CardapioPDV = () => {
             </Toolbar>
           </AppBar>
 
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="scrollable auto tabs"
-          >
-            {categories.map((tab) => (
-              <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()} />
-            ))}
-          </Tabs>
+          <Box sx={{ bgcolor: ' #ffff00' }}>
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs"
+              color='primary'
+              textColor='primary'
+            >
+              {categories.map((tab) => (
+                <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()} />
+              ))}
+            </Tabs>
+          </Box>
+
+
         </div>
 
         {/* Menu Items Grid */}

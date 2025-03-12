@@ -143,12 +143,12 @@ export function TestePedidoButton() {
 
     const pedidoData = {
       "id": 1861,
-      "nome_cliente": "Pv",
+      "nome_cliente": "Pedro V",
       "telefone": "5521999289987",
       "endereco": "Niterói",
-      "complemento": "Sem Complemento.",
+      "complemento": "Centro, perto do Plaza shopping",
       "forma_pagamento": "Dinheiro",
-      "status": "Em Processo",
+      "status": "em processo",
       "total_pagar": 96,
       "data_pedido": {
         "data": "06/03/2025",

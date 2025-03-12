@@ -42,11 +42,11 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
 
     function getNextStatus(status: string): string {
 
-        //! Status do servidor
+       //! Status do servidor
         switch (status) {
-            case 'Em Processo': return 'Cozinha';
-            case 'Cozinha': return 'Entrega';
-            case 'Entrega': return 'Finalizado';
+            case 'em processo': return 'cozinha';
+            case 'cozinha': return 'entrega';
+            case 'entrega': return 'finalizado';
             default: return status;
         }
     }
@@ -106,7 +106,7 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
                     {order.status}
                 </span>
 
-                {onAdvance && order.status !== 'Finalizado' && (
+                {onAdvance && order.status !== 'finalizado' && (
                     <button
                         onClick={(e) => {
                             e.stopPropagation(); // Evita que o clique propague para o toggle
@@ -253,10 +253,10 @@ export function DashboardPedidosPage() {
 
             // Processar e separar os pedidos por status (excluindo os pendentes)
             console.log("Separando pedidos por status...");
-            const processando = data.filter(order => order.status === 'Em Processo');
-            const cozinha = data.filter(order => order.status === 'Cozinha');
-            const entrega = data.filter(order => order.status === 'Entrega');
-            const finalizados = data.filter(order => order.status === 'Finalizado');
+            const processando = data.filter(order => order.status === 'em processo');
+            const cozinha = data.filter(order => order.status === 'cozinha');
+            const entrega = data.filter(order => order.status === 'entrega');
+            const finalizados = data.filter(order => order.status === 'finalizado');
 
             console.log("Pedidos em processo:", processando.length);
             console.log("Pedidos na cozinha:", cozinha.length);
@@ -290,7 +290,7 @@ export function DashboardPedidosPage() {
                     },
                     body: JSON.stringify({
                         ...pedido,
-                        status: 'Em Processo'
+                        status: 'em processo'
                     }),
                 });
 
@@ -321,20 +321,20 @@ export function DashboardPedidosPage() {
 
     //! Função para avançar o status do pedido
     const advanceOrder = async (orderId: number, nextStatus: string) => {
-        const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status`; // Rota de exemplo para atualizar status
+        //const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
+        const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
+
         try {
             const response = await fetch(UPDATE_API_ENDPOINT, {
-                method: 'PUT', // Usando PUT conforme solicitado
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ status: nextStatus }), // Envia o novo status
             });
             if (!response.ok) {
                 throw new Error(`Erro ao atualizar pedido ${orderId}: ${response.status} - ${response.statusText}`);
             }
-            // Após atualizar no backend, refazer a busca de pedidos para atualizar a interface
-            fetchOrders(); // Refaz a busca para atualizar a lista na tela
+            fetchOrders();
             console.log(`Pedido ${orderId} avançado para status: ${nextStatus} (ID: ${orderId})`);
 
         } catch (e: any) {
@@ -342,6 +342,7 @@ export function DashboardPedidosPage() {
             console.error(`Erro ao avançar pedido ${orderId}:`, e);
         }
     };
+
 
 
     useEffect(() => {
