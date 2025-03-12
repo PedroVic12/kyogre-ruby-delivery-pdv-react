@@ -14,7 +14,7 @@ import { CartDialog } from '../../components/cardapio/CartDialog';
 import { CategoryTabs } from '../../components/cardapio/CategoryTabs';
 import { SearchBar } from '../../components/cardapio/SearchBar';
 import { FeaturedCarousel } from '../../components/cardapio/FeaturedCarousel';
-import { ProductRepository } from '../../repositories/ProductRepository';
+import { ProductRepository } from '../../repositories/_ProductRepository';
 import { useCart } from '../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 import { MenuCard } from '../../components/cardapio/MenuCard';

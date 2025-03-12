@@ -71,6 +71,20 @@ interface Produto {
         throw error;
       }
     }
+
+    async buscarFotoStorage(){
+
+      //pegar do storage via API na /storage
+      try {
+        const response = await fetch(`${this.baseUrl}/storage/files`);
+        const data = await response.json();
+        return data.data;
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        throw error;
+      }
+
+    }
   }
   
   export const cardapioService = new CardapioService();

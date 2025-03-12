@@ -193,7 +193,7 @@ const ProductModal = ({
     
   });
   const [hasAdditionals, setHasAdditionals] = useState(false);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState(''); // New state for the uploaded image URL
+  const [, setUploadedImageUrl] = useState(''); // New state for the uploaded image URL
 
  // Callback function to receive the URL from UploadImage
   const handleUploadSuccess = (url: string) => {
@@ -311,11 +311,10 @@ const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => 
               </FormControl>
             </Grid>
             <Grid item xs={12}>
+
               <UploadImage onUploadSuccess={handleUploadSuccess} /> {/* Pass the callback function */}
-              {/* Display the uploaded image */}
-              {uploadedImageUrl && (
-                <img src={uploadedImageUrl} alt="Uploaded" style={{ maxWidth: '200px' }} />
-              )}
+ 
+
               <TextField
                 fullWidth
                 label="URL da Imagem"

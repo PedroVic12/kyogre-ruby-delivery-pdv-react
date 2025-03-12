@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/pages/cardapio/ProductDetailsPage.tsx
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -10,56 +11,97 @@ import {
   FormControlLabel,
   Button,
   Paper,
+  CircularProgress,
 } from '@mui/material';
-
-
 
 import { ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ProductRepository } from '../../repositories/ProductRepository';
 import { useCart } from '../../hooks/useCart';
-
-
+import ProductCardapioRepository from '../../repositories/cardapio_repository';
+import { Product } from '../../types/menu';
 
 export const ProductDetailsPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const item = id ? ProductRepository.getProductById(id) : undefined;
+  const [item, setItem] = useState<Product | undefined>(undefined);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const productCardapioRepository = new ProductCardapioRepository();
 
-  if (!item) {
-    return <Typography>Produto não encontrado</Typography>;
+  useEffect(() => {
+    const loadProduct = async () => {
+      setIsLoading(true);
+      try {
+        if (id) {
+          const fetchedCategories = await productCardapioRepository.fetchProducts();
+          const allProds: Product[] = fetchedCategories.flatMap(cat => cat.products);
+          const product = allProds.find(prod => prod.id === Number(id));
+          setItem(product);
+        }
+      } catch (error) {
+        console.error("Error loading product:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [id]);
+
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen"><CircularProgress /></div>;
   }
 
-  const handleAddonToggle = (addonId: string) => {
+  if (!item) {
+    return <Typography>Product not found</Typography>;
+  }
+
+  const handleAddonToggle = (addonName: string) => {
     setSelectedAddons((current) =>
-      current.includes(addonId)
-        ? current.filter((id) => id !== addonId)
-        : [...current, addonId]
+      current.includes(addonName)
+        ? current.filter((name) => name !== addonName)
+        : [...current, addonName]
     );
   };
 
   const calculateTotal = () => {
-    const addonsTotal = (item.addons || [])
-      .filter((addon: { id: string; }) => selectedAddons.includes(addon.id))
-      .reduce((sum: number, addon: { price: number; }) => sum + addon.price, 0);
+    let addonsTotal = 0;
+    if (item.adicionais && Array.isArray(item.adicionais)) {
+      item.adicionais.forEach(addon => {
+        if (selectedAddons.includes(addon.nome_adicional)) {
+          addonsTotal += addon.preco;
+        }
+      });
+    }
     return item.price + addonsTotal;
   };
 
   const handleAddToCart = () => {
-    addToCart({
-      ...item,
-      price: calculateTotal(),
-    });
-    navigate('/');
+    if (item) {
+      const selectedAdicionais = item.adicionais?.filter(addon =>
+        selectedAddons.includes(addon.nome_adicional)
+      ) || [];
+
+      const formattedAdicionais = selectedAdicionais.map(addon => ({
+        nome_adicional: addon.nome_adicional,
+        preco: addon.preco,
+      }));
+
+      addToCart({
+        ...item,
+        price: calculateTotal(),
+        adicionais: formattedAdicionais,
+      });
+      navigate('/cardapio');
+    }
   };
 
   return (
     <Box sx={{ pb: 8 }}>
-      <AppBar 
+      <AppBar
         position="static"
-        sx={{ 
+        sx={{
           background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 100%)',
           color: 'white',
         }}
@@ -68,19 +110,19 @@ export const ProductDetailsPage: React.FC = () => {
           <IconButton
             edge="start"
             color="inherit"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/cardapio')}
             sx={{ mr: 2 }}
           >
             <ArrowLeft />
           </IconButton>
-          <Typography variant="h6">Detalhes do Produto</Typography>
+          <Typography variant="h6">Product Details</Typography>
         </Toolbar>
       </AppBar>
 
       <Container maxWidth="sm" sx={{ mt: 2 }}>
         <Box
           component="img"
-          src={item.image}
+          src={item.url_imagem}
           alt={item.name}
           sx={{
             width: '100%',
@@ -94,7 +136,7 @@ export const ProductDetailsPage: React.FC = () => {
         <Typography variant="h4" gutterBottom>
           {item.name}
         </Typography>
-        
+
         <Typography variant="h5" color="primary" gutterBottom>
           R$ {item.price.toFixed(2)}
         </Typography>
@@ -103,21 +145,21 @@ export const ProductDetailsPage: React.FC = () => {
           {item.description}
         </Typography>
 
-        {item.addons && item.addons.length > 0 && (
+        {item.adicionais && Array.isArray(item.adicionais) && item.adicionais.length > 0 && (
           <Paper sx={{ p: 2, mt: 2 }}>
             <Typography variant="h6" gutterBottom>
               Adicionais
             </Typography>
-            {item.addons.map((addon: { id: string; name: string; price: number; }) => (
+            {item.adicionais.map((adicional, index) => (
               <FormControlLabel
-                key={addon.id}
+                key={index}
                 control={
                   <Checkbox
-                    checked={selectedAddons.includes(addon.id)}
-                    onChange={() => handleAddonToggle(addon.id)}
+                    checked={selectedAddons.includes(adicional.nome_adicional)}
+                    onChange={() => handleAddonToggle(adicional.nome_adicional)}
                   />
                 }
-                label={`${addon.name} (+R$ ${addon.price.toFixed(2)})`}
+                label={`${adicional.nome_adicional} (+R$ ${adicional.preco.toFixed(2)})`}
               />
             ))}
           </Paper>
@@ -131,7 +173,7 @@ export const ProductDetailsPage: React.FC = () => {
             size="large"
             onClick={handleAddToCart}
           >
-            Adicionar ao Carrinho • R$ {calculateTotal().toFixed(2)}
+            Add to Cart • R$ {calculateTotal().toFixed(2)}
           </Button>
         </Box>
       </Container>

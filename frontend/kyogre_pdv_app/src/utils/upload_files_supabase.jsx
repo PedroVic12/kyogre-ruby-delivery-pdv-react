@@ -49,7 +49,7 @@ const UploadImage = ({ onUploadSuccess }) => {
             <br></br>
             <br></br>
             
-            <Button type="button" onClick={handleUpload} variant="contained" color="primary">Enviar</Button>
+            <Button type="button" onClick={handleUpload} variant="contained" color="primary">Salvar Foto</Button>
             {message && <p>{message}</p>}
             {imageUrl && (
                 <div>

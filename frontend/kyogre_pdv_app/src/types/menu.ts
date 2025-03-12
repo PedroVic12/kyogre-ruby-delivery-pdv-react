@@ -1,3 +1,9 @@
+// src/types/menu.ts
+export interface Adicional {
+  nome_adicional: string;
+  preco: number;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -5,10 +11,7 @@ export interface Product {
   imageUrl?: string;
   description?: string;
   isAvailable: boolean;
-  adicionais?: {
-    nome_adicional: string;
-    preco: number;
-  };
+  adicionais?: Adicional[]; // Changed to an array of Adicional objects
   categoria?: string;
   url_imagem?: string;
   descricao?: string;

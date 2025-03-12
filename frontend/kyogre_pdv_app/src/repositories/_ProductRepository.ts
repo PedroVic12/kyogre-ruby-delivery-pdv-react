@@ -1,6 +1,9 @@
 import { Product, Category } from '../models/Product';
 
 export class ProductRepository {
+  fetchProducts() {
+    throw new Error('Method not implemented.');
+  }
   private static products: Product[] = [
     {
       id: '1',

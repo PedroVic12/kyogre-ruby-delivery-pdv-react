@@ -1,160 +1,58 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Minus, NavigationIcon } from 'lucide-react';
 import PedidoController from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
-import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, AppBar, Toolbar, Typography } from '@mui/material';
+import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, AppBar, Toolbar, Typography, Box } from '@mui/material';
 
-const MENU_ITEMS = [
-  {
-    id: 1,
-    name: 'Suco de Laranja',
-    price: 8.90,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=500&q=80',
-    category: 'sucos'
-  },
-  {
-    id: 2,
-    name: 'Suco de Morango',
-    price: 9.90,
-    image: 'https://images.unsplash.com/photo-1638176066666-ffb2f013c7dd?w=500&q=80',
-    category: 'sucos'
-  },
-  {
-    id: 3,
-    name: 'Pizza Margherita',
-    price: 45.90,
-    image: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=500&q=80',
-    category: 'pizzas'
-  },
-  {
-    id: 4,
-    name: 'Pizza Pepperoni',
-    price: 49.90,
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-    category: 'pizzas'
-  },
-  {
-    id: 5,
-    name: 'Hambúrguer Clássico',
-    price: 32.90,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80',
-    category: 'hamburguers'
-  },
-  {
-    id: 6,
-    name: 'Hambúrguer Duplo',
-    price: 39.90,
-    image: 'https://images.unsplash.com/photo-1586816001966-79b736744398?w=500&q=80',
-    category: 'hamburguers'
-  },
-  // Add more items here
-  {
-    id: 7,
-    name: 'Refrigerante Cola',
-    price: 7.00,
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-    category: 'refrigerantes'
-  },
-    {
-    id: 8,
-    name: 'Batata Frita',
-    price: 25.00,
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-    category: 'acompanhamentos'
-  },
+import ProductCardapioRepository from "../../../src/repositories/cardapio_repository"; // Import ProductRepository and types
 
- 
-    {
-      id: 9,
-      name: 'Hambúrguer Vegetariano',
-      price: 35.90,
-      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80',
-      category: 'hamburguers'
-    },
-    {
-      id: 10,
-      name: 'Hambúrguer de Frango',
-      price: 37.90,
-      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80',
-      category: 'hamburguers'
-    },
-    {
-      id: 11,
-      name: 'Hambúrguer de Carne',
-      price: 39.90,
-      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80',
-      category: 'hamburguers'
-    },
-    {
-      id: 12,
-      name: 'Refrigerante de Laranja',
-      price: 5.00,
-      image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-      category: 'refrigerantes'
-    },
-    {
-      id: 13,
-      name: 'Refrigerante de Limão',
-      price: 5.00,
-      image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-      category: 'refrigerantes'
-    },
-    {
-      id: 14,
-      name: 'Refrigerante de Uva',
-      price: 5.00,
-      image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-      category: 'refrigerantes'
-    },
-    {
-      id: 15,
-      name: 'Batata Doce Frita',
-      price: 25.00,
-      image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-      category: 'acompanhamentos'
-    },
-    {
-      id: 16,
-      name: 'Batata Frita com Cheddar',
-      price: 30.00,
-      image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-      category: 'acompanhamentos'
-    },
-    {
-      id: 17,
-      name: 'Batata Frita com Bacon',
-      price: 30.00,
-      image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&q=80',
-      category: 'acompanhamentos'
-    },
-  
-];
+import {Product, Category} from "../../../src/types/menu"
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
+interface CartItem extends Product { // CartItem now extends Product
   quantity: number;
 }
 
 const CardapioPDV = () => {
   const { mesa } = useParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<string>('sucos');
+  const [activeTab, setActiveTab] = useState<string>(''); // Initialize as empty string, will be set from categories
   const [cart, setCart] = useState<CartItem[]>([]);
   const [customerName, setCustomerName] = useState('');
   const [customersCount, setCustomersCount] = useState(1);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
-  const menuTabs = ['sucos', 'pizzas', 'hamburguers','refrigerantes', 'acompanhamentos'];
-  const tabsRef = useRef<HTMLDivElement>(null); // Reference to the tabs container
+  const [categories, setCategories] = useState<Category[]>([]); // State to hold categories from repository
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
+  const tabsRef = useRef<HTMLDivElement>(null);
+
+
+  //!Loading o controlador do cardapio pegando do supabase
+  const productRepository = new ProductCardapioRepository();
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedCategories = await productRepository.fetchProducts();
+        setCategories(fetchedCategories);
+        if (fetchedCategories.length > 0) {
+          setActiveTab(fetchedCategories[0].name.toLowerCase()); // Set initial tab to the first category
+        }
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+        // Handle error appropriately, maybe show an error message to the user
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   useEffect(() => {
     if (mesa) {
       TableController.getInstance().updateTableStatus(Number(mesa), 'occupied', customersCount);
-
-      console.log("Total de itens no carrinho",MENU_ITEMS.filter(item => item.category === activeTab).length)
     }
   }, [mesa, customersCount]);
 
@@ -179,7 +77,7 @@ const CardapioPDV = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  const addToCart = (item: typeof MENU_ITEMS[0]) => {
+  const addToCart = (item: Product) => { // item is now of type Product
     setCart(current => {
       const existing = current.find(i => i.id === item.id);
       if (existing) {
@@ -189,20 +87,20 @@ const CardapioPDV = () => {
       }
       return [...current, { ...item, quantity: 1 }];
     });
-    setTotalItems(prev => prev + 1); // Incrementa o contador
+    setTotalItems(prev => prev + 1);
   };
-  
+
   const removeFromCart = (itemId: number) => {
     setCart(current => {
       const existing = current.find(i => i.id === itemId);
       if (existing && existing.quantity > 1) {
-        setTotalItems(prev => prev - 1); // Decrementa o contador
+        setTotalItems(prev => prev - 1);
         return current.map(i =>
           i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i
         );
       }
       if (existing) {
-        setTotalItems(prev => prev - existing.quantity); // Remove todos os itens
+        setTotalItems(prev => prev - existing.quantity);
       }
       return current.filter(i => i.id !== itemId);
     });
@@ -216,7 +114,7 @@ const CardapioPDV = () => {
     setIsCartOpen(false);
   };
 
-    const handleTabChange = (_event: React.SyntheticEvent, newValue: string) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: string) => {
     setActiveTab(newValue);
     if (tabsRef.current) {
       const tabElement = tabsRef.current.querySelector(`[data-value="${newValue}"]`);
@@ -227,10 +125,12 @@ const CardapioPDV = () => {
     }
   };
 
+  if (isLoading) {
+    return <div>Carregando Cardápio...</div>; // Simple loading message
+  }
+
   return (
     <div className="min-h-screen bg-gray-300 flex flex-col md:flex-row">
-
-
 
       {/* Cart Section (Mobile - Modal) */}
       <Dialog open={isCartOpen} onClose={handleCloseCart} fullWidth maxWidth="sm">
@@ -260,6 +160,12 @@ const CardapioPDV = () => {
           <div className="space-y-4 mb-4">
             {cart.map((item) => (
               <div key={item.id} className="flex justify-between items-center">
+                <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {item.imageUrl ?
+                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit:'cover' }} /> :
+                    <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
+                  }
+                </Box>
                 <div>
                   <p className="font-medium">{item.name}</p>
                   <p className="text-sm text-gray-500">R$ {item.price.toFixed(2)}</p>
@@ -273,7 +179,7 @@ const CardapioPDV = () => {
                   </button>
                   <span>{item.quantity}</span>
                   <button
-                    onClick={() => addToCart(MENU_ITEMS.find(i => i.id === item.id)!)}
+                    onClick={() => addToCart(categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.find(prod => prod.id === item.id)!)} // Find item in categories
                     className="p-1 text-green-500 hover:bg-green-50 rounded"
                   >
                     <Plus size={16} />
@@ -332,6 +238,12 @@ const CardapioPDV = () => {
         <div className="space-y-4 mb-4">
           {cart.map((item) => (
             <div key={item.id} className="flex justify-between items-center">
+              <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {item.imageUrl ?
+                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit:'cover' }} /> :
+                    <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
+                  }
+                </Box>
               <div>
                 <p className="font-medium">{item.name}</p>
                 <p className="text-sm text-gray-500">R$ {item.price.toFixed(2)}</p>
@@ -345,7 +257,7 @@ const CardapioPDV = () => {
                 </button>
                 <span>{item.quantity}</span>
                 <button
-                  onClick={() => addToCart(MENU_ITEMS.find(i => i.id === item.id)!)}
+                  onClick={() => addToCart(categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.find(prod => prod.id === item.id)!)} // Find item in categories
                   className="p-1 text-green-500 hover:bg-green-50 rounded"
                 >
                   <Plus size={16} />
@@ -371,43 +283,39 @@ const CardapioPDV = () => {
       </aside>
 
       {/* Menu Section */}
-      
       <main className="flex-1 p-4">
-
-
         {/* Tabs for Categories */}
         <div ref={tabsRef} className="overflow-x-auto mb-6">
-            <AppBar position="static" style={{ backgroundColor: '#424242' }}>
+          <AppBar position="static" style={{ backgroundColor: '#424242' }}>
             <Toolbar>
               <Typography variant="h6" style={{ flexGrow: 1 }}>
                 Cardapio PDV
               </Typography>
             </Toolbar>
           </AppBar>
- 
-     
+
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
             variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs"
-            
           >
-            {menuTabs.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} data-value={tab} />
+            {categories.map((tab) => (
+              <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()} />
             ))}
           </Tabs>
         </div>
+
         {/* Menu Items Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {MENU_ITEMS.filter(item => item.category === activeTab).map((item) => (
+          {categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.map((item) => ( // Access products from the selected category
             <div
               key={item.id}
               className="bg-blue rounded-lg shadow-md overflow-hidden"
             >
               <img
-                src={item.image}
+                src={item.imageUrl}
                 alt={item.name}
                 className="w-full h-48 object-cover"
               />
@@ -426,18 +334,17 @@ const CardapioPDV = () => {
           ))}
         </div>
 
-
         {/* Mobile Cart Button */}
         <Fab
-            variant="extended"
-            size="medium"
-            color="primary"
-            className="md:hidden fixed top-10 left-20 bg-blue-600 text-white"
-            onClick={handleOpenCart}
-          >
-            <NavigationIcon />
-            Fazer Pedido {totalItems > 0 && `(${totalItems})`} {/* Exibe o contador */}
-          </Fab>
+          variant="extended"
+          size="medium"
+          color="primary"
+          className="md:hidden fixed top-10 left-20 bg-blue-600 text-white"
+          onClick={handleOpenCart}
+        >
+          <NavigationIcon />
+          Fazer Pedido {totalItems > 0 && `(${totalItems})`}
+        </Fab>
       </main>
     </div>
   );
