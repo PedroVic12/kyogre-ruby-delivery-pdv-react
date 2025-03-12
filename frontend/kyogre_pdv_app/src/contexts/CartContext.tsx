@@ -1,15 +1,14 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useCart as useCartHook } from '../hooks/useCart';
-import { CartItem } from '../types/CartItem';
-import { MenuItem } from '../types/MenuItem';
+import { CartItem,Product } from '../types/menu';
 
 interface CartContextType {
   items: CartItem[];
   total: number;
   itemCount: number;
-  addToCart: (item: MenuItem) => void;
-  removeFromCart: (itemId: string) => void;
-  updateQuantity: (itemId: string, quantity: number) => void;
+  addToCart: (menuItem: Product) => void;
+  removeFromCart: (itemId: number) => void;
+  updateQuantity: (itemId: number, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);

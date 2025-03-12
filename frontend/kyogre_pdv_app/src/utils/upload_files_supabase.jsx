@@ -24,7 +24,7 @@ const UploadImage = ({ onUploadSuccess }) => {
 
         try {
             // Corrected URL: Added /api prefix
-            const response = await axios.post('http://localhost:8000/api/storage/', formData, {
+            const response = await axios.post('https://docker-raichu.onrender.com/api/storage/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

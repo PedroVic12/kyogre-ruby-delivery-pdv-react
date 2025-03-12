@@ -41,6 +41,8 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     function getNextStatus(status: string): string {
+
+        //! Status do servidor
         switch (status) {
             case 'Em Processo': return 'Cozinha';
             case 'Cozinha': return 'Entrega';
@@ -317,7 +319,7 @@ export function DashboardPedidosPage() {
 
 
 
-    //! Função para avançar o status do pedido (simulada - você precisa implementar no backend)
+    //! Função para avançar o status do pedido
     const advanceOrder = async (orderId: number, nextStatus: string) => {
         const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status`; // Rota de exemplo para atualizar status
         try {
@@ -377,7 +379,7 @@ export function DashboardPedidosPage() {
             {/* Changed the div for better responsiveness */}
             <div className="flex flex-col sm:flex-row gap-4 overflow-x-auto">
                 <OrderColumn
-                    title="Em Processo"
+                    title="Em Analise"
                     orders={pedidosEmProcesso}
                     color="border-blue-500 bg-blue-100"
                     onAdvance={advanceOrder}
