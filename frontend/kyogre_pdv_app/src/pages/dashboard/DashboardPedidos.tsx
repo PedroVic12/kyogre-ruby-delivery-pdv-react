@@ -321,8 +321,8 @@ export function DashboardPedidosPage() {
 
     //! Função para avançar o status do pedido
     const advanceOrder = async (orderId: number, nextStatus: string) => {
-        //const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
-        const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
+        const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
+        //const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status?status=${nextStatus}`; // This SHOULD work based on code given.
 
         try {
             const response = await fetch(UPDATE_API_ENDPOINT, {
