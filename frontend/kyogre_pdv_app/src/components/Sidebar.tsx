@@ -23,7 +23,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: LayoutDashboard, label: 'App Garçom', href: '/app_garcom' },
     //{ icon: Coffee, label: 'Cardapio PDV', href: '/cardapio/:mesa' },
     { icon: UserPlus, label: 'Controle Estoque', href: '/controle_estoque' },
-    { icon: Book, label: 'Pagina Componentes', href: '/pagina_componentes' },
+   // { icon: Book, label: 'Pagina Componentes', href: '/pagina_componentes' },
     { icon: UserPlus, label: 'Login', href: '/login' },
 
   ];

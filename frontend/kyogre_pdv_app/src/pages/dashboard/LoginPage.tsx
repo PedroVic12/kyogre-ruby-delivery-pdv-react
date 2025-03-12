@@ -1,11 +1,11 @@
-// LoginPageComponent.tsx (anteriormente LoginPage.tsx e renomeado para LoginPageComponent para App.tsx usar como LoginPageComponent)
+// LoginPageComponent.tsx
 import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Importe useNavigate
 
 interface LoginPageProps { // Define as props do componente
     isDebug: boolean;
-    onLoginSuccess: () => void;
+    onLoginSuccess: (email: string) => void; // Modifique a definição de onLoginSuccess para aceitar email
 }
 
 // User data
@@ -20,6 +20,7 @@ const superuserPassword = "admin";
 
 
 
+
 export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginSuccess }) => { // LoginPageComponent aceita props agora
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
@@ -27,36 +28,34 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
     const [loginError, setLoginError] = useState('');
     const navigate = useNavigate(); // Hook useNavigate
 
-    
-    // Simulated sendEmail function
-    const sendEmail = (to: string, subject: string, body: string) => {
-      // ... (mesma implementação de sendEmail) ...
-      if (!isDebug) {
-          alert(`Simulando envio de email:\nPara: ${to}\nAssunto: ${subject}\nCorpo: ${body}`);
-      } else {
-          console.log(`Modo Debug: Email Simulado - Para: ${to}, Assunto: ${subject}`);
-      }
-    };
 
+  // Simulated sendEmail function
+  const sendEmail = (to: string, subject: string, body: string) => {
+    if (!isDebug) {
+        alert(`Simulando envio de email:\nPara: ${to}\nAssunto: ${subject}\nCorpo: ${body}`);
+    } else {
+        console.log(`Modo Debug: Email Simulado - Para: ${to}, Assunto: ${subject}`);
+    }
+  };
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setLoginError('');
 
         if (isDebug) {
-            handleDebugLogin(); // Usa handleDebugLogin localmente
+            handleDebugLogin();
             return;
         }
 
         if (email === superuserEmail && password === superuserPassword) {
             alert("Login de Superusuário Bem-sucedido!");
-            onLoginSuccess(); // Chama a prop onLoginSuccess para atualizar o estado de autenticação em App.tsx
+            onLoginSuccess(superuserEmail); // Passe superuserEmail
             navigate('/dashboard');
             return;
         }
 
         if (email === userData.email && password === userData.senha) {
             alert("Login Bem-sucedido!");
-            onLoginSuccess(); // Chama a prop onLoginSuccess
+            onLoginSuccess(userData.email); // Passe userData.email
             navigate('/dashboard');
         } else {
             setLoginError('Email ou senha incorretos.');
@@ -91,7 +90,7 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
 
     const handleDebugLogin = () => { // Mantém handleDebugLogin local para LoginPageComponent
         alert(`Modo Debug: Logado como ${userData.email}`);
-        onLoginSuccess(); // Simula login bem-sucedido e atualiza o estado em App.tsx
+        onLoginSuccess(userData.email); // Passe userData.email no login debug
         navigate('/dashboard'); // Redireciona para /dashboard
     };
 
