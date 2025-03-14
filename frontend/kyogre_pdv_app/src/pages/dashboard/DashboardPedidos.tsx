@@ -191,12 +191,11 @@ export function DashboardPedidosPage() {
     const [pedidosCozinha, setPedidosCozinha] = useState<Order[]>([]);
     const [pedidosEntrega, setPedidosEntrega] = useState<Order[]>([]);
     const [pedidosFinalizados, setPedidosFinalizados] = useState<Order[]>([]);
-    const [pedidosPendentes, setPedidosPendentes] = useState<Order[]>([]); // Novos pedidos que ainda não foram aceitos
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [newOrdersCount, setNewOrdersCount] = useState(0); // Use this state to manage the count
     const [isNewOrderDialogOpen, setIsNewOrderDialogOpen] = useState(false);
-    const [lastOrdersLength, setLastOrdersLength] = useState(0);
+    const [, setLastOrdersLength] = useState(0);
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
