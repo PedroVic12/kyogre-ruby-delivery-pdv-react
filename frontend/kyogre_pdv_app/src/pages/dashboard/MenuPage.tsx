@@ -1,8 +1,8 @@
 import { MenuCategory } from '../../components/menu/MenuCategory';
 import { AddProductModal } from '../../components/menu/AddProductModal';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Category, Product } from '../../types/menu';
-import { Button, CircularProgress, Box, Paper, Typography, Collapse, IconButton, Stack } from '@mui/material';
+import { Button, CircularProgress, Box, Paper, Typography, Collapse, IconButton, Stack, TextField } from '@mui/material';
 import { green, blue, red } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -112,6 +112,25 @@ export function useMenuState() {
 
 
 //! Front end de gerenciador do cardapio
+interface PedidoData {
+  id: number;
+  nome_cliente: string;
+  telefone: string;
+  endereco: string;
+  complemento: string;
+  forma_pagamento: string;
+  status: string;
+  total_pagar: number;
+  data_pedido: {
+    data: string;
+    hora: string;
+  };
+  carrinho: {
+    quantidade: number;
+    nome: string;
+    preco: number;
+  }[];
+}
 
 export function TestePedidoButton() {
   const [mensagem, setMensagem] = useState('');
@@ -119,6 +138,40 @@ export function TestePedidoButton() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [detalhesResposta, setDetalhesResposta] = useState<any>(null);
   const [mostrarDetalhes, setMostrarDetalhes] = useState(false);
+  const [pedidoData, setPedidoData] = useState<PedidoData>({
+    id: 1861,
+    nome_cliente: 'Pedro Victor',
+    telefone: '5521999289987',
+    endereco: 'Niterói',
+    complemento: 'Centro, perto do Plaza shopping',
+    forma_pagamento: 'Dinheiro',
+    status: 'em processo',
+    total_pagar: 96,
+    data_pedido: {
+      data: '06/03/2025',
+      hora: ' 03:08:19',
+    },
+    carrinho: [
+      {
+        quantidade: 1,
+        nome: 'Americano',
+        preco: 24,
+      },
+      {
+        quantidade: 1,
+        nome: 'Bauru',
+        preco: 42,
+      },
+      {
+        quantidade: 1,
+        nome: 'Filé de Carne',
+        preco: 30,
+      },
+    ],
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [isLongPress, setIsLongPress] = useState(false);
 
   // Limpar mensagem após 8 segundos quando houver sucesso ou erro
   useEffect(() => {
@@ -127,10 +180,32 @@ export function TestePedidoButton() {
         setMensagem('');
         setStatus('idle');
       }, 8000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [status]);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    const path = name.split('.');
+    setPedidoData((prevData) => {
+      let newData = { ...prevData };
+      let current = newData as any;
+      for (let i = 0; i < path.length - 1; i++) {
+        current = current[path[i]];
+      }
+      current[path[path.length - 1]] = value;
+      return newData;
+    });
+  };
+
+  const handleCarrinhoChange = (index: number, field: string, value: any) => {
+    setPedidoData((prevData) => {
+      const newCarrinho = [...prevData.carrinho];
+      newCarrinho[index] = { ...newCarrinho[index], [field]: value };
+      return { ...prevData, carrinho: newCarrinho };
+    });
+  };
 
   const fazerPedido = async () => {
     setIsLoading(true);
@@ -138,50 +213,18 @@ export function TestePedidoButton() {
     setMensagem('Enviando pedido...');
     setDetalhesResposta(null);
     setMostrarDetalhes(false);
-    
+    setIsEditing(false);
+
     console.log('Iniciando envio do pedido de teste...');
-
-    const pedidoData = {
-      "id": 1861,
-      "nome_cliente": "Pedro V",
-      "telefone": "5521999289987",
-      "endereco": "Niterói",
-      "complemento": "Centro, perto do Plaza shopping",
-      "forma_pagamento": "Dinheiro",
-      "status": "em processo",
-      "total_pagar": 96,
-      "data_pedido": {
-        "data": "06/03/2025",
-        "hora": " 03:08:19"
-      },
-      "carrinho": [
-        {
-          "quantidade": 1,
-          "nome": "Americano",
-          "preco": 24
-        },
-        {
-          "quantidade": 1,
-          "nome": "Bauru",
-          "preco": 42
-        },
-        {
-          "quantidade": 1,
-          "nome": "Filé de Carne",
-          "preco": 30
-        }
-      ]
-    };
-
     console.log('Dados do pedido:', pedidoData);
 
     try {
-      const resposta = await fetch('https://docker-raichu.onrender.com/api/pedidos/', { // Use 'http://localhost:8000/api/pedidos/' para teste local
+      const resposta = await fetch('https://docker-raichu.onrender.com/api/pedidos/', {
+        // Use 'http://localhost:8000/api/pedidos/' para teste local
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        
         body: JSON.stringify(pedidoData),
       });
 
@@ -220,10 +263,39 @@ export function TestePedidoButton() {
   // Cores para diferentes estados
   const getStatusColor = () => {
     switch (status) {
-      case 'success': return green[500];
-      case 'error': return red[500];
-      case 'loading': return blue[500];
-      default: return 'inherit';
+      case 'success':
+        return green[500];
+      case 'error':
+        return red[500];
+      case 'loading':
+        return blue[500];
+      default:
+        return 'inherit';
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+    setMostrarDetalhes(true);
+  };
+
+  const handleMouseDown = () => {
+    const timer = setTimeout(() => {
+      setIsLongPress(true);
+      handleEditClick();
+    }, 2000); // 2 segundos
+
+    const handleMouseUpOrLeave = () => {
+      clearTimeout(timer);
+      if (!isLongPress) {
+        fazerPedido();
+      }
+      setIsLongPress(false);
+    };
+
+    if (buttonRef.current) {
+      buttonRef.current.addEventListener('mouseup', handleMouseUpOrLeave, { once: true });
+      buttonRef.current.addEventListener('mouseleave', handleMouseUpOrLeave, { once: true });
     }
   };
 
@@ -231,6 +303,7 @@ export function TestePedidoButton() {
     <Box sx={{ mb: 4 }}>
       <Box sx={{ position: 'relative' }}>
         <Button
+          ref={buttonRef}
           variant="contained"
           sx={{
             bgcolor: isLoading ? 'grey.400' : blue[600],
@@ -243,7 +316,7 @@ export function TestePedidoButton() {
             borderRadius: 2,
           }}
           disabled={isLoading}
-          onClick={fazerPedido}
+          onMouseDown={handleMouseDown}
         >
           {isLoading ? 'Enviando...' : 'Fazer Pedido de Teste (POST)'}
         </Button>
@@ -261,9 +334,9 @@ export function TestePedidoButton() {
           />
         )}
       </Box>
-      
+
       {mensagem && (
-        <Paper 
+        <Paper
           elevation={3}
           sx={{
             mt: 2,
@@ -274,14 +347,12 @@ export function TestePedidoButton() {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {status === 'loading' && (
-              <CircularProgress size={20} sx={{ color: 'white' }} />
-            )}
+            {status === 'loading' && <CircularProgress size={20} sx={{ color: 'white' }} />}
             <Typography variant="body1">{mensagem}</Typography>
-            
+
             {detalhesResposta && (
-              <IconButton 
-                size="small" 
+              <IconButton
+                size="small"
                 sx={{ ml: 'auto', color: 'white' }}
                 onClick={() => setMostrarDetalhes(!mostrarDetalhes)}
               >
@@ -289,22 +360,156 @@ export function TestePedidoButton() {
               </IconButton>
             )}
           </Box>
-          
+
           <Collapse in={mostrarDetalhes}>
-            <Box 
-              sx={{ 
-                mt: 2, 
-                p: 1, 
-                bgcolor: 'rgba(0, 0, 0, 0.1)', 
+            <Box
+              sx={{
+                mt: 2,
+                p: 1,
+                bgcolor: 'rgba(0, 0, 0, 0.1)',
                 borderRadius: 1,
-                maxHeight: 200,
+                maxHeight: 400,
                 overflow: 'auto',
                 fontFamily: 'monospace',
                 fontSize: '0.8rem',
-                whiteSpace: 'pre-wrap'
+                whiteSpace: 'pre-wrap',
+                position: 'relative',
               }}
             >
-              {JSON.stringify(detalhesResposta, null, 2)}
+              {isEditing ? (
+                <Box>
+                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Dados do Pedido:
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    label="ID"
+                    name="id"
+                    value={pedidoData.id}
+                    onChange={handleInputChange}
+                    margin="normal"
+                    type="number"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Nome do Cliente"
+                    name="nome_cliente"
+                    value={pedidoData.nome_cliente}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Telefone"
+                    name="telefone"
+                    value={pedidoData.telefone}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Endereço"
+                    name="endereco"
+                    value={pedidoData.endereco}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Complemento"
+                    name="complemento"
+                    value={pedidoData.complemento}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Forma de Pagamento"
+                    name="forma_pagamento"
+                    value={pedidoData.forma_pagamento}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Status"
+                    name="status"
+                    value={pedidoData.status}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Total a Pagar"
+                    name="total_pagar"
+                    value={pedidoData.total_pagar}
+                    onChange={handleInputChange}
+                    margin="normal"
+                    type="number"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Data do Pedido"
+                    name="data_pedido.data"
+                    value={pedidoData.data_pedido.data}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Hora do Pedido"
+                    name="data_pedido.hora"
+                    value={pedidoData.data_pedido.hora}
+                    onChange={handleInputChange}
+                    margin="normal"
+                  />
+                  <Typography variant="subtitle1" sx={{ mt: 2, mb: 1 }}>
+                    Carrinho:
+                  </Typography>
+                  {pedidoData.carrinho.map((item, index) => (
+                    <Box key={index} sx={{ border: '1px solid #ccc', p: 1, mb: 1, borderRadius: 1 }}>
+                      <TextField
+                        fullWidth
+                        label={`Quantidade`}
+                        name={`carrinho.${index}.quantidade`}
+                        value={item.quantidade}
+                        onChange={(e) => handleCarrinhoChange(index, 'quantidade', Number(e.target.value))}
+                        margin="normal"
+                        type="number"
+                      />
+                      <TextField
+                        fullWidth
+                        label={`Nome`}
+                        name={`carrinho.${index}.nome`}
+                        value={item.nome}
+                        onChange={(e) => handleCarrinhoChange(index, 'nome', e.target.value)}
+                        margin="normal"
+                      />
+                      <TextField
+                        fullWidth
+                        label={`Preço`}
+                        name={`carrinho.${index}.preco`}
+                        value={item.preco}
+                        onChange={(e) => handleCarrinhoChange(index, 'preco', Number(e.target.value))}
+                        margin="normal"
+                        type="number"
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              ) : (
+                <pre>{JSON.stringify(pedidoData, null, 2)}</pre>
+              )}
+              <Box sx={{ position: 'absolute', top: 5, right: 5, display: 'flex', gap: 1 }}>
+                <Button variant="outlined" color="primary" size="small" onClick={handleEditClick}>
+                  {isEditing ? 'Cancelar' : 'Editar'}
+                </Button>
+                {isEditing && (
+                  <Button variant="contained" color="success" size="small" onClick={fazerPedido}>
+                    Enviar
+                  </Button>
+                )}
+              </Box>
             </Box>
           </Collapse>
         </Paper>
@@ -313,6 +518,7 @@ export function TestePedidoButton() {
   );
 }
 
+//! CODIGO ANTIGO DO CARDAPIO, SE POSSIVEL APAGAR
 
 export function MenuPage() {
   const {

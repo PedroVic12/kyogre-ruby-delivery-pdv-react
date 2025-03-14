@@ -26,7 +26,7 @@ const isDebug = false; // Defina como false para modo de produção
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loggedInEmail, setLoggedInEmail] = useState(''); // Novo estado para email do usuário logado
+  const [loggedInEmail, setLoggedInEmail,] = useState(''); // Novo estado para email do usuário logado
 
   useEffect(() => {
     if (isDebug) {
