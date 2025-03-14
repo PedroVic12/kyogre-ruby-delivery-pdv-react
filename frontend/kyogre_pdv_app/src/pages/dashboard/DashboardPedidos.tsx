@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import "../../index.css"
 
-import {TestePedidoButton} from "./MenuPage"
+import { TestePedidoButton } from "./MenuPage"
 
 // Definições de Interface (Typescript)
 interface OrderItem {
@@ -42,7 +42,7 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
 
     function getNextStatus(status: string): string {
 
-       //! Status do servidor
+        //! Status do servidor
         switch (status) {
             case 'em processo': return 'cozinha';
             case 'cozinha': return 'entrega';
@@ -149,17 +149,20 @@ interface NewOrderDialogProps {
     isOpen: boolean;
     onClose: () => void;
     onAccept: () => void;
+    newOrdersCount: number; // Add newOrdersCount prop
 }
 
 // Modificar o componente NewOrderDialog para mostrar quantos pedidos novos existem
-function NewOrderDialog({ isOpen, onClose, onAccept }: NewOrderDialogProps) {
+function NewOrderDialog({ isOpen, onClose, onAccept, newOrdersCount }: NewOrderDialogProps) {
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
                 <h2 className="text-lg font-semibold mb-4">Novos Pedidos Recebidos!</h2>
-                <p className="mb-4">Você tem novos pedidos aguardando aceitação. Deseja aceitá-los e colocá-los em preparo?</p>
+                <p className="mb-4">
+                    Você tem {newOrdersCount} novo{newOrdersCount !== 1 ? 's' : ''} pedido{newOrdersCount !== 1 ? 's' : ''} aguardando aceitação. Deseja aceitá-los e colocá-los em preparo?
+                </p>
                 <div className="flex justify-end gap-4">
                     <button
                         onClick={onClose}
@@ -191,14 +194,15 @@ export function DashboardPedidosPage() {
     const [pedidosPendentes, setPedidosPendentes] = useState<Order[]>([]); // Novos pedidos que ainda não foram aceitos
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [, setNewOrdersCount] = useState(0);
+    const [newOrdersCount, setNewOrdersCount] = useState(0); // Use this state to manage the count
     const [isNewOrderDialogOpen, setIsNewOrderDialogOpen] = useState(false);
     const [lastOrdersLength, setLastOrdersLength] = useState(0);
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
+    const [allOrders, setAllOrders] = useState<Order[]>([]);
 
     const API_ENDPOINT = 'https://docker-raichu.onrender.com/api/pedidos/'; // Rota da sua API para buscar pedidos
 
-    
+
     const fetchOrders = async () => {
         setIsLoading(true);
         setError(null);
@@ -223,30 +227,18 @@ export function DashboardPedidosPage() {
                 console.error("Erro ao fazer parse do JSON:", parseError);
                 throw new Error(`Resposta inválida da API: ${responseText}`);
             }
-
+            setAllOrders(data);
             // Verificar se há novos pedidos
-            if (data.length > lastOrdersLength) {
-                // Encontrar os novos pedidos (aqueles que não estavam na lista anterior)
-                const novos = data.filter(pedido => {
-                    // Verifica se este pedido não está em nenhuma das listas existentes
-                    const emProcesso = pedidosEmProcesso.some(p => p.id === pedido.id);
-                    const emCozinha = pedidosCozinha.some(p => p.id === pedido.id);
-                    const emEntrega = pedidosEntrega.some(p => p.id === pedido.id);
-                    const emFinalizado = pedidosFinalizados.some(p => p.id === pedido.id);
-                    const emPendentes = pedidosPendentes.some(p => p.id === pedido.id);
+            const newOrders = data.filter(order => order.status === 'em processo');
+            const newOrdersIds = newOrders.map(order => order.id);
+            const oldOrdersIds = allOrders.map(order => order.id);
+            const isNewOrder = newOrdersIds.some(id => !oldOrdersIds.includes(id));
 
-                    return !emProcesso && !emCozinha && !emEntrega && !emFinalizado && !emPendentes;
-                });
-
-                if (novos.length > 0) {
-                    console.log("Novos pedidos encontrados:", novos.length);
-                    setNewOrdersCount(novos.length);
-                    setNovosPedidos(novos);
-                    setIsNewOrderDialogOpen(true);
-
-                    // Adicionar à lista de pendentes
-                    setPedidosPendentes(prev => [...prev, ...novos]);
-                }
+            if (isNewOrder) {
+                const newOrdersToAdd = newOrders.filter(order => !oldOrdersIds.includes(order.id));
+                setNovosPedidos(newOrdersToAdd);
+                setNewOrdersCount(newOrdersToAdd.length);
+                setIsNewOrderDialogOpen(true);
             }
 
             setLastOrdersLength(data.length);
@@ -282,16 +274,12 @@ export function DashboardPedidosPage() {
         // Para cada novo pedido, atualize o status para "Em Processo"
         for (const pedido of novosPedidos) {
             try {
-                const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${pedido.id}`;
+                const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${pedido.id}/status?status=em processo`;
                 const response = await fetch(UPDATE_API_ENDPOINT, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        ...pedido,
-                        status: 'em processo'
-                    }),
                 });
 
                 if (!response.ok) {
@@ -375,6 +363,7 @@ export function DashboardPedidosPage() {
                 isOpen={isNewOrderDialogOpen}
                 onClose={handleCloseNewOrderDialog}
                 onAccept={handleAcceptNewOrder}
+                newOrdersCount={newOrdersCount} // Pass the count here
             />
 
             {/* Changed the div for better responsiveness */}
