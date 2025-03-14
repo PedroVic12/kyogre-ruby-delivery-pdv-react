@@ -21,7 +21,7 @@ import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 
 // Debug Mode Switch - CENTRALIZADO AQUI
-const isDebug = true; // Defina como false para modo de produção
+const isDebug = false; // Defina como false para modo de produção
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,7 +32,7 @@ function App() {
     if (isDebug) {
       // Auto-login em modo debug
       setIsAuthenticated(true);
-      setLoggedInEmail("debug@example.com"); // Defina um email padrão para debug
+      setLoggedInEmail("admin@admin"); // Defina um email padrão para debug
     }
   }, []);
 

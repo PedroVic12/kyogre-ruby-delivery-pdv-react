@@ -294,7 +294,7 @@ const CardapioPDV = () => {
             </Toolbar>
           </AppBar>
 
-          <Box sx={{ bgcolor: 'rgb(0, 76, 255)' }}>
+          <Box sx={{ bgcolor: 'rgb(0, 131, 202)' }}>
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
@@ -302,7 +302,7 @@ const CardapioPDV = () => {
               scrollButtons="auto"
               aria-label="scrollable auto tabs"
               color='primary'
-              textColor='primary'
+              textColor='secondary'
             >
               {categories.map((tab) => (
                 <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()} />
