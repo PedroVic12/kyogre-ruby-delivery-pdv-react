@@ -97,18 +97,18 @@ export const CardapioDigitalPage: React.FC = () => {
       </AppBar>
 
       <Container maxWidth="sm" sx={{ mt: 3 }}>
-        <Box component="section" sx={{ mb: 4 }}>
+        <Box component="section" sx={{ mb: 3 }}>
           <SearchBar onSearch={setSearchQuery} />
         </Box>
 
-        <Box component="section" sx={{ mb: 4 }}>
+        <Box component="section" sx={{ mb: 2 }}>
           <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
             Destaques
           </Typography>
           <FeaturedCarousel items={featuredProducts} />
         </Box>
 
-        <Box component="section" sx={{ mb: 4 }}>
+        <Box component="section" sx={{ mb: 2 }}>
           <CategoryTabs
             categories={categories}
             selectedCategory={selectedCategory}
