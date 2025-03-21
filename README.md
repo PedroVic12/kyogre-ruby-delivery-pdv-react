@@ -1,5 +1,22 @@
 # Kyogre Ruby Delivery PDV - Project Documentation
 
+
+## Dev Notes
+
+1) Supabase:
+    - Cada cliente possui login,senha, nome_tabela, pasta_storage
+    - O usuario logado possui segurança com criptografia e JWT e cada um possui seu banco especifico
+
+2) Interface React consome API em FastAPI
+    - Login
+    - Cardapio Manager
+    - Cardapio digital QR code, Cardapio PDV
+    - Pedidos com Kanban
+    - App Garcom com checkout
+
+3) Api em Fastapi 
+    - Se encarrega a controlar os pedidos, dados do supabase e o storage
+
 ## Overview
 
 The Kyogre Ruby Delivery PDV (Point of Sale) project is a full-stack web application designed for restaurant management. It consists of a React-based frontend and a FastAPI-based backend, offering features for order management, product listing, customer management, and a digital menu. It utilizes Supabase as a backend-as-a-service for database management.

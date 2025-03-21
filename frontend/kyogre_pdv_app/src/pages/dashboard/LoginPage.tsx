@@ -3,23 +3,38 @@ import React, { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Importe useNavigate
 
+// Refactored USUARIOS data structure for easier access
+export const USUARIOS = [
+    {
+        role: "admin",
+        email: "admin@admin",
+        senha: "admin",
+        table: "cardapio",
+        storage: "cardapio_fotos"
+    },
+    {
+        role: "Pedro Victor - The Creator",
+        email: "pedrovictor.rveras12@gmail.com",
+        senha: "pedro",
+        table: "cardapio",
+        storage: "cardapio_fotos"
+    },
+    {
+        role: "cliente1",
+        email: "gabyltds@icloud.com",
+        senha: ""
+    },
+];
+
+// Optional: Log the users for verification
+USUARIOS.forEach(user => {
+    console.log(`${user.role}: ${user.email}, ${user.senha}`);
+});
+
 interface LoginPageProps { // Define as props do componente
     isDebug: boolean;
     onLoginSuccess: (email: string) => void; // Modifique a definição de onLoginSuccess para aceitar email
 }
-
-// User data
-const userData = {
-    "email": "pedrovictor.rveras12@gmail.com",
-    "senha": "admin"
-};
-
-// Superuser credentials
-const superuserEmail = "admin@admin";
-const superuserPassword = "admin";
-
-
-
 
 export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginSuccess }) => { // LoginPageComponent aceita props agora
     const [isLogin, setIsLogin] = useState(true);
@@ -28,40 +43,55 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
     const [loginError, setLoginError] = useState('');
     const navigate = useNavigate(); // Hook useNavigate
 
+    // Simulated sendEmail function (remains the same)
+    const sendEmail = (to: string, subject: string, body: string) => {
+        if (!isDebug) {
+            alert(`Simulando envio de email:\nPara: ${to}\nAssunto: ${subject}\nCorpo: ${body}`);
+        } else {
+            console.log(`Modo Debug: Email Simulado - Para: ${to}, Assunto: ${subject}`);
+        }
+    };
 
-  // Simulated sendEmail function
-  const sendEmail = (to: string, subject: string, body: string) => {
-    if (!isDebug) {
-        alert(`Simulando envio de email:\nPara: ${to}\nAssunto: ${subject}\nCorpo: ${body}`);
-    } else {
-        console.log(`Modo Debug: Email Simulado - Para: ${to}, Assunto: ${subject}`);
-    }
-  };
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         setLoginError('');
 
         if (isDebug) {
-            handleDebugLogin();
-            return;
-        }
-
-        if (email === superuserEmail && password === superuserPassword) {
-            alert("Login de Superusuário Bem-sucedido!");
-            onLoginSuccess(superuserEmail); // Passe superuserEmail
-            navigate('/dashboard');
-            return;
-        }
-
-        if (email === userData.email && password === userData.senha) {
-            alert("Login Bem-sucedido!");
-            onLoginSuccess(userData.email); // Passe userData.email
-            navigate('/dashboard');
+            // In debug mode, auto-login with the first user found (for simplicity)
+            if (USUARIOS.length > 0) {
+                const firstUser = USUARIOS[0];
+                alert(`Modo Debug: Logado como ${firstUser.email}`);
+                onLoginSuccess(firstUser.email);
+                if (firstUser.role === 'cliente1') {
+                    navigate('/dashboard');
+                } else {
+                    navigate('/dashboard');
+                }
+                return;
+            }
         } else {
-            setLoginError('Email ou senha incorretos.');
+            // Production mode login logic
+            let loggedIn = false;
+            for (const user of USUARIOS) {
+                if (email === user.email) {
+                    if (user.role === 'cliente1' && password === "") {
+                        onLoginSuccess(user.email);
+                        navigate('/dashboard');
+                        loggedIn = true;
+                        break;
+                    } else if (password === user.senha) {
+                        onLoginSuccess(user.email);
+                        navigate('/dashboard');
+                        loggedIn = true;
+                        break;
+                    }
+                }
+            }
+            if (!loggedIn) {
+                setLoginError('Email ou senha incorretos.');
+            }
         }
     };
-
 
     const handleForgotPassword = (e: React.FormEvent) => {
         e.preventDefault();
@@ -76,8 +106,6 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
             return;
         }
 
-
-        // In production mode, simulate sending a password reset link to the email
         sendEmail(
             email,
             'Recuperação de Senha',
@@ -87,14 +115,6 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
         setIsLogin(true);
     };
 
-
-    const handleDebugLogin = () => { // Mantém handleDebugLogin local para LoginPageComponent
-        alert(`Modo Debug: Logado como ${userData.email}`);
-        onLoginSuccess(userData.email); // Passe userData.email no login debug
-        navigate('/dashboard'); // Redireciona para /dashboard
-    };
-
-
     return (
         <div className="ml-2 pt-16 min-h-screen bg-gray-50 flex items-center justify-center">
             <div className="w-full max-w-md">
@@ -103,7 +123,6 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">Login</h2>
                         {loginError && <p className="text-red-500 text-sm mb-2">{loginError}</p>}
                         <form onSubmit={handleLogin} className="space-y-4">
-                            {/* ... seu formulário de login existente ... */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Email
@@ -158,7 +177,6 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">Recuperar Senha</h2>
                         {loginError && <p className="text-red-500 text-sm mb-2">{loginError}</p>}
                         <form onSubmit={handleForgotPassword} className="space-y-4">
-                            {/* ... seu formulário de recuperação de senha existente ... */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Email
@@ -197,5 +215,5 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug, onLoginS
     );
 };
 
+export default LoginPageComponent;
 
-export default LoginPageComponent; // Exporta LoginPageComponent agora

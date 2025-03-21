@@ -167,7 +167,7 @@ const CardapioPDV = () => {
       <div>
         <CircularProgress size="120px" />
         <br />
-        <h2>Carregando pedidos...</h2>
+        <h2>Carregando cardapio...</h2>
       </div>
     </div>; // Simple loading message
   }

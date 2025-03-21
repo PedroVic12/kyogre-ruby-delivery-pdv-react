@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PedidoController, {PedidoMesa} from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
-import Button from '@mui/material/Button';
 
 
 const PaymentMethods = [
@@ -110,9 +109,7 @@ const CheckoutPage = () => {
           >
             Finalizar e Imprimir
           </button>
-          <Button variant="contained" color="success" size="small" onClick={EnviarPedido}>
-                      Enviar Pedido Post
-          </Button>
+ 
         </div>
       </div>
     </div>
