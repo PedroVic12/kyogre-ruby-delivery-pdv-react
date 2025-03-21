@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Minus, NavigationIcon } from 'lucide-react';
 import PedidoController from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
-import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, AppBar, Toolbar, Typography, Box } from '@mui/material';
+import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, AppBar, Toolbar, Typography, Box, CircularProgress } from '@mui/material';
 
 import ProductCardapioRepository from "../../../src/repositories/cardapio_repository"; // Import ProductRepository and types
 
@@ -124,13 +124,18 @@ const CardapioPDV = () => {
       }
     }
   };
-
   if (isLoading) {
-    return <div>Carregando Cardápio...</div>; // Simple loading message
+    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div>
+        <CircularProgress size="120px" />
+        <br />
+        <h2>Carregando pedidos...</h2>
+      </div>
+    </div>; // Simple loading message
   }
 
   return (
-    <div className="min-h-screen bg-gray-300 flex flex-col md:flex-row">
+    <div className="min-h-screen  flex flex-col md:flex-row">
 
       {/* Cart Section (Mobile - Modal) */}
       <Dialog open={isCartOpen} onClose={handleCloseCart} fullWidth maxWidth="sm">
@@ -283,17 +288,19 @@ const CardapioPDV = () => {
       </aside>
 
       {/* Menu Section */}
-      <main className="flex-1 p-4">
+      <main className="flex-1 ">
         {/* Tabs for Categories */}
         <div ref={tabsRef} className="overflow-x-auto mb-6">
-          <AppBar position="static" style={{ backgroundColor: '#054f77' }}>
+          <AppBar position="static" style={{ backgroundColor: '#054f77', display: 'flex', justifyContent: 'center' }}>
             <Toolbar>
-              <Typography variant="h6" style={{ flexGrow: 1 }}>
+              <Typography variant="h6">
                 Cardapio PDV
               </Typography>
             </Toolbar>
           </AppBar>
 
+
+          {/* Tabs de navegacao */}
           <Box sx={{ backgroundColor: '#C0C0C0', padding: 2, borderRadius: 1 }}>
           <Tabs
               value={activeTab}
@@ -314,11 +321,11 @@ const CardapioPDV = () => {
         </div>
 
         {/* Menu Items Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-2 ">
           {categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.map((item) => ( // Access products from the selected category
             <div
               key={item.id}
-              className="bg-blue rounded-lg shadow-md overflow-hidden"
+              className="bg-gray-300 p-4 rounded-lg shadow-md overflow-hidden"
             >
               <img
                 src={item.imageUrl}
@@ -331,7 +338,7 @@ const CardapioPDV = () => {
                 <Button
                   fullWidth
                   onClick={() => addToCart(item)}
-                  className="mt-2 bg-blue-900 text-white py-2 rounded-md hover:bg-blue-900 text-white"
+                  className="mt-2 bg-blue-200 text-white py-2 rounded-md hover:bg-blue-900 text-white"
                 >
                   Adicionar
                 </Button>
@@ -342,15 +349,16 @@ const CardapioPDV = () => {
 
         {/* Mobile Cart Button */}
         <Fab
-          variant="extended"
-          size="large"
-          color="primary"
-          className="md:hidden fixed top-10 left-20 bg-blue-600 text-white"
-          onClick={handleOpenCart}
-        >
-          <NavigationIcon className='mr-2'/>
-          Fazer Pedido {totalItems > 0 && `(${totalItems})`}
-        </Fab>
+                variant="extended"
+                size="large"
+                color="primary"
+                className="md:hidden fixed bg-blue-600 text-white"
+                onClick={handleOpenCart}
+                style={{position: 'fixed', top: 500, right: 10, zIndex: 9999}}
+          >
+                <NavigationIcon className='mr-2'/>
+                Fazer Pedido {totalItems > 0 && `(${totalItems})`}
+          </Fab>
       </main>
     </div>
   );
