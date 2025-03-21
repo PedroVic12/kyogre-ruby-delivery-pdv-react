@@ -7,11 +7,17 @@ import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, 
 
 import ProductCardapioRepository from "../../../src/repositories/cardapio_repository"; // Import ProductRepository and types
 
-import {Product, Category} from "../../../src/types/menu"
+import { Product, Category } from "../../../src/types/menu"
 
 interface CartItem extends Product { // CartItem now extends Product
   quantity: number;
 }
+
+
+//!Loading o controlador do cardapio pegando do supabase
+const productRepository = new ProductCardapioRepository();
+const pedidoController = PedidoController.getInstance();
+
 
 const CardapioPDV = () => {
   const { mesa } = useParams();
@@ -26,9 +32,6 @@ const CardapioPDV = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
   const tabsRef = useRef<HTMLDivElement>(null);
 
-
-  //!Loading o controlador do cardapio pegando do supabase
-  const productRepository = new ProductCardapioRepository();
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -48,6 +51,8 @@ const CardapioPDV = () => {
     };
 
     loadProducts();
+    const pedidos = pedidoController.loadPedidos();
+    console.log(pedidos);
   }, []);
 
   useEffect(() => {
@@ -62,16 +67,49 @@ const CardapioPDV = () => {
       return;
     }
 
-    const pedidoController = PedidoController.getInstance();
+    const now = new Date();
+    const dataPedido = {
+      data: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
+      hora: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
+    };
+
+    const carrinho = cart.map(item => ({
+      quantidade: item.quantity,
+      nome: item.name,
+      preco: item.price,
+    }));
+
     const newPedido = pedidoController.createPedido({
-      mesa: Number(mesa),
-      cliente: customerName,
-      items: cart,
-      total: calculateTotal()
+      nome_cliente: customerName,
+      complemento: `Mesa ${mesa ? mesa.charAt(0).toUpperCase() + mesa.slice(1) : ''}`,
+      total_pagar: calculateTotal(),
+      data_pedido: dataPedido,
+      carrinho: carrinho,
     });
+
+    console.log("Novo Pedido", newPedido)
 
     navigate(`/checkout/${newPedido.id}`);
   };
+
+  //! metodos do carrinho
+
+  // Validação dos nomes das pessoas
+  // const validatePeopleNames = (): boolean => {
+  //   const nameList = peopleNames
+  //     .split(',')
+  //     .map(name => name.trim())
+  //     .filter(name => name.length > 0);
+  //   return nameList.length === customersCount;
+  // };
+
+  // // Função para obter array de nomes limpos
+  // const getPeopleNamesList = (): string[] => {
+  //   return peopleNames
+  //     .split(',')
+  //     .map(name => name.trim())
+  //     .filter(name => name.length > 0);
+  // };
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -139,7 +177,7 @@ const CardapioPDV = () => {
 
       {/* Cart Section (Mobile - Modal) */}
       <Dialog open={isCartOpen} onClose={handleCloseCart} fullWidth maxWidth="sm">
-        <DialogTitle>Pedido</DialogTitle>
+        <DialogTitle>Pedido da mesa {mesa}</DialogTitle>
         <DialogContent>
           <div className="space-y-2 mb-2">
             <TextField
@@ -167,7 +205,7 @@ const CardapioPDV = () => {
               <div key={item.id} className="flex justify-between items-center">
                 <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   {item.imageUrl ?
-                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit:'cover' }} /> :
+                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
                     <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
                   }
                 </Box>
@@ -184,7 +222,12 @@ const CardapioPDV = () => {
                   </button>
                   <span>{item.quantity}</span>
                   <button
-                    onClick={() => addToCart(categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.find(prod => prod.id === item.id)!)} // Find item in categories
+                    onClick={() => {
+                      const product = categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.find(prod => prod.id === item.id);
+                      if (product) {
+                        addToCart(product);
+                      }
+                    }} // Find item in categories
                     className="p-1 text-green-500 hover:bg-green-50 rounded"
                   >
                     <Plus size={16} />
@@ -239,16 +282,16 @@ const CardapioPDV = () => {
           />
         </div>
 
-        <h2 className="text-lg font-semibold mb-4">Pedido</h2>
+        <h2 className="text-lg font-semibold mb-4">Pedido da mesa </h2>
         <div className="space-y-4 mb-4">
           {cart.map((item) => (
             <div key={item.id} className="flex justify-between items-center">
               <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {item.imageUrl ?
-                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit:'cover' }} /> :
-                    <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
-                  }
-                </Box>
+                {item.imageUrl ?
+                  <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
+                  <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
+                }
+              </Box>
               <div>
                 <p className="font-medium">{item.name}</p>
                 <p className="text-sm text-gray-500">R$ {item.price.toFixed(2)}</p>
@@ -262,7 +305,13 @@ const CardapioPDV = () => {
                 </button>
                 <span>{item.quantity}</span>
                 <button
-                  onClick={() => addToCart(categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.find(prod => prod.id === item.id)!)} // Find item in categories
+                  onClick={() => {
+                    const category = categories.find(cat => cat.name.toLowerCase() === activeTab);
+                    const product = category?.products.find(prod => prod.id === item.id);
+                    if (product) {
+                      addToCart(product);
+                    }
+                  }} // Find item in categories
                   className="p-1 text-green-500 hover:bg-green-50 rounded"
                 >
                   <Plus size={16} />
@@ -301,15 +350,15 @@ const CardapioPDV = () => {
 
 
           {/* Tabs de navegacao */}
-          <Box sx={{ backgroundColor: '#C0C0C0', padding: 2, borderRadius: 1 }}>
-          <Tabs
+          <Box sx={{ backgroundColor: '#C0C0C0', padding: 1, borderRadius: 1 }}>
+            <Tabs
               value={activeTab}
               onChange={handleTabChange}
               variant="scrollable"
               scrollButtons="auto"
               aria-label="scrollable auto tabs"
               color='primary'
-              textColor='secondary'
+              textColor='primary'
             >
               {categories.map((tab) => (
                 <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()} />
@@ -349,16 +398,16 @@ const CardapioPDV = () => {
 
         {/* Mobile Cart Button */}
         <Fab
-                variant="extended"
-                size="large"
-                color="primary"
-                className="md:hidden fixed bg-blue-600 text-white"
-                onClick={handleOpenCart}
-                style={{position: 'fixed', top: 500, right: 10, zIndex: 9999}}
-          >
-                <NavigationIcon className='mr-2'/>
-                Fazer Pedido {totalItems > 0 && `(${totalItems})`}
-          </Fab>
+          variant="extended"
+          size="large"
+          color="primary"
+          className="md:hidden fixed bg-blue-600 text-white"
+          onClick={handleOpenCart}
+          style={{ position: 'fixed', top: 850, right: 10, zIndex: 9999 }}
+        >
+          <NavigationIcon className='mr-2' />
+          Fazer Pedido {totalItems > 0 && `(${totalItems})`}
+        </Fab>
       </main>
     </div>
   );

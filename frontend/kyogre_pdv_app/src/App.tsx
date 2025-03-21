@@ -19,6 +19,7 @@ import GarcomMesas from '../app/app_garcom_pdv/pages/GarcomMesas.js';
 import CardapioPDV from '../app/app_garcom_pdv/pages/CardapioPDV.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
+import OrderComponent from '../app/app_garcom_pdv/pages/PedidoWidget';
 
 // Debug Mode Switch - CENTRALIZADO AQUI
 const isDebug = false; // Defina como false para modo de produção
@@ -102,6 +103,9 @@ function App() {
                   <Route path="app_garcom" element={<GarcomMesas />} />
                   <Route path="cardapio/:mesa" element={<CardapioPDV />} />
                   <Route path="checkout/:pedidoId" element={<CheckoutPage />} />
+
+                  <Route path="pedido" element={<OrderComponent />} />
+
                 </Routes>
               </div>
             }
