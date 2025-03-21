@@ -14,7 +14,7 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
   onCategoryChange,
 }) => {
   return (
-    <Box sx={{  borderColor: 'divider',  bgcolor: 'rgb(0, 131, 202)'  }}>
+    <Box sx={{ backgroundColor: '#C0C0C0', padding: 2, borderRadius: 1 }}>
       <Tabs
         value={selectedCategory}
         onChange={(_, value) => onCategoryChange(value as string)} // Changed here

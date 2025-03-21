@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { StockContextProvider } from "./contexts/StockContext";
 import Home from "./pages/Home";
 import ListItems from "./pages/items/ListItems";
@@ -8,18 +8,185 @@ import UpdateItem from "./pages/items/UpdateItem";
 
 import { Button, IconButton } from '@mui/material';
 
+// Theme Context
+const ThemeContext = createContext({
+  theme: 'dark', // Default theme
+  setTheme: (theme) => {},
+});
+
+// Custom hook to use the theme context
+const useTheme = () => useContext(ThemeContext);
+
+// Theme Provider
+const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('dark'); // Default theme
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+// Theme Styles
+const themes = {
+  dark: {
+    estoqueContainer: {
+      backgroundColor: '#2c2c2d',
+      color: '#fefefe',
+    },
+    estoqueHeader: {
+      backgroundColor: '#2c2c2d',
+      borderBottom: '2px solid #fefefe',
+    },
+    estoqueNavLinkHover: {
+      backgroundColor: '#fefefe11',
+    },
+    estoqueFooter: {
+      backgroundColor: '#2c2c2d',
+      borderTop: '2px solid #fefefe',
+      color: '#fefefe',
+    },
+    estoqueButton: {
+      backgroundColor: '#5ba7fd',
+      color: '#2c2c2d',
+    },
+    estoqueDangerButton: {
+      backgroundColor: '#ff5258',
+    },
+    estoqueThead: {
+      backgroundColor: '#1c1a1d',
+    },
+    estoqueDashboardCard: {
+      backgroundColor: '#1c1a1d',
+    },
+    estoqueInput: {
+      backgroundColor: '#1c1a1d',
+      color: '#fefefe',
+    },
+    estoqueItemSpan: {
+      backgroundColor: '#1c1a1d',
+    },
+    estoqueTrHover: {
+      backgroundColor: 'rgba(28, 26, 29, 0.33)',
+    },
+    buttonHover:{
+      filter: 'brightness(0.9)'
+    },
+    mainBackground:{
+      backgroundColor: 'rgba(255, 255, 255, 0.5)'
+    }
+  },
+  light: {
+    estoqueContainer: {
+      backgroundColor: '#f0f0f0',
+      color: '#333',
+    },
+    estoqueHeader: {
+      backgroundColor: '#f0f0f0',
+      borderBottom: '2px solid #ccc',
+    },
+    estoqueNavLinkHover: {
+      backgroundColor: '#ccc',
+    },
+    estoqueFooter: {
+      backgroundColor: '#f0f0f0',
+      borderTop: '2px solid #ccc',
+      color: '#333',
+    },
+    estoqueButton: {
+      backgroundColor: '#4CAF50',
+      color: '#fff',
+    },
+    estoqueDangerButton: {
+      backgroundColor: '#f44336',
+    },
+    estoqueThead: {
+      backgroundColor: '#e0e0e0',
+    },
+    estoqueDashboardCard: {
+      backgroundColor: '#e0e0e0',
+    },
+    estoqueInput: {
+      backgroundColor: '#e0e0e0',
+      color: '#333',
+    },
+    estoqueItemSpan: {
+      backgroundColor: '#e0e0e0',
+    },
+    estoqueTrHover: {
+      backgroundColor: 'rgba(204, 204, 204, 0.5)',
+    },
+    buttonHover:{
+      filter: 'brightness(0.9)'
+    },
+    mainBackground:{
+      backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    }
+  },
+  blue: {
+    estoqueContainer: {
+      backgroundColor: '#1e3a8a', // Dark blue
+      color: '#f0f9ff', // Light blue
+    },
+    estoqueHeader: {
+      backgroundColor: '#1e3a8a',
+      borderBottom: '2px solid #f0f9ff',
+    },
+    estoqueNavLinkHover: {
+      backgroundColor: '#f0f9ff22',
+    },
+    estoqueFooter: {
+      backgroundColor: '#1e3a8a',
+      borderTop: '2px solid #f0f9ff',
+      color: '#f0f9ff',
+    },
+    estoqueButton: {
+      backgroundColor: '#3b82f6', // Medium blue
+      color: '#f0f9ff',
+    },
+    estoqueDangerButton: {
+      backgroundColor: '#ef4444', // Red
+    },
+    estoqueThead: {
+      backgroundColor: '#172554', // Darker blue
+    },
+    estoqueDashboardCard: {
+      backgroundColor: '#172554',
+    },
+    estoqueInput: {
+      backgroundColor: '#172554',
+      color: '#f0f9ff',
+    },
+    estoqueItemSpan: {
+      backgroundColor: '#172554',
+    },
+    estoqueTrHover: {
+      backgroundColor: 'rgba(23, 37, 84, 0.5)',
+    },
+    buttonHover:{
+      filter: 'brightness(0.9)'
+    },
+    mainBackground:{
+      backgroundColor: 'rgba(255, 255, 255, 0.3)'
+    }
+  },
+};
+
+
 
 
 export default function ControleEstoquePage() {
   const [currentPage, setCurrentPage] = useState("home");
   const [selectedItemId, setSelectedItemId] = useState(null);
 
+  const { theme, setTheme } = useTheme();
+  const currentTheme = themes[theme];
+
   // Estilos inline completos baseados no CSS original (removendo o main para usar Tailwind)
   const styles = {
     estoqueContainer: {
       fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif',
-      backgroundColor: '#2c2c2d',
-      color: '#fefefe',
       display: 'flex',
       flexDirection: 'column',
       minHeight: '100vh',
@@ -27,15 +194,15 @@ export default function ControleEstoquePage() {
       padding: 0,
       boxSizing: 'border-box',
       overflow: 'hidden',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+      ...currentTheme.estoqueContainer,
     },
     estoqueHeader: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: '0 2rem',
-      borderBottom: '2px solid #fefefe',
-      backgroundColor: '#2c2c2d'
+      ...currentTheme.estoqueHeader,
     },
     estoqueTitle: {
       fontSize: '1.5rem',
@@ -53,33 +220,30 @@ export default function ControleEstoquePage() {
       transition: 'background-color 0.2s'
     },
     estoqueNavLinkHover: {
-      backgroundColor: '#fefefe11'
+      ...currentTheme.estoqueNavLinkHover,
     },
     estoqueFooter: {
       padding: '1rem 2rem',
       textAlign: 'center',
-      borderTop: '2px solid #fefefe',
-      backgroundColor: '#2c2c2d',
       fontSize: '1rem',
-      color: '#fefefe'
+      ...currentTheme.estoqueFooter,
     },
     estoqueButton: {
-      backgroundColor: '#5ba7fd',
       borderRadius: '0.25rem',
       border: '0',
-      color: '#2c2c2d',
       cursor: 'pointer',
       display: 'inline-block',
       fontSize: '1rem',
       padding: '0.5em 1em',
       textDecoration: 'none',
-      transition: '0.2s'
+      transition: '0.2s',
+      ...currentTheme.estoqueButton,
     },
     estoqueButtonMargin: {
       marginLeft: '0.75rem'
     },
     estoqueDangerButton: {
-      backgroundColor: '#ff5258'
+      ...currentTheme.estoqueDangerButton,
     },
     estoqueTable: {
       borderCollapse: 'collapse',
@@ -87,9 +251,9 @@ export default function ControleEstoquePage() {
       width: '100%'
     },
     estoqueThead: {
-      backgroundColor: '#1c1a1d',
       boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.25)',
-      textAlign: 'left'
+      textAlign: 'left',
+      ...currentTheme.estoqueThead,
     },
     estoqueTh: {
       padding: '1.25rem'
@@ -98,8 +262,8 @@ export default function ControleEstoquePage() {
       padding: '1.25rem'
     },
     estoqueTrHover: {
-      backgroundColor: 'rgba(28, 26, 29, 0.33)',
-      cursor: 'default'
+      cursor: 'default',
+      ...currentTheme.estoqueTrHover,
     },
     estoqueRow: {
       display: 'flex',
@@ -107,14 +271,14 @@ export default function ControleEstoquePage() {
       gap: '2rem'
     },
     estoqueDashboardCard: {
-      backgroundColor: '#1c1a1d',
       boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.25)',
       borderRadius: '0.25rem',
       cursor: 'default',
       fontSize: '1.125rem',
       marginTop: '2rem',
       padding: '1rem 2rem',
-      flex: '1 0 16rem'
+      flex: '1 0 16rem',
+      ...currentTheme.estoqueDashboardCard,
     },
     estoqueDashboardCardSpan: {
       display: 'block',
@@ -128,15 +292,14 @@ export default function ControleEstoquePage() {
       padding: '2rem 0'
     },
     estoqueInput: {
-      backgroundColor: '#1c1a1d',
       borderRadius: '0.25rem',
       border: '0',
-      color: '#fefefe',
       display: 'block',
       marginTop: '0.5rem',
       marginBottom: '1rem',
       padding: '0.75rem',
-      width: '100%'
+      width: '100%',
+      ...currentTheme.estoqueInput,
     },
     estoqueH1: {
       fontSize: '3rem',
@@ -151,13 +314,13 @@ export default function ControleEstoquePage() {
       marginRight: '2rem'
     },
     estoqueItemSpan: {
-      backgroundColor: '#1c1a1d',
       boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.25)',
       borderRadius: '0.25rem',
       cursor: 'default',
       fontSize: '1.125rem',
       marginTop: '2rem',
-      padding: '1rem 2rem'
+      padding: '1rem 2rem',
+      ...currentTheme.estoqueItemSpan,
     },
     estoqueItemP: {
       fontSize: '1.25rem',
@@ -180,14 +343,14 @@ export default function ControleEstoquePage() {
         gap: '2rem'
       },
       dashboardCard: {
-        backgroundColor: '#1c1a1d',
         boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.25)',
         borderRadius: '0.25rem',
         cursor: 'default',
         fontSize: '1.125rem',
         marginTop: '2rem',
         padding: '1rem 2rem',
-        flex: '1 0 16rem'
+        flex: '1 0 16rem',
+        ...currentTheme.estoqueDashboardCard,
       },
       dashboardCardSpan: {
         display: 'block',
@@ -201,9 +364,9 @@ export default function ControleEstoquePage() {
         width: '100%'
       },
       thead: {
-        backgroundColor: '#1c1a1d',
         boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.25)',
-        textAlign: 'left'
+        textAlign: 'left',
+        ...currentTheme.estoqueThead,
       },
       th: {
         padding: '1.25rem'
@@ -212,16 +375,15 @@ export default function ControleEstoquePage() {
         padding: '1.25rem'
       },
       button: {
-        backgroundColor: '#5ba7fd',
         borderRadius: '0.25rem',
         border: '0',
-        color: '#2c2c2d',
         cursor: 'pointer',
         display: 'inline-block',
         fontSize: '1rem',
         padding: '0.5em 1em',
         textDecoration: 'none',
-        transition: '0.2s'
+        transition: '0.2s',
+        ...currentTheme.estoqueButton,
       },
       buttonSmall: {
         fontSize: '0.875rem'

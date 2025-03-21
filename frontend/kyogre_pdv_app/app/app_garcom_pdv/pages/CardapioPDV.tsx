@@ -294,8 +294,8 @@ const CardapioPDV = () => {
             </Toolbar>
           </AppBar>
 
-          <Box sx={{ bgcolor: 'rgb(0, 131, 202)' }}>
-            <Tabs
+          <Box sx={{ backgroundColor: '#C0C0C0', padding: 2, borderRadius: 1 }}>
+          <Tabs
               value={activeTab}
               onChange={handleTabChange}
               variant="scrollable"
