@@ -335,13 +335,13 @@ const CardapioPDV = () => {
               <div className="p-4">
                 <h3 className="font-semibold">{item.name}</h3>
                 <p className="text-gray-600">R$ {item.price.toFixed(2)}</p>
-                <Button
-                  fullWidth
+                <br />
+                <button
                   onClick={() => addToCart(item)}
-                  className="mt-2 bg-blue-200 text-white py-2 rounded-md hover:bg-blue-900 text-white"
+                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
                 >
                   Adicionar
-                </Button>
+                </button>
               </div>
             </div>
           ))}
