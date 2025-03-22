@@ -63,6 +63,9 @@ const ProductCard = ({
         <Typography variant="subtitle1">{product.name}</Typography>
         <Typography variant="body2" color="text.secondary">R$ {product.price} reais</Typography>
       </Box>
+
+
+
       <IconButton onClick={handleClick} size="small">
         <MoreVertIcon />
       </IconButton>
@@ -352,6 +355,8 @@ const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => 
 
 
 
+        
+
            {/* Conditionally render Additionals Fields based on hasAdditionals state */}
            {hasAdditionals && (
               <> {/* Use a Fragment to group the conditionally rendered Grid items */}
@@ -429,8 +434,22 @@ const CategoryModal = ({
   );
 };
 
-// Main Component - replaces your MenuPage component
-export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean }) {
+
+//! Cardapio Manager
+export interface IUserData {
+  email: string;
+  role?: string;
+  // adicione outros campos que existirem no objeto do usuário
+}
+
+interface CardapioManagerPageProps {
+  isSidebarOpen: boolean;
+  userData: IUserData | null;
+}
+
+export function CardapioManagerPage({ isSidebarOpen, userData }: CardapioManagerPageProps) {
+  console.log("UserData recebido no CardapioManager:", userData);
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -451,6 +470,9 @@ export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean 
       // Agrupa produtos por categoria
       const categoriaMap = new Map<string, Product[]>();
       produtos.forEach(produto => {
+
+        console.log(produto)
+
         if (!categoriaMap.has(produto.categoria)) {
           categoriaMap.set(produto.categoria, []);
         }
@@ -480,6 +502,8 @@ export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean 
   };
 
   const handleAddProduct = (categoryName: string) => {
+   // setFormData(prev => ({ ...prev, category: categoryName }));
+
     setSelectedCategory(categoryName);
     setEditingProduct(null);
     setIsProductModalOpen(true);
@@ -519,6 +543,11 @@ export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean 
           nome_adicional: '',
           preco: 0
         }
+
+        // adicionais: hasAdditionals ? productData.adicionais : {
+        //   nome_adicional: '',
+        //   preco: 0
+        // }
       });
 
       await carregarProdutos(); // Recarrega os produtos
@@ -548,8 +577,14 @@ export function CardapioManagerPage({ isSidebarOpen }: { isSidebarOpen: boolean 
   return (
     <div className="ml-2 pt-8 p-2">
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
+
+      
       <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
-    
+     
+         <div>
+            <h1>Bem-vindo, {userData?.role}</h1>
+        </div>
+
       <Stack
           direction={{ xs: 'column', sm: 'row' }} // Empilha verticalmente em xs, horizontal em sm e acima
           spacing={2}

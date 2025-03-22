@@ -20,7 +20,7 @@ const GarcomMesas = () => {
     toast.success(`Garçom chamado para a Mesa ${tableId}`, {
       icon: '🔔',
       duration: 3000,
-      position: 'top-center', // Adjust the position as needed
+      position: 'top-center',
     });
   };
 
@@ -37,46 +37,64 @@ const GarcomMesas = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Header - Responsive */}
-      <header className="bg-sky-900  p-4">
-        <div className="container mx-auto flex flex-row justify-between items-center">
-          <Bell className="h-6 w-6 text-white" />
-          <h1 className="text-xl font-semibold text-white mb-2 sm:mb-0">Mapa de Mesas</h1>
-          <Bell className="h-6 w-6 text-white" />
+      {/* Header */}
+      <header className="bg-sky-900 p-4">
+        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+          <div className="flex items-center gap-2">
+            <Bell className="h-6 w-6 text-white" />
+            <h1 className="text-xl font-semibold text-white">Mapa de Mesas</h1>
+          </div>
+
+          {/* Legenda de Status */}
+          <div className="flex items-center gap-4 text-white text-sm">
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-green-600 rounded-sm" />
+              <span>Livre</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-red-600 rounded-sm" />
+              <span>Ocupada</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 bg-orange-600 rounded-sm" />
+              <span>Fechando conta</span>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Main Content - Responsive */}
+      {/* Main Content */}
       <main className="container mx-auto p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {tables.map((table) => (
             <div
               key={table.id}
-              className={`relative ${getTableColor(table.status)} rounded-lg p-4 text-white flex flex-col justify-between`} // p-4 and flex added here
+              className={`relative ${getTableColor(table.status)} rounded-lg p-4 text-white flex flex-col justify-between`}
             >
-              {/* Table Header - Responsive */}
-              <div className="flex flex-col sm:flex-row justify-between items-start mb-2 sm:mb-0"> {/*Reduced the margin from mb-12 to mb-2*/}
+              {/* Header da mesa */}
+              <div className="flex flex-col sm:flex-row justify-between items-start mb-2">
                 <h2 className="text-lg font-semibold">{table.name}</h2>
                 <button
                   onClick={() => handleCallWaiter(table.id)}
                   className="p-1 hover:bg-white/20 rounded-full transition-colors"
+                  title="Chamar Garçom"
                 >
                   <Bell className="h-5 w-5" />
                 </button>
               </div>
 
-              {/* Customers Count - Responsive */}
+              {/* Número de clientes */}
               {table.customers && (
-                <div className="flex items-center gap-1 text-sm mt-auto"> {/*Added mt-auto here*/}
+                <div className="flex items-center gap-1 text-sm mt-auto">
                   <Users className="h-6 w-6" />
                   <span>{table.customers}</span>
                 </div>
               )}
 
-              {/* Open/View Table Button - Responsive */}
+              {/* Botão Ver/Abrir Mesa */}
               <button
                 onClick={() => navigate(`/cardapio/${table.id}`)}
-                className="mt-3 w-full bg-white/20 hover:bg-white/30 py-2 rounded-md transition-colors" // Removed absolute position
+                className="mt-3 w-full bg-white/20 hover:bg-white/30 py-2 rounded-md transition-colors"
               >
                 {table.status === 'free' ? 'Abrir Mesa' : 'Ver Pedidos'}
               </button>

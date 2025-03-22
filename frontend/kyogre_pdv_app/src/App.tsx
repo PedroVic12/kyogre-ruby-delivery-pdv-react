@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useState, useEffect } from 'react';
 import { MenuPage } from './pages/dashboard/MenuPage';
 import { ClientsPage } from './pages/dashboard/ClientsPage';
-import { LoginPageComponent } from './pages/dashboard/LoginPage'; // Importe LoginPageComponent e USUARIOS
+import { USUARIOS, LoginPageComponent } from './pages/dashboard/LoginPage';
 import { ChatPage } from './pages/dashboard/ChatPage';
 import { CardapioDigitalPage } from './pages/cardapio/CardapioDigitalPage';
 import { ProductDetailsPage } from './pages/cardapio/ProductDetailsPage';
@@ -30,6 +30,7 @@ function App() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loggedInEmail, setLoggedInEmail,] = useState(''); // Novo estado para email do usuário logado
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
         if (!isProduction) {
@@ -43,15 +44,22 @@ function App() {
         }
     }, [isProduction]);
 
-    const handleLoginSuccess = (email: string) => { // Agora aceita senha opcionalmente
-        setIsAuthenticated(true);
-        setLoggedInEmail(email); // Atualiza o estado com o email do usuário
-        console.log(`Login bem-sucedido para: ${email}`);
-        alert(`Login bem-sucedido para: ${email}`);
+    const handleLoginSuccess = (email: string) => {
 
-        // Aqui você pode adicionar lógica adicional, como verificar a senha se fornecida
+        // Metodo de autenticação simples
+
+        const user = USUARIOS.find(u => u.email === email);
+        if (user) {
+            setIsAuthenticated(true);
+            setLoggedInEmail(email);
+            setUserData(user);
+            console.log("Usuário logado:", user);
+            alert("Usuário logado como: " + email);
+        } else {
+            alert("Usuário não encontrado!");
+        }
     };
-
+    
     return (
         <Router>
             <CartProvider>
@@ -88,7 +96,12 @@ function App() {
                                                 <Route path="clientes" element={<ClientsPage />} />
                                                 <Route path="pedidos" element={<HomePage />} />
                                                 <Route path="atendimento" element={<ChatPage />} />
-                                                <Route path="cardapioManager" element={<CardapioManagerPage isSidebarOpen={isSidebarOpen} />} />
+                                                <Route path="cardapioManager" element={
+                                                                                <CardapioManagerPage
+                                                                                    isSidebarOpen={isSidebarOpen}
+                                                                                    userData={userData}
+                                                                                />
+                                                                            } />
                                             </Routes>
                                         </main>
                                     </div>
