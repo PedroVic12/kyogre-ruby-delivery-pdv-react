@@ -373,7 +373,7 @@ const CardapioPDV = () => {
 
         {/* Menu Items Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 p-2 ">
-          {categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.map((item) => ( // Access products from the selected category
+          {categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.map((item) => (
             <div
               key={item.id}
               className="bg-sky-800 hover:bg-amber-500 p-2 rounded-lg shadow-md overflow-hidden"
