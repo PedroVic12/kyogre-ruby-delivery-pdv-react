@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Minus, NavigationIcon } from 'lucide-react';
 import PedidoController from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
-import { Fab, Dialog, DialogTitle, DialogContent, TextField,  Tabs, Tab, AppBar, Toolbar, Typography, Box, CircularProgress } from '@mui/material';
+import { Fab, Dialog, DialogTitle, DialogContent, TextField, Tabs, Tab, AppBar, Toolbar, Typography, Box, CircularProgress } from '@mui/material';
 
 import ProductCardapioRepository from "../../../src/repositories/cardapio_repository"; // Import ProductRepository and types
 
@@ -327,11 +327,11 @@ const CardapioPDV = () => {
             <span>R$ {calculateTotal().toFixed(2)}</span>
           </div>
           <button
-            
+
             onClick={handleFinishOrder}
             disabled={cart.length === 0 || !customerName}
             className="w-full mt-4 mb-4 bg-green-600 text-white py-2 rounded-md disabled:bg-gray-600"
-            >
+          >
             Finalizar Pedido
           </button>
         </div>
@@ -343,8 +343,8 @@ const CardapioPDV = () => {
         <div ref={tabsRef} className="overflow-x-auto mb-6">
           <AppBar position="static" style={{ backgroundColor: '#054f77', display: 'flex', justifyContent: 'center' }}>
             <Toolbar>
-      
-            <Typography variant="h6">
+
+              <Typography variant="h6">
                 Cardapio PDV
               </Typography>
             </Toolbar>
@@ -378,6 +378,8 @@ const CardapioPDV = () => {
               key={item.id}
               className="bg-sky-800 hover:bg-amber-500 p-2 rounded-lg shadow-md overflow-hidden"
             >
+
+
               <img
                 src={item.imageUrl}
                 alt={item.name}
@@ -389,7 +391,7 @@ const CardapioPDV = () => {
                 <br />
                 <button
                   onClick={() => addToCart(item)}
-                  className="bg-emerald-500 hover:bg-amber-400 text-white font-bold py-2 px-3 border-b-6 border-emerald-700 hover:border-emerald-500 rounded"
+                  className="bg-emerald-700 hover:bg-purple-900 text-white font-bold py-2 px-3 border-b-6 border-emerald-700 hover:border-red-500 rounded"
                 >
                   Adicionar
                 </button>
@@ -403,11 +405,16 @@ const CardapioPDV = () => {
           variant="extended"
           size="large"
           color="primary"
-          className="md:hidden fixed bg-blue-600 text-white "
+          className="md:hidden fixed bg-blue-600 text-white"
           onClick={handleOpenCart}
-          style={{ position: 'fixed', top: 750, right: 10, zIndex: 9999 }}
+          style={{
+            position: 'fixed',
+            bottom: 20, // Ensure it stays at the bottom of the screen
+            right: 20,
+            zIndex: 9999,
+          }}
         >
-          <NavigationIcon className='mr-2' />
+          <NavigationIcon className="mr-2" />
           Anotar Pedido {totalItems > 0 && `(${totalItems})`}
         </Fab>
         <br />
@@ -416,7 +423,7 @@ const CardapioPDV = () => {
         <br />
       </main>
 
-  
+
 
     </div>
   );

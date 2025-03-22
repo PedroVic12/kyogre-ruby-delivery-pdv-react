@@ -52,7 +52,7 @@ function OrderCard({ order, onAdvance, buttonIcon }: OrderCardProps) {
     }
 
     return (
-        <div className="bg-gray-300 rounded-md p-4 shadow-sm border relative">
+        <div className="bg-gray-200 rounded-md p-4 shadow-sm border relative">
             {/* Cabeçalho do Card - Sempre visível */}
             <div
                 className="flex justify-between items-center cursor-pointer"
@@ -259,9 +259,9 @@ export function DashboardPedidosPage() {
             setPedidosEntrega(entrega);
             setPedidosFinalizados(finalizados);
 
-        } catch (e: any) {
-            setError(e.message || "Erro ao buscar pedidos.");
-            console.error("Erro ao buscar pedidos:", e);
+        } catch {
+            setError("Erro ao buscar pedidos.");
+            console.error("Erro ao buscar pedidos:",);
         } finally {
             setIsLoading(false);
         }
@@ -324,8 +324,8 @@ export function DashboardPedidosPage() {
             fetchOrders();
             console.log(`Pedido ${orderId} avançado para status: ${nextStatus} (ID: ${orderId})`);
 
-        } catch (e: any) {
-            setError(e.message || `Erro ao avançar pedido ${orderId}.`);
+        } catch (e: unknown) {
+            setError(`Erro ao avançar pedido ${orderId}.`);
             console.error(`Erro ao avançar pedido ${orderId}:`, e);
         }
     };
