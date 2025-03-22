@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Minus, NavigationIcon } from 'lucide-react';
 import PedidoController from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
-import { Fab, Dialog, DialogTitle, DialogContent, TextField, Button, Tabs, Tab, AppBar, Toolbar, Typography, Box, CircularProgress } from '@mui/material';
+import { Fab, Dialog, DialogTitle, DialogContent, TextField,  Tabs, Tab, AppBar, Toolbar, Typography, Box, CircularProgress } from '@mui/material';
 
 import ProductCardapioRepository from "../../../src/repositories/cardapio_repository"; // Import ProductRepository and types
 
@@ -172,6 +172,8 @@ const CardapioPDV = () => {
     </div>; // Simple loading message
   }
 
+
+
   return (
     <div className="min-h-screen  flex flex-col md:flex-row">
 
@@ -243,14 +245,13 @@ const CardapioPDV = () => {
             </div>
           </div>
         </DialogContent>
-        <Button
-          fullWidth
+        <button
           onClick={handleFinishOrder}
           disabled={cart.length === 0 || !customerName}
-          className="w-full mt-4 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400"
+          className="w-full mt-4 mb-4 bg-green-600 text-white py-2 rounded-md disabled:bg-gray-600"
         >
           Finalizar Pedido
-        </Button>
+        </button>
       </Dialog>
 
       {/* Cart Section (Desktop) */}
@@ -325,14 +326,14 @@ const CardapioPDV = () => {
             <span>Total</span>
             <span>R$ {calculateTotal().toFixed(2)}</span>
           </div>
-          <Button
-            fullWidth
+          <button
+            
             onClick={handleFinishOrder}
             disabled={cart.length === 0 || !customerName}
-            className="w-full mt-4 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400"
-          >
+            className="w-full mt-4 mb-4 bg-green-600 text-white py-2 rounded-md disabled:bg-gray-600"
+            >
             Finalizar Pedido
-          </Button>
+          </button>
         </div>
       </aside>
 
@@ -342,7 +343,8 @@ const CardapioPDV = () => {
         <div ref={tabsRef} className="overflow-x-auto mb-6">
           <AppBar position="static" style={{ backgroundColor: '#054f77', display: 'flex', justifyContent: 'center' }}>
             <Toolbar>
-              <Typography variant="h6">
+      
+            <Typography variant="h6">
                 Cardapio PDV
               </Typography>
             </Toolbar>
@@ -370,24 +372,24 @@ const CardapioPDV = () => {
         </div>
 
         {/* Menu Items Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 p-2 ">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 p-2 ">
           {categories.find(cat => cat.name.toLowerCase() === activeTab)?.products.map((item) => ( // Access products from the selected category
             <div
               key={item.id}
-              className="bg-gray-300 p-4 rounded-lg shadow-md overflow-hidden"
+              className="bg-sky-800 hover:bg-amber-500 p-2 rounded-lg shadow-md overflow-hidden"
             >
               <img
                 src={item.imageUrl}
                 alt={item.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-40 object-cover"
               />
               <div className="p-4">
-                <h3 className="font-semibold">{item.name}</h3>
-                <p className="text-gray-600">R$ {item.price.toFixed(2)}</p>
+                <h2 className="font-semibold">{item.name}</h2>
+                <p className="text-gray-100 font-semibold">R$ {item.price.toFixed(2)}</p>
                 <br />
                 <button
                   onClick={() => addToCart(item)}
-                  className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-3 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+                  className="bg-emerald-500 hover:bg-amber-400 text-white font-bold py-2 px-3 border-b-6 border-emerald-700 hover:border-emerald-500 rounded"
                 >
                   Adicionar
                 </button>
@@ -401,14 +403,21 @@ const CardapioPDV = () => {
           variant="extended"
           size="large"
           color="primary"
-          className="md:hidden fixed bg-blue-600 text-white"
+          className="md:hidden fixed bg-blue-600 text-white "
           onClick={handleOpenCart}
-          style={{ position: 'fixed', top: 850, right: 10, zIndex: 9999 }}
+          style={{ position: 'fixed', top: 750, right: 10, zIndex: 9999 }}
         >
           <NavigationIcon className='mr-2' />
-          Fazer Pedido {totalItems > 0 && `(${totalItems})`}
+          Anotar Pedido {totalItems > 0 && `(${totalItems})`}
         </Fab>
+        <br />
+        <br />
+        <br />
+        <br />
       </main>
+
+  
+
     </div>
   );
 };

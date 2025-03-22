@@ -38,8 +38,9 @@ const GarcomMesas = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header - Responsive */}
-      <header className="bg-gray-800 p-4">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+      <header className="bg-sky-900  p-4">
+        <div className="container mx-auto flex flex-row justify-between items-center">
+          <Bell className="h-6 w-6 text-white" />
           <h1 className="text-xl font-semibold text-white mb-2 sm:mb-0">Mapa de Mesas</h1>
           <Bell className="h-6 w-6 text-white" />
         </div>

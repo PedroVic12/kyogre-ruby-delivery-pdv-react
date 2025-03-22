@@ -42,7 +42,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
 
           </IconButton>
-          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App v5</h2>
+          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V6</h2>
         </div>
 
         <nav className="flex-1 px-3 space-y-1">
