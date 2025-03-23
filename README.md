@@ -17,6 +17,17 @@
 3) Api em Fastapi 
     - Se encarrega a controlar os pedidos, dados do supabase e o storage
 
+
+4) Software robusto, personalizavel e escalonavel
+
+| Item                         | Solução técnica Futura                                      |
+| ---------------------------- | ------------------------------------------------------------|
+| Cardápio individual por usuário | Crie uma tabela separada ou um campo `owner_id` no banco |
+| Storage individual           | Use nome do bucket/pasta baseado no email/ID do usuário     |
+| Upload isolado               | No frontend, envie arquivos para o bucket do usuário        |
+| Multi-tenant                 | APIs sempre filtram dados por `userId`, tabela              |
+| Admin Dashboard              | Usuários com `role: admin` veem todos os cardápios          |
+
 ## Overview
 
 The Kyogre Ruby Delivery PDV (Point of Sale) project is a full-stack web application designed for restaurant management. It consists of a React-based frontend and a FastAPI-based backend, offering features for order management, product listing, customer management, and a digital menu. It utilizes Supabase as a backend-as-a-service for database management.

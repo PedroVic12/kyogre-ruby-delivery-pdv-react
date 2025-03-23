@@ -31,9 +31,16 @@ const isProduction = true; //! Altere para false se quiser simular login automá
 
 
 function App() {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isAuthLoading } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    if (isAuthLoading) {
+        return (
+          <div className="flex flex-col justify-center items-center h-screen text-gray-600">
+            <span className="text-lg animate-pulse">🔐 Verificando sessão de login...</span>
+          </div>
+        );
+      }
 
     return (
         <Router>
