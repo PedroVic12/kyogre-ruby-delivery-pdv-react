@@ -19,6 +19,9 @@ RUN npm install --force \
     @emotion/styled \
     @mui/icons-material \
     @ionic/react \
+    @types/sqlite3 \
+    @types/bcrypt \                  
+    sqlite \ 
     lucide-react \
     axios \
     react-hot-toast \

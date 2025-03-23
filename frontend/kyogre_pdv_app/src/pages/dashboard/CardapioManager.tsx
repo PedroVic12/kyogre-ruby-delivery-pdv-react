@@ -29,6 +29,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Category, Product } from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
+import { useAuth } from '../../contexts/AuthContext';
 
 // ProductCard Component
 const ProductCard = ({
@@ -436,20 +437,11 @@ const CategoryModal = ({
 
 
 //! Cardapio Manager
-export interface IUserData {
-  email: string;
-  role?: string;
-  // adicione outros campos que existirem no objeto do usuário
-}
-
 interface CardapioManagerPageProps {
   isSidebarOpen: boolean;
-  userData: IUserData | null;
 }
 
-export function CardapioManagerPage({ isSidebarOpen, userData }: CardapioManagerPageProps) {
-  console.log("UserData recebido no CardapioManager:", userData);
-  
+export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProps) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -457,10 +449,19 @@ export function CardapioManagerPage({ isSidebarOpen, userData }: CardapioManager
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [, setSelectedCategory] = useState('');
 
+  const { user } = useAuth();
 
+  const nome = user?.nome;
+  const tabela = user?.tabela;
+  const bucket = user?.storage;
+  
   useEffect(() => {
+    console.log("🔍 Sessão carregada:", nome, tabela, bucket);
     carregarProdutos();
   }, []);
+
+
+
 
   const carregarProdutos = async () => {
     try {
@@ -471,7 +472,6 @@ export function CardapioManagerPage({ isSidebarOpen, userData }: CardapioManager
       const categoriaMap = new Map<string, Product[]>();
       produtos.forEach(produto => {
 
-        console.log(produto)
 
         if (!categoriaMap.has(produto.categoria)) {
           categoriaMap.set(produto.categoria, []);
@@ -502,7 +502,6 @@ export function CardapioManagerPage({ isSidebarOpen, userData }: CardapioManager
   };
 
   const handleAddProduct = (categoryName: string) => {
-   // setFormData(prev => ({ ...prev, category: categoryName }));
 
     setSelectedCategory(categoryName);
     setEditingProduct(null);
@@ -582,7 +581,7 @@ export function CardapioManagerPage({ isSidebarOpen, userData }: CardapioManager
       <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
      
          <div>
-            <h1>Bem-vindo, {userData?.role}</h1>
+            <h1>Bem-vindo, {nome}</h1>
         </div>
 
       <Stack
