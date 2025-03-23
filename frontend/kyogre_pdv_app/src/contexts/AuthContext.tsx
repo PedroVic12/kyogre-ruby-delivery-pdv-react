@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: userData.email || email,
           tabela: userData.tabela || 'default_table',
           storage: userData.storage || 'default_bucket',
-          nome: userData.nome || 'Usuário',
+          nome: userData.user || 'Usuário',
         };
 
         setUser(userToStore);

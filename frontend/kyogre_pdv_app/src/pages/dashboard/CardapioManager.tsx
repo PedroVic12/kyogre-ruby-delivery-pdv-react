@@ -581,7 +581,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
      
          <div>
-            <h1>Bem-vindo, {nome}</h1>
+            <h1>Bem-vindo, {nome?.toLocaleUpperCase()}</h1>
         </div>
 
       <Stack
