@@ -1,5 +1,6 @@
 // src/services/api.ts
 
+
 /**
  * Interface para representar um produto do cardápio
  */
@@ -20,9 +21,15 @@ interface Produto {
   /**
    * Classe responsável por gerenciar as chamadas à API
    */
-  
+
+
   class CardapioService {
     private baseUrl: string = 'https://raichu-server.up.railway.app/api';
+
+
+    
+
+
   
     /**
      * Busca todos os produtos do cardápio
@@ -115,6 +122,20 @@ interface Produto {
 
 
     }
+
+
+    async buscarProdutosUsuario(table_name: string): Promise<Produto[]> {
+      try {
+        const response = await fetch(`${this.baseUrl}/produtos/${table_name}`);
+        const data = await response.json();
+        return data.data;
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        throw error;
+      }
+    }
+    
+    
 
     async loadSupabaseCardapio(table_name: string, storage_name: string) {
       const baseUrl = 'https://raichu-server.up.railway.app/api';

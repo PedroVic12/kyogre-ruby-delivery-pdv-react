@@ -462,7 +462,12 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   useEffect(() => {
     console.log("🔍 Sessão carregada:", nome, tabela, bucket);
     carregarProdutos();
+
+
+
   }, []);
+
+
 
 
 
