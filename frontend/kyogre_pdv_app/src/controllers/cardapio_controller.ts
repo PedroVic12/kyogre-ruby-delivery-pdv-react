@@ -57,6 +57,35 @@ interface Produto {
         throw error;
       }
     }
+
+    async criarNovoProduto(produto: Produto): Promise<Produto> {
+      try {
+        console.log("Enviando produto para API:", produto); // Log do objeto antes do envio
+    
+        const response = await fetch(`${this.baseUrl}/produtos/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(produto),
+        });
+    
+        console.log("Resposta bruta da API:", response);
+    
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+        }
+    
+        const data = await response.json();
+        console.log("Resposta JSON da API:", data);
+    
+        return data.data[0];
+      } catch (error) {
+        console.error('Erro ao criar produto:', error);
+        throw error;
+      }
+    }
+    
   
     /**
      * Deleta um produto do cardápio
@@ -87,16 +116,74 @@ interface Produto {
 
     }
 
-    async loadSupabaseCardapio(){
+    async loadSupabaseCardapio(table_name: string, storage_name: string) {
+      const baseUrl = 'https://raichu-server.up.railway.app/api';
+      
       try {
-        const response = await fetch(`${this.baseUrl}/storage/files`);
+        const response = await fetch(`${baseUrl}/storage/files`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ table: table_name, folder:storage_name }),
+        });
+        
+        
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
+        }
+        
         const data = await response.json();
-        return data.data;
+        return data.length > 0 ? data : null;
       } catch (error) {
         console.error('Erro ao buscar produtos:', error);
         throw error;
       }
     }
+
+
+    // async function setupSupabaseCardapio() {
+    //   try {
+        
+    //     // Busca os produtos
+    //     const response = await fetch(`https://raichu-server.up.railway.app/api/produtos/${tabela}`);
+    //     const data = await response.json();
+    
+    //     console.log("📦 Produtos carregados:", data);
+    
+    //     // Busca as imagens no storage
+    //     const imagensResponse = await fetch(`https://raichu-server.up.railway.app/api/storage/files`);
+    //     const imagensData = await imagensResponse.json();
+    
+    //     console.log("🖼️ Imagens encontradas:", imagensData);
+    
+    //     // Filtra as pastas (nomes dos clientes)
+    //     const pastasClientes = imagensData.slice(0, 3).map(item => item.name);
+    //     console.log("📂 Pastas dos clientes:", pastasClientes);
+    
+    //     // Filtra as imagens da pasta do usuário logado
+    //     const imagensCliente = imagensData.filter(img => img.name.includes(bucket));
+        
+    //     // Monta um objeto { nomeArquivo: urlImagem }
+    //     const imagensMap = imagensCliente.reduce((acc, img) => {
+    //       acc[img.name] = `https://raichu-server.up.railway.app/api/storage/files/${bucket}/${img.name}`;
+    //       return acc;
+    //     }, {} as Record<string, string>);
+    
+    //     console.log("🔗 URLs das imagens:", imagensMap);
+    
+    //     // Associa os produtos às imagens
+    //     const produtosComImagens = data.map(produto => ({
+    //       ...produto,
+    //       url_imagem: imagensMap[produto.nome_produto] || produto.url_imagem, // Se não tiver imagem, mantém a original
+    //     }));
+    
+    //   } catch (error) {
+    //     console.error("❌ Erro ao carregar produtos:", error);
+    //   } 
+    // }
+    
+    
 
   }
   

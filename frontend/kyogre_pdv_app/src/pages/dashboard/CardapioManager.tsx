@@ -291,7 +291,7 @@ const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => 
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                label="Preço (R$)"
+                label="Preço em (R$)"
                 name="price"
                 type="number"
                 value={formData.price}
