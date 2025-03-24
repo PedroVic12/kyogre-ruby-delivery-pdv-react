@@ -22,7 +22,7 @@ interface Produto {
    */
   
   class CardapioService {
-    private baseUrl: string = 'https://docker-raichu.onrender.com/api';
+    private baseUrl: string = 'https://raichu-server.up.railway.app/api';
   
     /**
      * Busca todos os produtos do cardápio
@@ -84,7 +84,20 @@ interface Produto {
         throw error;
       }
 
+
     }
+
+    async loadSupabaseCardapio(){
+      try {
+        const response = await fetch(`${this.baseUrl}/storage/files`);
+        const data = await response.json();
+        return data.data;
+      } catch (error) {
+        console.error('Erro ao buscar produtos:', error);
+        throw error;
+      }
+    }
+
   }
   
   export const cardapioService = new CardapioService();

@@ -199,7 +199,7 @@ export function DashboardPedidosPage() {
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
     const [allOrders, setAllOrders] = useState<Order[]>([]);
 
-    const API_ENDPOINT = 'https://docker-raichu.onrender.com/api/pedidos/'; // Rota da sua API para buscar pedidos
+    const API_ENDPOINT = 'https://raichu-server.up.railway.app/api/pedidos/'; // Rota da sua API para buscar pedidos
 
 
     const fetchOrders = async () => {
@@ -273,7 +273,7 @@ export function DashboardPedidosPage() {
         // Para cada novo pedido, atualize o status para "Em Processo"
         for (const pedido of novosPedidos) {
             try {
-                const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${pedido.id}/status?status=em processo`;
+                const UPDATE_API_ENDPOINT = `https://raichu-server.up.railway.app/api/pedidos/${pedido.id}/status?status=em processo`;
                 const response = await fetch(UPDATE_API_ENDPOINT, {
                     method: 'PUT',
                     headers: {
@@ -308,9 +308,11 @@ export function DashboardPedidosPage() {
 
     //! Função para avançar o status do pedido
     const advanceOrder = async (orderId: number, nextStatus: string) => {
-        const UPDATE_API_ENDPOINT = `https://docker-raichu.onrender.com/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
+        const UPDATE_API_ENDPOINT = `https://raichu-server.up.railway.app/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
         //const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status?status=${nextStatus}`; // This SHOULD work based on code given.
+        //docker-raichu 
 
+        
         try {
             const response = await fetch(UPDATE_API_ENDPOINT, {
                 method: 'PUT',

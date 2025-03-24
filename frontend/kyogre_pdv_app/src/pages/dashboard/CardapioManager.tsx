@@ -439,6 +439,7 @@ const CategoryModal = ({
 //! Cardapio Manager
 interface CardapioManagerPageProps {
   isSidebarOpen: boolean;
+
 }
 
 export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProps) {
@@ -454,6 +455,9 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const nome = user?.nome;
   const tabela = user?.tabela;
   const bucket = user?.storage;
+
+
+
   
   useEffect(() => {
     console.log("🔍 Sessão carregada:", nome, tabela, bucket);
@@ -580,8 +584,10 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       
       <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
      
-         <div>
-            <h1>Bem-vindo, {nome?.toLocaleUpperCase()}</h1>
+      <div>
+          <h1>Bem-vindo, {nome?.toLocaleUpperCase()}</h1>
+          <h2>Tabela: {tabela}</h2>
+          <h2>Bucket: {bucket}</h2>
         </div>
 
       <Stack
