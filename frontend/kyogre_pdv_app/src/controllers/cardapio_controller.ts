@@ -25,6 +25,10 @@ import { Product } from "../types/menu";
       try {
           const response = await fetch(`${this.baseUrl}/produtos/`);
           const data = await response.json();
+
+          console.log("Buscando produtos", data)
+          console.log("Consultando os dados no redis e jogando na api")
+
           return data; // Directly return the parsed JSON data
         } catch (error) {
           console.error('Erro ao buscar produtos:', error);
