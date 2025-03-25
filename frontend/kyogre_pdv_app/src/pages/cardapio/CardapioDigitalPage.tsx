@@ -31,6 +31,9 @@ export const CardapioDigitalPage: React.FC = () => {
 
   const productRepository = new ProductCardapioRepository();
 
+  //const pedidoController = PedidoController.getInstance();
+
+
   useEffect(() => {
     const loadProducts = async () => {
       setIsLoading(true);
@@ -148,6 +151,11 @@ export const CardapioDigitalPage: React.FC = () => {
 
       <CartDialog
         open={openCart}
+
+        //! debug aqui
+        //onClose={()=> pedidoController.fazerPedido(
+        //  
+        //)}
         onClose={() => setOpenCart(false)}
         items={items}
         total={total}

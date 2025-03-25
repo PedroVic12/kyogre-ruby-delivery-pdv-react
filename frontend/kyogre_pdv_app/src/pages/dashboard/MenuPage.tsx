@@ -138,7 +138,11 @@ export function TestePedidoButton() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [detalhesResposta, setDetalhesResposta] = useState<any>(null);
   const [mostrarDetalhes, setMostrarDetalhes] = useState(false);
-  const [pedidoData, setPedidoData] = useState<PedidoData>({
+
+
+  
+  const [pedidoData, setPedidoData] = useState<PedidoData>(
+    {
     id: 1861,
     nome_cliente: 'Pedro Victor',
     telefone: '5521999289987',
@@ -168,7 +172,9 @@ export function TestePedidoButton() {
         preco: 30,
       },
     ],
-  });
+  }
+
+);
   const [isEditing, setIsEditing] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [isLongPress, setIsLongPress] = useState(false);
