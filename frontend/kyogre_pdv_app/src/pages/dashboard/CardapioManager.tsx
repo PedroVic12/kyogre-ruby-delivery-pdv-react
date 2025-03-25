@@ -26,7 +26,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Category, Product } from '../../types/menu';
+import { Category, Product, } from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -212,7 +212,7 @@ const ProductModal = ({
         price: editingProduct.price,
         category: '', // This would come from the category context in a real implementation
         imageUrl: editingProduct.imageUrl || '',
-        description: editingProduct.description || '',
+        description: editingProduct.descricao || '',
         isAvailable: editingProduct.isAvailable || false,
         adicionais: {
           nome_adicional: '',
@@ -460,13 +460,10 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
   
   useEffect(() => {
-    console.log("🔍 Sessão carregada:", nome, tabela, bucket);
+    console.log("🔍 Sessão:", nome, tabela, bucket);
     carregarProdutos();
 
-
-
   }, []);
-
 
 
 
@@ -479,7 +476,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
       // Agrupa produtos por categoria
       const categoriaMap = new Map<string, Product[]>();
-      produtos.forEach(produto => {
+      produtos.forEach((produto: { categoria: string; id: any; nome_produto: any; preco: any; url_imagem: any; descricao: any; disponivel: any; }) => {
 
 
         if (!categoriaMap.has(produto.categoria)) {
@@ -490,7 +487,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           name: produto.nome_produto,
           price: produto.preco,
           imageUrl: produto.url_imagem,
-          description: produto.descricao,
+          descricao: produto.descricao,
           isAvailable: produto.disponivel
         });
       });
@@ -509,6 +506,9 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       setIsLoading(false);
     }
   };
+
+
+
 
   const handleAddProduct = (categoryName: string) => {
 
@@ -541,17 +541,16 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
     try {
       await cardapioService.criarProduto({
         id: productData.id || 0,
-        nome_produto: productData.name,
-        preco: productData.price,
+        name: productData.name,
+        price: productData.price,
         categoria: productData.category,
-        url_imagem: productData.imageUrl,
+        imageUrl: productData.imageUrl,
         descricao: productData.description,
-        disponivel: true,
-        adicionais:[ {
+        isAvailable: true,
+        adicionais:  [{
           nome_adicional: '',
           preco: 0
         }]
-
         // adicionais: hasAdditionals ? productData.adicionais : {
         //   nome_adicional: '',
         //   preco: 0

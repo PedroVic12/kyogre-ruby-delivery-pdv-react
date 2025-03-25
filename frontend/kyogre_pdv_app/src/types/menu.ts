@@ -9,7 +9,6 @@ export interface Product {
   name: string;
   price: number;
   imageUrl?: string;
-  description: string;
   isAvailable: boolean;
   adicionais?: Adicional[]; //! Changed to an array of Adicional objects
   categoria?: string;
