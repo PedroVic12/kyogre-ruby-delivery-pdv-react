@@ -105,8 +105,8 @@ class PedidoController {
     console.log('Dados do pedido:', pedidoData);
 
     try {
-      const resposta = await fetch('https://docker-raichu.onrender.com/api/pedidos/', {
-        // Use 'http://localhost:8000/api/pedidos/' para teste local
+      const resposta = await fetch('https://raichu-server.up.railway.app/api/pedidos/', {
+        // Use 'http://docker-raichu/api/pedidos/' para teste local
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
