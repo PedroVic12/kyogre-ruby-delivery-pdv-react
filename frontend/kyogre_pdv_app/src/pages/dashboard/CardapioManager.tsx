@@ -587,13 +587,15 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
 
       
-      <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
      
       <div>
-          <h1>Bem-vindo, {nome?.toLocaleUpperCase()}</h1>
+          <h1>Bem-vindo! {nome?.toLocaleUpperCase()}</h1>
           {/* <h2>Tabela: {tabela}</h2>
           <h2>Bucket: {bucket}</h2> */}
         </div>
+
+        <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
+
 
       <Stack
           direction={{ xs: 'column', sm: 'row' }} // Empilha verticalmente em xs, horizontal em sm e acima

@@ -26,11 +26,6 @@ interface Produto {
   class CardapioService {
     private baseUrl: string = 'https://raichu-server.up.railway.app/api';
 
-
-    
-
-
-  
     /**
      * Busca todos os produtos do cardápio
      */
