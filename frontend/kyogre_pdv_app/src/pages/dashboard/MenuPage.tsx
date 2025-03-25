@@ -63,10 +63,10 @@ export function useMenuState() {
         url_imagem: formData.imageUrl,
         descricao: formData.description,
         disponivel: true,
-        adicionais: {
+        adicionais: [{
           nome_adicional: '',
           preco: 0,
-        },
+        }],
       });
       console.log('Produto adicionado com sucesso:', novoProduto);
       await carregarProdutos(); // Recarrega os produtos
@@ -219,7 +219,7 @@ export function TestePedidoButton() {
     console.log('Dados do pedido:', pedidoData);
 
     try {
-      const resposta = await fetch('https://docker-raichu.onrender.com/api/pedidos/', {
+      const resposta = await fetch('https://raichu-server.up.railway.app/api/pedidos/', {
         // Use 'http://localhost:8000/api/pedidos/' para teste local
         method: 'POST',
         headers: {

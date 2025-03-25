@@ -547,10 +547,10 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         url_imagem: productData.imageUrl,
         descricao: productData.description,
         disponivel: true,
-        adicionais: {
+        adicionais:[ {
           nome_adicional: '',
           preco: 0
-        }
+        }]
 
         // adicionais: hasAdditionals ? productData.adicionais : {
         //   nome_adicional: '',
