@@ -437,6 +437,8 @@ const CategoryModal = ({
 
 
 //! Cardapio Manager
+
+//TODO -> Arrumar editar produto e adicionar categoria. Tem que receber o cardapio de cada cliente separado e ter CRUD completo com a restapi pro supabase
 interface CardapioManagerPageProps {
   isSidebarOpen: boolean;
 
@@ -451,6 +453,11 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const [, setSelectedCategory] = useState('');
 
   const { user } = useAuth();
+
+
+  // com o context do login, consumir a API para buscar os produtos de cada usuario. 
+
+  // o envio de foto no storage deu ruim e editar o produto tem que ser o ID certo 
 
   const nome = user?.nome;
   const tabela = user?.tabela;
