@@ -31,7 +31,7 @@ const UploadImage = ({ onUploadSuccess }) => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            alert('Imagem enviada com sucesso!'); // Use setMessage to update the message
+           //alert('Imagem enviada com sucesso!!'); 
             setImageUrl(response.data.url);
             onUploadSuccess(response.data.url); // Pass the URL to the parent component
             console.log(response.data);
