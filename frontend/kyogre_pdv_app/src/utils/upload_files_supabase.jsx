@@ -25,13 +25,14 @@ const UploadImage = ({ onUploadSuccess }) => {
         try {
             // Corrected URL: Added /api prefix 
             //const response = await axios.post('https://docker-raichu.onrender.com/api/storage/', formData, {
+            console.log("enviando arquivo para o supabase via api")
             const response = await axios.post('raichu-server.up.railway.app/api/storage/', formData, {
 
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-           //alert('Imagem enviada com sucesso!!'); 
+           //alert('Imagem enviada com sucesso!!');   
             setImageUrl(response.data.url);
             onUploadSuccess(response.data.url); // Pass the URL to the parent component
             console.log(response.data);
