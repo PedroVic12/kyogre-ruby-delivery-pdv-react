@@ -591,8 +591,8 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
      
       <div>
           <h1>Bem-vindo, {nome?.toLocaleUpperCase()}</h1>
-          <h2>Tabela: {tabela}</h2>
-          <h2>Bucket: {bucket}</h2>
+          {/* <h2>Tabela: {tabela}</h2>
+          <h2>Bucket: {bucket}</h2> */}
         </div>
 
       <Stack
