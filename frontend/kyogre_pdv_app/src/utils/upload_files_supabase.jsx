@@ -23,36 +23,32 @@ const UploadImage = ({ onUploadSuccess }) => {
         formData.append('file', selectedFile);
 
         try {
-            // Corrected URL: Added /api prefix 
-            //const response = await axios.post('https://docker-raichu.onrender.com/api/storage/', formData, {
-            console.log("enviando arquivo para o supabase via api")
-            const response = await axios.post('raichu-server.up.railway.app/api/storage/', formData, {
-
+            console.log("Enviando arquivo para o Supabase via API...");
+            const response = await axios.post('https://raichu-server.up.railway.app/api/storage/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-           //alert('Imagem enviada com sucesso!!');   
+
+            // Atualiza o estado com a URL da imagem retornada pela API
             setImageUrl(response.data.url);
-            onUploadSuccess(response.data.url); // Pass the URL to the parent component
-            console.log(response.data);
+            onUploadSuccess(response.data.url); // Passa a URL para o componente pai
+            console.log("Resposta da API:", response.data);
         } catch (error) {
-            alert('Erro ao enviar a imagem.'); // Use setMessage to update the message
-            console.error(error);
+            setMessage('Erro ao enviar a imagem.'); // Atualiza a mensagem de erro
+            console.error("Erro ao enviar a imagem:", error);
         }
     };
 
     return (
-        <div style={{ 
-            //coloque margem
-            margin: "10px 50px 20px 0"
-         }}>
+        <div style={{ margin: "10px 50px 20px 0" }}>
             <h2>Upload de Imagem</h2>
             <input type="file" accept="image/*" onChange={handleFileChange} />
-            <br></br>
-            <br></br>
-            
-            <Button type="button" onClick={handleUpload} variant="contained" color="primary">Salvar Foto</Button>
+            <br />
+            <br />
+            <Button type="button" onClick={handleUpload} variant="contained" color="primary">
+                Salvar Foto
+            </Button>
             {message && <p>{message}</p>}
             {imageUrl && (
                 <div>

@@ -26,7 +26,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Category, Product, } from '../../types/menu';
+import { Category, Product, Adicional} from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -56,13 +56,13 @@ const ProductCard = ({
     <Card sx={{ display: 'flex', alignItems: 'center', p: 1, mb: 1, bgcolor: '#f5f5f5' }}>
       <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {product.imageUrl ?
-          <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%' }} /> :
+          <img src={product.imageUrl} alt={product.nome_produto} style={{ width: '100%', height: '100%' }} /> :
           <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
         }
       </Box>
       <Box sx={{ flexGrow: 1 }}>
-        <Typography variant="subtitle1">{product.name}</Typography>
-        <Typography variant="body2" color="text.secondary">R$ {product.price} reais</Typography>
+        <Typography variant="subtitle1">{product.nome_produto}</Typography>
+        <Typography variant="body2" color="text.secondary">R$ {product.preco} reais</Typography>
       </Box>
 
 
@@ -87,87 +87,6 @@ const ProductCard = ({
     </Card>
   );
 };
-
-// CategoryCard Component
-const CategoryCard = ({
-  category,
-  onAddProduct,
-  onDeleteCategory,
-  onEditProduct,
-  onDeleteProduct
-}: {
-  category: Category,
-  onAddProduct: (categoryName: string) => void,
-  onDeleteCategory: (categoryId: number) => void,
-  onEditProduct: (product: Product) => void,
-  onDeleteProduct: (productId: number) => void
-}) => {
-  // Get background color based on category name
-  const getBgColor = () => {
-    switch (category.name) {
-      case 'Hamburguer': return '#2196f3';
-      case 'Pizza': return '#4caf50';
-      case 'Sucos': return '#2196f3';
-      case 'Salgados': return '#4caf50';
-      default: return '#9c27b0';
-    }
-  };
-
-  // Get lighter background color for content
-  const getContentBgColor = () => {
-    switch (category.name) {
-      case 'Hamburguer': return '#bbdefb';
-      case 'Pizza': return '#c8e6c9';
-      case 'Sucos': return '#bbdefb';
-      case 'Salgados': return '#c8e6c9';
-      default: return '#e1bee7';
-    }
-  };
-
-  return (
-    <Card sx={{
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: 2,
-      overflow: 'hidden'
-    }}>
-      <Box sx={{
-        bgcolor: getBgColor(),
-        p: 1,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        color: 'white'
-      }}>
-        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onDeleteCategory(category.id)}>
-          <RemoveIcon />
-        </IconButton>
-        <Typography variant="h6">{category.name}</Typography>
-        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onAddProduct(category.name)}>
-          <AddIcon />
-        </IconButton>
-      </Box>
-      <Box sx={{
-        p: 1,
-        flexGrow: 1,
-        minHeight: 200,
-        bgcolor: getContentBgColor(),
-        overflowY: 'auto'
-      }}>
-        {category.products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onEdit={onEditProduct}
-            onDelete={onDeleteProduct}
-          />
-        ))}
-      </Box>
-    </Card>
-  );
-};
-
 // ProductModal Component
 const ProductModal = ({
   open,
@@ -190,15 +109,26 @@ const ProductModal = ({
     imageUrl: '',
     description: '',
     isAvailable: true,
-    adicionais: {
-      nome_adicional: '',
-      preco: 0
-    }
-    
+    adicionais: [] as Adicional[], // Array de adicionais    
   });
   const [hasAdditionals, setHasAdditionals] = useState(false);
   const [, setUploadedImageUrl] = useState(''); // New state for the uploaded image URL
 
+
+  
+  const handleAddAdicional = () => {
+    setFormData({
+      ...formData,
+      adicionais: [...formData.adicionais, { nome_adicional: '', preco: 0 }],
+    });
+  };
+  
+
+  const handleRemoveAdicional = (index: number) => {
+    const updatedAdicionais = formData.adicionais.filter((_, i) => i !== index);
+    setFormData({ ...formData, adicionais: updatedAdicionais });
+  };
+  
  // Callback function to receive the URL from UploadImage
   const handleUploadSuccess = (url: string) => {
     setUploadedImageUrl(url);
@@ -208,31 +138,27 @@ const ProductModal = ({
     if (editingProduct) {
       setFormData({
         id: editingProduct.id,
-        name: editingProduct.name,
-        price: editingProduct.price,
-        category: '', // This would come from the category context in a real implementation
+        name: editingProduct.nome_produto,
+        price: editingProduct.preco,
+        category: editingProduct.categoria || '',
         imageUrl: editingProduct.imageUrl || '',
         description: editingProduct.descricao || '',
         isAvailable: editingProduct.isAvailable || false,
-        adicionais: {
-          nome_adicional: '',
-          preco: 0
-        }
+        adicionais: editingProduct.adicionais || [], // Carregar adicionais existentes ou array vazio
       });
+      setHasAdditionals(!!editingProduct.adicionais && editingProduct.adicionais.length > 0); // Ativar o switch se houver adicionais
     } else {
       setFormData({
         id: 0,
         name: '',
         price: 0,
         category: categoryOptions[0] || '',
-        imageUrl: 'https://picsum.photos/200/300', //!change here
+        imageUrl: 'https://picsum.photos/200/300',
         description: '',
         isAvailable: true,
-        adicionais: {
-          nome_adicional: '',
-          preco: 0
-        }
+        adicionais: [],
       });
+      setHasAdditionals(false);
     }
   }, [editingProduct, categoryOptions, open]);
 
@@ -247,26 +173,12 @@ const ProductModal = ({
   };
 
 // New handler for "Adicional Name" TextField
-const handleChangeAdicionais = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setFormData({
-    ...formData,
-    adicionais: { // Update the nested adicionais object
-      ...formData.adicionais, // Keep existing properties of adicionais
-      nome_adicional: e.target.value // Update nome_adicional
-    }
-  });
+const handleChangeAdicionais = (index: number, field: keyof Adicional, value: string | number) => {
+  const updatedAdicionais = [...formData.adicionais]; // Cria uma cópia do array
+  updatedAdicionais[index] = { ...updatedAdicionais[index], [field]: value }; // Atualiza o campo específico do adicional
+  setFormData({ ...formData, adicionais: updatedAdicionais }); // Atualiza o estado com o novo array
 };
 
-// New handler for "Adicional Price" TextField
-const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setFormData({
-    ...formData,
-    adicionais: { // Update the nested adicionais object
-      ...formData.adicionais, // Keep existing properties of adicionais
-      preco: Number(e.target.value) // Update preco (ensure it's a number)
-    }
-  });
-};
 
   const handleSubmit = () => {
     onSave(formData);
@@ -354,35 +266,48 @@ const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => 
               />
             </div>
 
-
-
         
 
            {/* Conditionally render Additionals Fields based on hasAdditionals state */}
            {hasAdditionals && (
               <> {/* Use a Fragment to group the conditionally rendered Grid items */}
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1">Adicionais:</Typography>
-                </Grid>
-                <Grid item xs={6} mb={2} mt={2}>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">Adicionais:</Typography>
+            {formData.adicionais.map((adicional, index) => (
+              <Grid container spacing={2} key={index} alignItems="center">
+                <Grid item xs={5}>
                   <TextField
                     fullWidth
                     label="Nome do Adicional"
-                    name="nome_adicional" // <-- Name for the additional name field
-                    value={formData.adicionais.nome_adicional} // <-- Bind to formData.adicionais.nome_adicional
-                    onChange={handleChangeAdicionais} // <-- Create handleChangeAdicionais
+                    value={adicional.nome_adicional}
+                    onChange={(e) => handleChangeAdicionais(index, 'nome_adicional', e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={5}>
                   <TextField
                     fullWidth
                     label="Preço do Adicional (R$)"
-                    name="preco_adicional" // <-- Name for the additional price field
                     type="number"
-                    value={formData.adicionais.preco} // <-- Bind to formData.adicionais.preco
-                    onChange={handleChangeAdicionaisPreco} // <-- Create handleChangeAdicionaisPreco
+                    value={adicional.preco}
+                    onChange={(e) => handleChangeAdicionais(index, 'preco', Number(e.target.value))}
                   />
                 </Grid>
+                <Grid item xs={2}>
+                  <IconButton color="error" onClick={() => handleRemoveAdicional(index)}>
+                    <RemoveIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            ))}
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleAddAdicional}
+              sx={{ mt: 2 }}
+            >
+              Adicionar Adicional
+            </Button>
+          </Grid>
               </>
             )}
         </Box>
@@ -395,6 +320,77 @@ const handleChangeAdicionaisPreco = (e: React.ChangeEvent<HTMLInputElement>) => 
   );
 };
 
+// CategoryCard Component
+const CategoryCard = ({
+  category,
+  onAddProduct,
+  onDeleteCategory,
+  onEditProduct,
+  onDeleteProduct
+}: {
+  category: Category,
+  onAddProduct: (categoryName: string) => void,
+  onDeleteCategory: (categoryId: number) => void,
+  onEditProduct: (product: Product) => void,
+  onDeleteProduct: (productId: number) => void
+}) => {
+  // Get background color based on category name
+  const getBgColor = () => category.color || '#9c27b0'; // Usar a cor da categoria ou uma cor padrão
+
+  // Get lighter background color for content
+  // const getContentBgColor = () => {
+  //   switch (category.name) {
+  //     case 'Hamburguer': return '#bbdefb';
+  //     case 'Pizza': return '#c8e6c9';
+  //     case 'Sucos': return '#bbdefb';
+  //     case 'Salgados': return '#c8e6c9';
+  //     default: return '#e1bee7';
+  //   }
+  // };
+
+  return (
+    <Card sx={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: 2,
+      overflow: 'hidden',
+      bgcolor: getBgColor(), // Aplicar a cor da categoria como fundo do card inteiro
+      color: 'white' // Ajustar a cor do texto para contraste
+    }}>
+      <Box sx={{
+        p: 1,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onDeleteCategory(category.id)}>
+          <RemoveIcon />
+        </IconButton>
+        <Typography variant="h6">{category.name}</Typography>
+        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onAddProduct(category.name)}>
+          <AddIcon />
+        </IconButton>
+      </Box>
+      <Box sx={{
+        p: 1,
+        flexGrow: 1,
+        minHeight: 200,
+        overflowY: 'auto'
+      }}>
+        {category.products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onEdit={onEditProduct}
+            onDelete={onDeleteProduct}
+          />
+        ))}
+      </Box>
+    </Card>
+  );
+};
+
 // CategoryModal Component
 const CategoryModal = ({
   open,
@@ -403,14 +399,16 @@ const CategoryModal = ({
 }: {
   open: boolean,
   onClose: () => void,
-  onSave: (categoryName: string) => void
+  onSave: (categoryName: string, categoryColor: string) => void // Ajustado para incluir a cor
 }) => {
   const [categoryName, setCategoryName] = useState('');
+  const [categoryColor, setCategoryColor] = useState('#9c27b0'); // Cor padrão
 
   const handleSubmit = () => {
     if (categoryName.trim()) {
-      onSave(categoryName);
+      onSave(categoryName, categoryColor); // Enviar a cor junto com o nome
       setCategoryName('');
+      setCategoryColor('#9c27b0'); // Resetar a cor para o padrão
       onClose();
     }
   };
@@ -426,6 +424,56 @@ const CategoryModal = ({
           onChange={(e) => setCategoryName(e.target.value)}
           sx={{ mt: 2 }}
         />
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="subtitle1">Escolha uma Cor:</Typography>
+          <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+            {/* Botões de seleção de cores */}
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: '#9c27b0',
+                border: categoryColor === '#9c27b0' ? '3px solid black' : '1px solid #ccc',
+                borderRadius: '50%',
+                cursor: 'pointer',
+              }}
+              onClick={() => setCategoryColor('#9c27b0')}
+            />
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: '#2196f3',
+                border: categoryColor === '#2196f3' ? '3px solid black' : '1px solid #ccc',
+                borderRadius: '50%',
+                cursor: 'pointer',
+              }}
+              onClick={() => setCategoryColor('#2196f3')}
+            />
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: '#4caf50',
+                border: categoryColor === '#4caf50' ? '3px solid black' : '1px solid #ccc',
+                borderRadius: '50%',
+                cursor: 'pointer',
+              }}
+              onClick={() => setCategoryColor('#4caf50')}
+            />
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: '#ff9800',
+                border: categoryColor === '#ff9800' ? '3px solid black' : '1px solid #ccc',
+                borderRadius: '50%',
+                cursor: 'pointer',
+              }}
+              onClick={() => setCategoryColor('#ff9800')}
+            />
+          </Box>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>
@@ -434,7 +482,6 @@ const CategoryModal = ({
     </Dialog>
   );
 };
-
 
 //! Cardapio Manager
 
@@ -483,19 +530,19 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
       // Agrupa produtos por categoria
       const categoriaMap = new Map<string, Product[]>();
-      produtos.forEach((produto: { categoria: string; id: any; nome_produto: any; preco: any; url_imagem: any; descricao: any; disponivel: any; }) => {
-
-
-        if (!categoriaMap.has(produto.categoria)) {
-          categoriaMap.set(produto.categoria, []);
+      produtos.forEach((produto) => {
+        const categoria = produto.categoria || '';
+        if (!categoriaMap.has(categoria)) {
+          categoriaMap.set(categoria, []);
         }
-        categoriaMap.get(produto.categoria)?.push({
+        categoriaMap.get(categoria)?.push({
           id: produto.id,
-          name: produto.nome_produto,
-          price: produto.preco,
+          nome_produto: produto.nome_produto,
+          preco: produto.preco,
           imageUrl: produto.url_imagem,
           descricao: produto.descricao,
-          isAvailable: produto.disponivel
+          isAvailable: produto.disponivel || true,
+          categoria: produto.categoria
         });
       });
 
@@ -503,7 +550,8 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, products], index) => ({
         id: index,
         name,
-        products
+        products,
+        color: '#000000' // Adicionei uma cor padrão, você pode alterar conforme necessário
       }));
 
       setCategories(novasCategorias);
@@ -546,43 +594,51 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
   const handleSaveProduct = async (productData: any) => {
     try {
-      await cardapioService.criarProduto({
-        id: productData.id || 0,
-        name: productData.name,
-        price: productData.price,
-        categoria: productData.category,
-        imageUrl: productData.imageUrl,
-        descricao: productData.description,
-        isAvailable: true,
-        adicionais:  [{
-          nome_adicional: '',
-          preco: 0
-        }]
-        // adicionais: hasAdditionals ? productData.adicionais : {
-        //   nome_adicional: '',
-        //   preco: 0
-        // }
-      });
-
+      if (productData.id > 0) {
+        // Atualizar produto existente
+        await cardapioService.updateProduct(productData.id, {
+          nome_produto: productData.name,
+          preco: productData.price,
+          categoria: productData.category,
+          url_imagem: productData.imageUrl,
+          descricao: productData.description,
+          disponivel: productData.isAvailable,
+          adicionais: productData.adicionais.length > 0 ? productData.adicionais : null, // Enviar null se não houver adicionais
+        });
+      } else {
+        // Criar novo produto
+        await cardapioService.criarProduto({
+          id: 0, // ID será gerado automaticamente
+          nome_produto: productData.name,
+          preco: productData.price,
+          categoria: productData.category,
+          url_imagem: productData.imageUrl,
+          descricao: productData.description,
+          disponivel: productData.isAvailable,
+          adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
+          isAvailable: true
+        });
+      }
+  
       await carregarProdutos(); // Recarrega os produtos
     } catch (error) {
       console.error('Erro ao salvar produto:', error);
     }
   };
 
-  const handleAddCategory = (categoryName: string) => {
-    // In a real app, this would call an API to create the category
+  const handleAddCategory = (categoryName: string, categoryColor: string) => {
     if (categories.some(cat => cat.name === categoryName)) {
       alert('Esta categoria já existe!');
       return;
     }
-
+  
     const newCategory: Category = {
       id: Math.max(0, ...categories.map(c => c.id)) + 1,
       name: categoryName,
-      products: []
+      products: [],
+      color: categoryColor // Adicionar a cor à categoria
     };
-
+  
     setCategories([...categories, newCategory]);
   };
 

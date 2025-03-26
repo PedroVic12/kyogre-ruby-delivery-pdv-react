@@ -11,7 +11,7 @@ pip install -r requirements.txt --break-system-packages # Garante que as depend√
 
 clear
 
-uvicorn main:app --reload --host 0.0.0.0 --port 8000 & # Inicia o backend FastAPI em background com hot-reload
+uvicorn main:app --reload --host 0.0.0.0 --port 9000 & # Inicia o backend FastAPI em background com hot-reload
 
 echo "Aguardando 5 segundos para os servidores iniciarem..."
 

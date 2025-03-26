@@ -6,8 +6,8 @@ export interface Adicional {
 
 export interface Product {
   id: number;
-  name: string;
-  price: number;
+  nome_produto: string;
+  preco: number;
   imageUrl?: string;
   isAvailable: boolean;
   adicionais?: Adicional[]; //! Changed to an array of Adicional objects
@@ -21,6 +21,7 @@ export interface Category {
   id: number;
   name: string;
   products: Product[];
+  color: string;
 }
 
 
