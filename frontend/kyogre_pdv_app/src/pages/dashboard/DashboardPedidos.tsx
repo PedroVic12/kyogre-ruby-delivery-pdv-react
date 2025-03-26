@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import "../../index.css"
 
-import { TestePedidoButton } from "./MenuPage"
+//import { TestePedidoButton } from "./MenuPage"
 
 // Definições de Interface (Typescript)
 interface OrderItem {
@@ -358,7 +358,7 @@ export function DashboardPedidosPage() {
         <div className="p-6 sm:p-6  min-h-screen"> {/* Changed padding to be responsive p-4 sm:p-6*/}
             <h1 className="text-2xl font-semibold mb-6 mt-6 text-gray-900">Gerenciamento de Pedidos</h1>
 
-            <TestePedidoButton></TestePedidoButton>
+            {/* <TestePedidoButton></TestePedidoButton> */}
 
             <NewOrderDialog
                 isOpen={isNewOrderDialogOpen}

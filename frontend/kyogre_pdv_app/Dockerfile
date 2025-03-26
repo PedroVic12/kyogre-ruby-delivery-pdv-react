@@ -22,6 +22,7 @@ RUN npm install
 # Copia o código fonte
 COPY . .
 
+
 # Gera o build da aplicação
 RUN npm run build
 
