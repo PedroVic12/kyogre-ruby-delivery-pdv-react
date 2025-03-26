@@ -60,12 +60,14 @@ const ProductCard = ({
       <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {product.imageUrl ?
           <img src={product.imageUrl} alt={product.nome_produto} style={{ width: '100%', height: '100%' }} /> :
-          <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
+          <Box sx={{ width: '100%', height: '100%', border: '10px solid #ccc' }} />
         }
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="subtitle1">{product.nome_produto}</Typography>
-        <Typography variant="body2" color="text.secondary">R$ {product.preco} reais</Typography>
+        {/* <Typography variant="body2" color="text.secondary">R$ {product.preco} reais</Typography> */}
+        <Typography variant="body2" color="text.success">$ {product.preco} </Typography>
+
       </Box>
 
 
