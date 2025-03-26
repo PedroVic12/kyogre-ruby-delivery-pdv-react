@@ -31,6 +31,9 @@ import { cardapioService } from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
 
+
+
+
 // ProductCard Component
 const ProductCard = ({
   product,
@@ -114,6 +117,9 @@ const ProductModal = ({
   const [hasAdditionals, setHasAdditionals] = useState(false);
   const [, setUploadedImageUrl] = useState(''); // New state for the uploaded image URL
 
+  const folder_name = useAuth().user?.storage;
+
+  console.log("🔍 Folder Name:", folder_name);
 
   
   const handleAddAdicional = () => {
@@ -228,7 +234,7 @@ const handleChangeAdicionais = (index: number, field: keyof Adicional, value: st
             </Grid>
             <Grid item xs={12}>
 
-              <UploadImage onUploadSuccess={handleUploadSuccess} /> {/* Pass the callback function */}
+              <UploadImage onUploadSuccess={handleUploadSuccess} storagePath={folder_name} /> {/* Pass the callback function */}
  
 
               <TextField

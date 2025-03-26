@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Button } from '@mui/material';
 
-const UploadImage = ({ onUploadSuccess }) => {
+const UploadImage = ({ onUploadSuccess, storagePath }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [message, setMessage] = useState('');
     const [imageUrl, setImageUrl] = useState('');
@@ -24,7 +24,7 @@ const UploadImage = ({ onUploadSuccess }) => {
 
         try {
             console.log("Enviando arquivo para o Supabase via API...");
-            const response = await axios.post('https://raichu-server.up.railway.app/api/storage/upload', formData, {
+            const response = await axios.post(`https://raichu-server.up.railway.app/api/storage/upload?folder=${storagePath}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

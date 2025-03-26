@@ -59,9 +59,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setUser(userToStore);
         setIsAuthenticated(true);
+        console.log("[AUTH CONTEXT] Login efetuado e salvo no Storage:", userToStore);
         localStorage.setItem("usuarios", JSON.stringify(userToStore));
 
-        console.log("[AUTH CONTEXT] Login efetuado e salvo no Storage:", userToStore);
         return true;
       } else {
         console.warn("[AUTH CONTEXT] Login falhou - usuário ou senha inválidos");
