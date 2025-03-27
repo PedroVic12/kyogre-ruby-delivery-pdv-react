@@ -345,14 +345,21 @@ const CardapioPDV = () => {
             <Toolbar>
 
               <Typography variant="h6">
-                Cardapio PDV
+                Sistema PDV
               </Typography>
             </Toolbar>
           </AppBar>
 
 
           {/* Tabs de navegacao */}
-          <Box sx={{ backgroundColor: '#C0C0C0', padding: 1, borderRadius: 1 }}>
+          <Box sx={{ 
+                     backgroundColor: '#C0C0C0', 
+                     padding: 2, 
+                     borderRadius: 1,
+                     position: 'sticky', // Adiciona position sticky
+                     top: 0,             // Garante que fique no topo
+                     zIndex: 10,          // Garante que sobreponha outros elementos
+          }}>
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
@@ -363,7 +370,18 @@ const CardapioPDV = () => {
               textColor='primary'
             >
               {categories.map((tab) => (
-                <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()} />
+                <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()}          sx={{
+                  '&.Mui-selected': {
+                    color: '#0000FF',
+                    backgroundColor: '#DCDCDC',
+                    borderRadius: 2,
+                    '&:hover': {
+                      backgroundColor: '#4682B4',
+                    },
+                  },
+                }}
+                
+                />
               ))}
             </Tabs>
           </Box>

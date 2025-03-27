@@ -2,6 +2,17 @@ import React from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
 import { Category } from '../../types/menu';
 
+
+//! Ainda tentando pegar e refazer um app inteiro com a tabs correta e bonititinah pela cor
+
+// cinza escuro: #696969
+// cinza médio: #C0C0C0
+// cinza claro: #d3d3d3
+// azul: #0000ff
+// vermelho: #ff0000
+
+
+
 interface CategoryTabsProps {
   categories: Category[];
   selectedCategory: string;
@@ -14,14 +25,14 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
   onCategoryChange,
 }) => {
   return (
-    <Box sx={{ backgroundColor: '#C0C0C0', padding: 2, borderRadius: 1 }}>
+    <Box sx={{ backgroundColor: '#B0C4DE', padding: 2, borderRadius: 5 }}>
       <Tabs
         value={selectedCategory}
         onChange={(_, value) => onCategoryChange(value as string)} // Changed here
         variant="scrollable"
         scrollButtons="auto"
         aria-label="categorias de produtos"
-         color='primary'
+        color='secondary'
         textColor='secondary'
       >
         {categories.map((category) => (
@@ -30,11 +41,17 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
             value={category.name} // Changed here
             label={
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <span>{category.name}</span>
+                <h1>{category.name}</h1>
               </Box>
             }
             sx={{
               '&.Mui-selected': {
+                color: '#0000FF',
+                backgroundColor: '#FFFFE0',
+                borderRadius: 2,
+                '&:hover': {
+                  backgroundColor: '#D3D3D3',
+                },
               },
             }}
           />

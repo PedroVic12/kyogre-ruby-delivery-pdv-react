@@ -5,6 +5,9 @@ export interface Adicional {
 }
 
 export interface Product {
+  price: any;
+  name: any;
+  description: any;
   id: number;
   nome_produto: string;
   preco: number;
