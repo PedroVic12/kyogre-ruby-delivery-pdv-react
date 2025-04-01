@@ -30,7 +30,7 @@ import { Category, Product, Adicional} from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
-import FloatActionButton from '../../components/ui/FloatActionButton';
+import {FloatActionButton} from '../../components/ui/FloatActionButton';
 
 
 
@@ -518,18 +518,12 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const nome = user?.nome;
   const tabela = user?.tabela;
   const bucket = user?.storage;
-
-
-
   
   useEffect(() => {
     console.log("🔍 Sessão:", nome, tabela, bucket);
     carregarProdutos();
 
   }, []);
-
-
-
 
 
   const carregarProdutos = async () => {
@@ -659,6 +653,32 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
   const categoryNames = categories.map(category => category.name);
 
+
+  // 1. Primeiro ajuste a interface de Action
+  interface Action {
+    icon: React.ReactNode;
+    name: string;
+    onClick: () => void;
+  }
+
+  // 2. Defina as ações corretamente
+  const selected_button_functions: Action[] = [
+    {
+      icon: <AddIcon fontSize="large" color='primary' />,
+      name: 'Adicionar  Produto',
+      onClick: () => {
+        setEditingProduct(null);
+        setIsProductModalOpen(true);
+      }
+    },
+    {
+      icon: <EditIcon fontSize="large"   color='success' />,
+      name: 'Criar Categoria',
+      onClick: () => setIsCategoryModalOpen(true)
+      }
+    
+  ];
+
   return (
     <div className="ml-2 pt-8 p-2">
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
@@ -710,9 +730,13 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         </Grid>
       )}
 
-      
 
-<FloatActionButton></FloatActionButton>
+      <FloatActionButton
+        mainButtonIcon={<AddIcon />}
+        mainButtonTooltip="Ações rápidas"
+        actions={selected_button_functions}
+      />
+
 
 
       <ProductModal
@@ -729,7 +753,12 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         onSave={handleAddCategory}
       />
 
-        <Button
+
+
+        {/* ! Your TestePedidoButton would go here */}
+
+
+        {/* <Button
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
@@ -738,7 +767,6 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             Adicionar Novo Produto
           </Button>
 
-          {/* Your TestePedidoButton would go here */}
 
           <Button
             variant="contained"
@@ -747,7 +775,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             onClick={() => setIsCategoryModalOpen(true)}
           >
             Adicionar Categoria
-          </Button>
+          </Button> */}
           
     </div>
   );

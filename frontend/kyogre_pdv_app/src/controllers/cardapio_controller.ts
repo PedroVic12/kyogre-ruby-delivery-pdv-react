@@ -115,6 +115,11 @@ class CardapioService {
     }
   }
 
+
+
+  /**
+   * Novas funcções devidos as alterações no cardápio
+   */
   async buscarProdutosUsuario(): Promise<Product[]> {
     try {
       const response = await fetch(`${this.baseUrl}/produtos/`); // Assuming you want to list all products and filter on the frontend
