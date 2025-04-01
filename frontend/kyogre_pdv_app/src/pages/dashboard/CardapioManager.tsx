@@ -30,6 +30,7 @@ import { Category, Product, Adicional} from '../../types/menu';
 import { cardapioService } from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import FloatActionButton from '../../components/ui/FloatActionButton';
 
 
 
@@ -550,7 +551,10 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           imageUrl: produto.url_imagem,
           descricao: produto.descricao,
           isAvailable: produto.disponivel || true,
-          categoria: produto.categoria
+          categoria: produto.categoria,
+          price: undefined,
+          name: undefined,
+          description: undefined
         });
       });
 
@@ -624,7 +628,10 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           descricao: productData.description,
           disponivel: productData.isAvailable,
           adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
-          isAvailable: true
+          isAvailable: true,
+          price: undefined,
+          name: undefined,
+          description: undefined
         });
       }
   
@@ -664,7 +671,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           <h2>Bucket: {bucket}</h2> */}
         </div>
 
-        <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciar Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
+        <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciador de Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
 
 
       <Stack
@@ -678,26 +685,9 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           }}
         >
       
-      <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={() => setIsProductModalOpen(true)}
-          >
-            Adicionar Novo Produto
-          </Button>
 
-          {/* Your TestePedidoButton would go here */}
-
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<AddIcon />}
-            onClick={() => setIsCategoryModalOpen(true)}
-          >
-            Adicionar Categoria
-          </Button>
         </Stack>
+        
       </Box>
 
       {isLoading ? (
@@ -720,6 +710,11 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         </Grid>
       )}
 
+      
+
+<FloatActionButton></FloatActionButton>
+
+
       <ProductModal
         open={isProductModalOpen}
         onClose={() => setIsProductModalOpen(false)}
@@ -733,6 +728,27 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         onClose={() => setIsCategoryModalOpen(false)}
         onSave={handleAddCategory}
       />
+
+        <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+            onClick={() => setIsProductModalOpen(true)}
+          >
+            Adicionar Novo Produto
+          </Button>
+
+          {/* Your TestePedidoButton would go here */}
+
+          <Button
+            variant="contained"
+            color="secondary"
+            startIcon={<AddIcon />}
+            onClick={() => setIsCategoryModalOpen(true)}
+          >
+            Adicionar Categoria
+          </Button>
+          
     </div>
   );
 }

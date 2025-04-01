@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Bell, Users } from 'lucide-react';
 import toast from 'react-hot-toast';
 import TableController from '../controllers/TableController';
+import FloatActionButton from '../../../src/components/ui/FloatActionButton';
+import { BottomNavigationAction } from '@mui/material';
+import BottomNavigationBar, { navigationItems } from '../../../src/components/ui/BottomNavigationBar';
 
 const GarcomMesas = () => {
   const navigate = useNavigate();
@@ -34,6 +37,7 @@ const GarcomMesas = () => {
         return 'bg-green-600';
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -98,6 +102,14 @@ const GarcomMesas = () => {
               >
                 {table.status === 'free' ? 'Abrir Mesa' : 'Ver Pedidos'}
               </button>
+
+              <BottomNavigationBar navigationItems={[
+                navigationItems[0],
+                navigationItems[1],
+                navigationItems[2],
+                navigationItems[3],
+              ]}></BottomNavigationBar>
+
             </div>
           ))}
         </div>

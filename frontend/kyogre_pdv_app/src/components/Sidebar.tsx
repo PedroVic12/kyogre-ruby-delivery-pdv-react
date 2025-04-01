@@ -11,12 +11,10 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const menuItems = [
-    //{ icon: Home, label: 'Home', href: '/dashboard' },
-    { icon: Home, label: 'Dashboard', href: '/dashboard' },
-    { icon: Book, label: 'Cardapio Manager', href: '/dashboard/cardapioManager' },
-    { icon: Coffee, label: 'Pedidos', href: '/dashboard/pedidos' },
+    { icon: Coffee, label: 'Dashboard', href: '/dashboard/pedidos' },
+    { icon: Home, label: 'Pedidos', href: '/dashboard' },
+    { icon: Book, label: 'Editar Cardapio', href: '/dashboard/cardapioManager' },
 
-    //{ icon: LayoutDashboard, label: 'Produtos Cardapio', href: '/dashboard/produtos' },
     // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: Coffee, label: 'Cardápio Digital', href: '/cardapio' },
@@ -42,7 +40,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
 
           </IconButton>
-          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V7.2.4</h2>
+          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V8.1.3</h2>
         </div>
 
         <nav className="flex-1 px-3 space-y-1">
@@ -57,6 +55,8 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             </Link>
           ))}
         </nav>
+
+        <br />
 
         <div className="p-4 border-t border-purple-600">
           <button
