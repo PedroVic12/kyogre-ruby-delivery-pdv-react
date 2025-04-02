@@ -79,9 +79,28 @@ export function OrdersTable() {
     // Simulando uma chamada para API
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://api.exemplo.com/orders'); // Substitua pela URL da sua API
+        const response = await fetch('https://raichu-server.up.railway.app/api/pedidos/status/finalizados'); // Substitua pela URL da sua API
         const data = await response.json();
-        setOrders(data);
+        //console.log(data);
+
+        let supabase_pedidos = data["supabase_pedidos"];
+        let pedidos = [];
+        for (let i = 0; i < supabase_pedidos.length; i++) {
+
+          //console.log(supabase_pedidos[i]);
+
+          let pedido = {
+            id: supabase_pedidos[i].id,
+            customer: supabase_pedidos[i].customer,
+            items: supabase_pedidos[i].items,
+            total: supabase_pedidos[i].total,
+            status: supabase_pedidos[i].status,
+            orderItems: supabase_pedidos[i].orderItems
+          }
+          pedidos.push(pedido);
+        }
+        setOrders(pedidos);
+
       } catch (error) {
         console.error('Erro ao buscar pedidos:', error);
       } finally {

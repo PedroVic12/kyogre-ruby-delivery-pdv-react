@@ -21,11 +21,12 @@ export function OrdersPage() {
     // Simulando uma chamada para API
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://api.exemplo.com/orders'); // Substitua pela URL da sua API
+        const response = await fetch('http://localhost:9000/api/pedidos/status/finalizados'); // Substitua pela URL da sua API
         const data = await response.json();
+        console.log(data);
         setOrders(data);
       } catch (error) {
-        console.error('Erro ao buscar pedidos:', error);
+        console.error('Erro ao buscar os dados do supabase no python:', error);
       } finally {
         setLoading(false);
       }

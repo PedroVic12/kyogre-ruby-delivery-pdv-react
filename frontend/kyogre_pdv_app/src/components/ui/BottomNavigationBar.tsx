@@ -13,19 +13,19 @@ interface NavigationItem {
 // Definição do array de itens de navegação
 export const navigationItems: NavigationItem[] = [
     {
-        label: "Home",
+        label: "Dashboard",
         icon: <span style={{ fontSize: "20px", color: "white" }}>🏠</span>, // Ícone de casa
         url: "/",
         isCentral: false,
     },
     {
-        label: "Wallet",
+        label: "Cardapio PDV",
         icon: <span style={{ fontSize: "20px", color: "white" }}>💰</span>, // Ícone de carteira
         url: "/wallet",
         isCentral: false,
     },
     {
-        label: "New item",
+        label: "Iniciar novo pedido",
         icon: <span style={{ fontSize: "20px", color: "white" }}>➕</span>, // Ícone de adicionar
         isCentral: true,
         onClick: () => {
@@ -34,17 +34,12 @@ export const navigationItems: NavigationItem[] = [
         },
     },
     {
-        label: "Settings",
+        label: "Pedidos",
         icon: <span style={{ fontSize: "20px", color: "white" }}>⚙️</span>, // Ícone de configurações
         url: "/settings",
         isCentral: false,
     },
-    {
-        label: "Profile",
-        icon: <span style={{ fontSize: "20px", color: "white" }}>👤</span>, // Ícone de perfil
-        url: "/profile",
-        isCentral: false,
-    },
+
 ];
 
 // Definição do tipo para as props do componente
