@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,7 +14,6 @@ import {
 // Registrar os componentes do Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-// Definindo a interface para o pedido
 interface Order {
   id: number;
   customer: string;
@@ -23,6 +22,7 @@ interface Order {
   status: string;
   orderItems: string[];
 }
+
 
 function OrderRow({ order }: { order: Order }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,45 +71,16 @@ function OrderRow({ order }: { order: Order }) {
   );
 }
 
-export function OrdersTable() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+interface OrdersTableProps {
+  orders: Order[];
+}
 
-  useEffect(() => {
-    // Simulando uma chamada para API
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch('https://raichu-server.up.railway.app/api/pedidos/status/finalizados'); // Substitua pela URL da sua API
-        const data = await response.json();
-        //console.log(data);
+export function OrdersTable({ orders }: OrdersTableProps) {
+  if (orders.length === 0) {
+    return <div className="text-center py-10">Nenhum pedido encontrado.</div>;
+  }
 
-        let supabase_pedidos = data["supabase_pedidos"];
-        let pedidos = [];
-        for (let i = 0; i < supabase_pedidos.length; i++) {
-
-          //console.log(supabase_pedidos[i]);
-
-          let pedido = {
-            id: supabase_pedidos[i].id,
-            customer: supabase_pedidos[i].customer,
-            items: supabase_pedidos[i].items,
-            total: supabase_pedidos[i].total,
-            status: supabase_pedidos[i].status,
-            orderItems: supabase_pedidos[i].orderItems
-          }
-          pedidos.push(pedido);
-        }
-        setOrders(pedidos);
-
-      } catch (error) {
-        console.error('Erro ao buscar pedidos:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, []);
+  const [loading] = useState(true);
 
   // Obter a data atual no formato dia/mês/ano
   const today = new Date();
