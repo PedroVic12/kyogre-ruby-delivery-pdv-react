@@ -19,22 +19,34 @@ export function HomePage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('raichu-server.up.railway.app/api/pedidos/status/finalizados');
-        const data = await response.json();
+        const response = await fetch('https://raichu-server.up.railway.app/api/pedidos/status/finalizados');
 
-          // Transformar os dados no formato esperado
-          const transformedOrders = data.supabase_pedidos.map((pedido: any, index: number) => ({
-            id: index + 1, // Gerar um ID único (se não houver na API)
-            customer: pedido.nome_produto, // Usar `nome_produto` como nome do cliente (ajuste conforme necessário)
-            items: 1, // Número de itens (ajuste conforme necessário)
-            total: pedido.preco.toFixed(2), // Preço formatado
-            status: 'finalizado', // Status fixo (ajuste conforme necessário)
-            orderItems: [pedido.nome_produto], // Lista de itens (ajuste conforme necessário)
-  
-            
-          }));
-  
+        // Verificar se a resposta é válida
+        if (!response.ok) {
+          throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+        }
 
+        // Logar a resposta bruta para depuração
+        const textResponse = await response.text();
+        //console.log('Resposta bruta da API:', textResponse);
+
+        // Tentar converter para JSON
+        const data = JSON.parse(textResponse);
+
+        console.log(data);
+
+        // Transformar os dados no formato esperado
+        const transformedOrders = data.supabase_pedidos.map((pedido: any, index: number) => ({
+          id: index + 1, // Gerar um ID único (se não houver na API)
+          customer: pedido.nome_produto, // Usar `nome_produto` como nome do cliente (ajuste conforme necessário)
+          items: 1, // Número de itens (ajuste conforme necessário)
+          total: pedido.preco.toFixed(2), // Preço formatado
+          status: 'finalizado', // Status fixo (ajuste conforme necessário)
+          orderItems: [pedido.nome_produto], // Lista de itens (ajuste conforme necessário)
+        }));
+
+        // Atualizar o estado com os pedidos transformados
+        console.log(transformedOrders);
         setOrders(transformedOrders);
       } catch (error) {
         console.error('Erro ao buscar os dados do supabase no python:', error);

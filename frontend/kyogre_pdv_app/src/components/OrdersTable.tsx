@@ -80,7 +80,6 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     return <div className="text-center py-10">Nenhum pedido encontrado.</div>;
   }
 
-  const [loading] = useState(true);
 
   // Obter a data atual no formato dia/mês/ano
   const today = new Date();
@@ -88,9 +87,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     .toString()
     .padStart(2, '0')}/${today.getFullYear()}`;
 
-  if (loading) {
-    return <div className="text-center py-10">Carregando pedidos...</div>;
-  }
+
 
   // Dados para o gráfico de barras (Pedidos durante o dia)
   const barData = {
