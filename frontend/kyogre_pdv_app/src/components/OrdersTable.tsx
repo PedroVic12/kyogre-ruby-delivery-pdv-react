@@ -89,7 +89,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
 
 
 
-  // Dados para o gráfico de barras (Pedidos durante o dia)
+  //! Dados para o gráfico de barras (Pedidos durante o dia)
   const barData = {
     labels: ['7h', '9h', '11h', '13h', '15h', '17h', '19h', '21h', '23h'],
     datasets: [
@@ -103,7 +103,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     ],
   };
 
-  // Dados para o gráfico de pizza (Categorias mais vendidas)
+  //! Dados para o gráfico de pizza (Categorias mais vendidas)
   const pieData = {
     labels: ['Bebidas', 'Lanches', 'Pratos principais', 'Sobremesas'],
     datasets: [
@@ -115,7 +115,6 @@ export function OrdersTable({ orders }: OrdersTableProps) {
       },
     ],
   };
-
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-200">
@@ -123,23 +122,25 @@ export function OrdersTable({ orders }: OrdersTableProps) {
         <p className="text-sm text-gray-500">Hoje: {formattedDate}</p>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full table-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pedido</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {orders.map((order) => (
-              <OrderRow key={order.id} order={order} />
-            ))}
-          </tbody>
-        </table>
+        <div className="table-container">
+          <table className="w-full table-auto">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pedido</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {orders.map((order) => (
+                <OrderRow key={order.id} order={order} />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Gráficos */}

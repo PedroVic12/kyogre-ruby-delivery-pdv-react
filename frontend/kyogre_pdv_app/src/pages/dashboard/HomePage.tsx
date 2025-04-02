@@ -61,15 +61,35 @@ export function HomePage() {
   if (loading) {
     return <div className="text-center py-10">Carregando pedidos...</div>;
   }
-
   return (
-    <div className="ml-2 pt-8 p-2">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <Card title="Pedidos Recebidos" value={orders.length.toString()} className="w-full md:w-auto" />
-        <Card title="Número de clientes ativos" value="1" className="w-full md:w-auto" />
-        <Card title="Total de vendas" value="32" className="w-full md:w-auto" />
+      <div>
+
+<div className="grid grid-cols-1 pt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <Card
+          title="Pedidos Recebidos"
+          value={orders.length.toString()}
+          className="w-full"
+          color="lightblue"
+        />
+        <Card
+          title="Número de clientes ativos"
+          value="1"
+          className="w-full"
+          color="lightblue"
+        />
+        <Card
+          title="Total de vendas"
+          value="12"
+          className="w-full"
+          color="lightblue"
+        />
       </div>
-      <OrdersTable orders={orders} />
+      <div className="overflow-x-auto bg-white rounded-lg shadow-md p-4 border border-green-500 w-full">
+        <OrdersTable orders={orders} />
+      </div>
     </div>
+
+      </div>
   );
 }

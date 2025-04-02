@@ -29,67 +29,102 @@ const isProduction = true; //! Altere para false se quiser simular login automá
 // PastaStorage: `/cardapios/${user.empresa_id}/logo.png`
 // TabelaCardapio: `cardapio_${user.empresa_id}`
 
-
 function App() {
     const { isAuthenticated, isAuthLoading } = useAuth();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     if (isAuthLoading) {
         return (
-          <div className="flex flex-col justify-center items-center h-screen text-gray-600">
-            <span className="text-lg animate-pulse">🔐 Verificando sessão de login...</span>
-          </div>
+            <div className="flex flex-col justify-center items-center h-screen text-gray-600">
+                <span className="text-lg animate-pulse">🔐 Verificando sessão de login...</span>
+            </div>
         );
-      }
+    }
 
     return (
         <Router>
             <CartProvider>
                 <Routes>
-                    <Route path="/" element={
-                        isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
-                    } />
-                    
-                    <Route path="/dashboard/*" element={
-                        isAuthenticated ? (
-                            <div className="flex min-h-screen bg-gray-100 md:bg-gray-120">
-                                <Sidebar isOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-                                <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'ml-0'}`}>
-                                <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
-                                   
-                                    <main className="p-4 sm:p-6 md:p-8 pt-16">
-                                        <Routes>
-                                            <Route index element={<DashboardPedidosPage />} />
-                                            <Route path="produtos" element={<MenuPage />} />
-                                            <Route path="clientes" element={<ClientsPage />} />
-                                            <Route path="pedidos" element={<HomePage />} />
-                                            <Route path="atendimento" element={<ChatPage />} />
-                                            <Route path="cardapioManager" element={<CardapioManagerPage isSidebarOpen={isSidebarOpen} />  } />
-                                            
-                                        </Routes>
-                                    </main>
+                    <Route
+                        path="/"
+                        element={
+                            isAuthenticated ? (
+                                <Navigate to="/dashboard" replace />
+                            ) : (
+                                <Navigate to="/login" replace />
+                            )
+                        }
+                    />
+
+                    <Route
+                        path="/dashboard/*"
+                        element={
+                            isAuthenticated ? (
+                                <div className="flex min-h-screen bg-gray-100">
+                                    {/* Sidebar */}
+                                    <Sidebar
+                                        isOpen={isSidebarOpen}
+                                        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                                    />
+
+                                    {/* Main Content */}
+                                    <div
+                                        className={`flex-1 transition-all duration-300 ${
+                                            isSidebarOpen ? 'md:ml-64' : 'ml-0'
+                                        }`}
+                                    >
+                                        {/* Header */}
+                                        <Header
+                                            toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                                            isSidebarOpen={isSidebarOpen}
+                                        />
+
+                                        {/* Main Content Area */}
+                                        <main className="p-4 sm:p-6 md:p-8 pt-16">
+                                            <Routes>
+                                                <Route index element={<DashboardPedidosPage />} />
+                                                <Route path="produtos" element={<MenuPage />} />
+                                                <Route path="clientes" element={<ClientsPage />} />
+                                                <Route path="pedidos" element={<HomePage />} />
+                                                <Route path="atendimento" element={<ChatPage />} />
+                                                <Route
+                                                    path="cardapioManager"
+                                                    element={
+                                                        <CardapioManagerPage
+                                                            isSidebarOpen={isSidebarOpen}
+                                                        />
+                                                    }
+                                                />
+                                            </Routes>
+                                        </main>
+                                    </div>
                                 </div>
+                            ) : (
+                                <Navigate to="/login" replace />
+                            )
+                        }
+                    />
+
+                    <Route
+                        path="/*"
+                        element={
+                            <div className="min-h-screen bg-gray-50">
+                                <Routes>
+                                    <Route path="cardapio" element={<CardapioDigitalPage />} />
+                                    <Route path="product/:id" element={<ProductDetailsPage />} />
+                                    <Route
+                                        path="login"
+                                        element={<LoginPageComponent isDebug={!isProduction} />}
+                                    />
+                                    <Route path="controle_estoque" element={<ControleEstoquePage />} />
+                                    <Route path="pagina_componentes" element={<PaginaComponentes />} />
+                                    <Route path="app_garcom" element={<GarcomMesas />} />
+                                    <Route path="cardapio/:mesa" element={<CardapioPDV />} />
+                                    <Route path="checkout/:pedidoId" element={<CheckoutPage />} />
+                                </Routes>
                             </div>
-                        ) : (
-                            <Navigate to="/login" replace />
-                        )
-                    } />
-
-                    <Route path="/*" element={
-                        <div className="min-h-screen bg-gray-50">
-                            <Routes>
-                                <Route path="cardapio" element={<CardapioDigitalPage />} />
-                                <Route path="product/:id" element={<ProductDetailsPage />} />
-                                <Route path="login" element={<LoginPageComponent isDebug={!isProduction} />} />
-
-                                <Route path="controle_estoque" element={<ControleEstoquePage />} />
-                                <Route path="pagina_componentes" element={<PaginaComponentes />} />
-                                <Route path="app_garcom" element={<GarcomMesas />} />
-                                <Route path="cardapio/:mesa" element={<CardapioPDV />} />
-                                <Route path="checkout/:pedidoId" element={<CheckoutPage />} />
-                            </Routes>
-                        </div>
-                    } />
+                        }
+                    />
                 </Routes>
             </CartProvider>
         </Router>
