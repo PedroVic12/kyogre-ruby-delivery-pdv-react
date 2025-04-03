@@ -32,6 +32,39 @@
 
 The Kyogre Ruby Delivery PDV (Point of Sale) project is a full-stack web application designed for restaurant management. It consists of a React-based frontend and a FastAPI-based backend, offering features for order management, product listing, customer management, and a digital menu. It utilizes Supabase as a backend-as-a-service for database management.
 
+
+
+## Arquitetura Geral:
+
+    - App React (Frontend): Será responsável por receber a interação do usuário (mensagens), enviar para o chatbot e exibir a resposta.
+    - Chatbot (n8n): Irá receber a mensagem do frontend, processar (usando, por exemplo, um modelo de linguagem como o GPT ou outros serviços de NLP), consultar o backend (FastAPI) para obter informações sobre o restaurante e formular uma resposta.
+    - Backend FastAPI: Irá expor APIs para o chatbot consultar informações sobre o restaurante (cardápio, horários, reservas, etc.) e, possivelmente, para atualizar informações (ex: receber um pedido feito pelo chatbot).
+
+2. Comunicação entre os Componentes:
+
+    React -> n8n: Use o fetch ou axios para enviar requisições POST com a mensagem do usuário para um endpoint específico no n8n.
+    n8n -> FastAPI: Use o nó HTTP Request do n8n para fazer requisições GET ou POST para os endpoints da sua API FastAPI.
+    FastAPI -> n8n: Em alguns casos, você pode querer que o FastAPI notifique o n8n sobre algum evento (ex: um novo pedido foi feito). Para isso, o FastAPI pode fazer uma requisição POST para um endpoint no n8n.
+    n8n -> React: O n8n irá retornar a resposta para o React através da resposta da requisição POST inicial.
+
+3. Detalhes Técnicos:
+
+    Autenticação: Implemente um sistema de autenticação entre o n8n e o FastAPI para garantir que apenas o chatbot autorizado possa acessar as informações do restaurante.
+    Formato dos Dados: Use JSON para trocar dados entre os componentes.
+    Gerenciamento de Estado: No React, use um gerenciador de estado (como Redux ou Context API) para armazenar o histórico de conversas e outras informações relevantes.
+
+ Lógica do Chatbot:
+
+    Intenções e Entidades: Use um serviço de NLP (como Dialogflow, Rasa ou Wit.ai) para identificar a intenção do usuário (ex: "fazer um pedido", "reservar uma mesa") e extrair entidades (ex: "pizza de calabresa", "mesa para 2 pessoas").
+    Diálogos: Crie fluxos de diálogo no n8n para guiar o usuário através de diferentes cenários (ex: fazer um pedido, cancelar uma reserva).
+    Acesso à API do Restaurante: Use os dados extraídos pelo NLP para fazer requisições para a API do seu restaurante e obter as informações necessárias para responder ao usuário.
+
+5. Desafios:
+
+    Escalabilidade: Se o seu restaurante tiver um grande volume de interações, você precisará garantir que o n8n e o FastAPI consigam lidar com a carga.
+    Confiabilidade: Implemente mecanismos de tratamento de erros e monitoramento para garantir que o chatbot esteja sempre disponível.
+    Segurança: Proteja os dados do seu restaurante e dos seus clientes
+
 ## Project Structure
 
 The project is organized into two main directories: `frontend` and `backend`.
@@ -100,6 +133,24 @@ The project is organized into two main directories: `frontend` and `backend`.
     * **Multi-service setup:** This is a great way to separate concerns and make your application easily scalable
 
 ## N8N
+
+```bash
+npx n8n
+
+```
+So acessar a http://localhost:5678/ com esse comando
+
+
+```
+npm install n8n -g
+```
+
+```
+n8n
+# or
+n8n start
+```
+
 
 ```bash
 docker volume create n8n_data
