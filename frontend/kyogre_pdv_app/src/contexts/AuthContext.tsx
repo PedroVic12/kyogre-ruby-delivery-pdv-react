@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface User {
@@ -16,6 +17,8 @@ interface AuthContextType {
   isAuthLoading: boolean;
   login: (email: string, senha: string) => Promise<boolean>;
   logout: () => void;
+  //token: string | null;
+  //fetchSecure: (endpoint: string) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,6 +27,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // controle de loading da sessão
+  const [token, setToken] = useState<string | null>(null);
+
 
   useEffect(() => {
     const session = localStorage.getItem('usuarios');
@@ -35,6 +40,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setIsAuthLoading(false);
   }, []);
+
+  const fetchSecureGet = async (endpoint: string) => {
+    try {
+      const response = await axios.get(`/api${endpoint}`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setUser(null);
+        setToken(null);
+      }
+      throw error;
+    }
+  };
+  const fetchSecurePost = async (endpoint: string, data: any) => {
+    try {
+      const response = await axios.post(`/api${endpoint}`, data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        setUser(null);
+        setToken(null);
+      }
+      throw error;
+    }
+  };
 
   const login = async (email: string, senha: string): Promise<boolean> => {
     try {
@@ -49,6 +79,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (response.ok) {
         const userData = await response.json();
 
+        const access_token = userData.access_token;
+        console.log("[AUTH CONTEXT] Token recebido:", access_token);
+
         const userToStore: User = {
           ...userData,
           email: userData.email || email,
@@ -59,8 +92,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         setUser(userToStore);
         setIsAuthenticated(true);
+        setToken(access_token);
         console.log("[AUTH CONTEXT] Login efetuado e salvo no Storage:", userToStore);
         localStorage.setItem("usuarios", JSON.stringify(userToStore));
+
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
         return true;
       } else {
