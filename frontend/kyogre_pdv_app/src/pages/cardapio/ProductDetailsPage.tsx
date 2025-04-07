@@ -76,26 +76,25 @@ export const ProductDetailsPage: React.FC = () => {
     }
     return item.price + addonsTotal;
   };
-
   const handleAddToCart = () => {
     if (item) {
       const selectedAdicionais = item.adicionais?.filter(addon =>
         selectedAddons.includes(addon.nome_adicional)
       ) || [];
 
-      const formattedAdicionais = selectedAdicionais.map(addon => ({
-        nome_adicional: addon.nome_adicional,
-        preco: addon.preco,
-      }));
-
-      addToCart({
+      const itemToAdd = {
         ...item,
         price: calculateTotal(),
-        adicionais: formattedAdicionais,
-      });
+        adicionais: selectedAdicionais,
+      };
+
+      console.log("Adicionando ao carrinho:", itemToAdd);
+      addToCart(itemToAdd);
       navigate('/cardapio');
     }
   };
+
+
 
   return (
     <Box sx={{ pb: 8 }}>
@@ -127,8 +126,8 @@ export const ProductDetailsPage: React.FC = () => {
           sx={{
             width: '100%',
             height: 300,
-            objectFit: 'cover',
-            borderRadius: 2,
+            objectFit: 'fill',
+            borderRadius: 5,
             mb: 2,
           }}
         />
@@ -173,7 +172,7 @@ export const ProductDetailsPage: React.FC = () => {
             size="large"
             onClick={handleAddToCart}
           >
-            Add to Cart • R$ {calculateTotal().toFixed(2)}
+            Adicionar ao Carrinho - R$ {calculateTotal().toFixed(2)}
           </Button>
         </Box>
       </Container>

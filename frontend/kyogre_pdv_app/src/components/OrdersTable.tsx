@@ -95,7 +95,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     datasets: [
       {
         label: 'Pedidos',
-        data: [5, 10, 15, 20, 25, 30, 35, 40, 45], // Substitua pelos dados reais
+        data: [5, 8, 25, 30, 15, 30, 35, 45, 25], // Substitua pelos dados reais
         backgroundColor: 'rgba(54, 162, 235, 0.5)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
@@ -118,7 +118,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900">Pedidos Recentes</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Produtos Cadastrados</h2>
         <p className="text-sm text-gray-500">Hoje: {formattedDate}</p>
       </div>
       <div className="overflow-x-auto">
@@ -127,7 +127,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pedido</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produtos</th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>

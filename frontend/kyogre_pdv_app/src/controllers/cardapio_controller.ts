@@ -22,8 +22,8 @@ class CardapioService {
       }
       const data = await response.json();
 
-      console.log("Buscando produtos", data);
-      console.log("Consultando os dados no redis e jogando na api");
+      //console.log("Buscando produtos", data);
+      //console.log("Consultando os dados no redis e jogando na api");
 
       return data; // Directly return the parsed JSON data
     } catch (error) {

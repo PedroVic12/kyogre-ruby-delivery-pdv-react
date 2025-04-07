@@ -8,7 +8,7 @@ import {
   Box,
 } from '@mui/material';
 import { Product } from '../../types/menu'; // Import Product instead of MenuItem
-import { grey } from '@mui/material/colors';
+import { blue, grey } from '@mui/material/colors';
 
 interface MenuCardProps {
   item: Product; // Change type to Product
@@ -17,6 +17,7 @@ interface MenuCardProps {
 }
 
 export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }) => {
+  
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     onAddToCart(item);
@@ -42,15 +43,16 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
         image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
         alt={item.name}
       />
-      <CardContent sx={{ flex: 1 }}>
+      <CardContent sx={{ flex: 1, backgroundColor: blue[100], borderRadius: 1  }}>
         <Typography variant="h6" component="div">
           {item.name}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
           {item.description}
         </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="subtitle1" color="success">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }}>
+
+          <Typography variant="h6"color="success">
             R$ {item.price.toFixed(2)}
           </Typography>
           <Button

@@ -1,40 +1,45 @@
-// src/hooks/useCart.ts
 import { useState, useCallback } from 'react';
-import { Product } from '../types/menu'; // Import the Product type
+import { Product } from '../types/menu';
 
-interface CartItem extends Product { // CartItem now extends Product
+interface CartItem extends Product {
   quantity: number;
 }
 
 export const useCart = () => {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addToCart = useCallback((menuItem: Product) => { // Expecting Product interface
+  const addToCart = useCallback((menuItem: Product & { adicionais?: any[]; price: number }) => {
     setItems(currentItems => {
-      const existingItem = currentItems.find(item => item.id === menuItem.id);
+      console.log("Estado atual do carrinho:", currentItems);
+      console.log("Item sendo adicionado:", menuItem);
+
+      const existingItem = currentItems.find(item =>
+        item.id === menuItem.id &&
+        JSON.stringify(item.adicionais) === JSON.stringify(menuItem.adicionais)
+      );
 
       if (existingItem) {
+        console.log("Item já existe no carrinho. Atualizando quantidade...");
         return currentItems.map(item =>
-          item.id === menuItem.id
+          item.id === menuItem.id &&
+          JSON.stringify(item.adicionais) === JSON.stringify(menuItem.adicionais)
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
 
-      return [...currentItems, {
-        ...menuItem, // Spread all properties from menuItem (which is Product)
-        quantity: 1
-      }];
+      console.log("Item não existe no carrinho. Adicionando novo item...");
+      return [...currentItems, { ...menuItem, quantity: 1 }];
     });
   }, []);
 
-  const removeFromCart = useCallback((itemId: number) => { // itemId should be number to match Product.id
+  const removeFromCart = useCallback((itemId: number) => {
     setItems(currentItems =>
       currentItems.filter(item => item.id !== itemId)
     );
   }, []);
 
-  const updateQuantity = useCallback((itemId: number, quantity: number) => { // itemId should be number
+  const updateQuantity = useCallback((itemId: number, quantity: number) => {
     if (quantity < 1) return;
 
     setItems(currentItems =>
@@ -46,7 +51,7 @@ export const useCart = () => {
     );
   }, []);
 
-  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0); // Use item.preco
+  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return {
@@ -55,6 +60,6 @@ export const useCart = () => {
     itemCount,
     addToCart,
     removeFromCart,
-    updateQuantity
+    updateQuantity,
   };
 };

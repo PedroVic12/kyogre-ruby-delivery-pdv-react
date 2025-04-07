@@ -680,8 +680,8 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   ];
 
   return (
-    <div className="ml-2 pt-8 p-2">
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
+    <div className="ml-2 pt-2 p-1">
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, mt: 2, flexDirection: { xs: 'column', sm: 'row' } }}> {/* Adicionado flexDirection para mobile */}
 
       
      
@@ -730,6 +730,11 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         </Grid>
       )}
 
+
+      <br />
+      <br />
+      <br />
+      
 
       <FloatActionButton
         mainButtonIcon={<AddIcon />}

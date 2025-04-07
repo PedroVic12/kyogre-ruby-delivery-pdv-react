@@ -25,7 +25,8 @@ export function FloatActionButton({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Box sx={{ position: 'fixed', bottom: 16, right: 16,  }}>
+    <Box sx={{ position: 'fixed', bottom: 16, right: 16,  zIndex: 1000, mt: 2 }}>
+
       <SpeedDial
         ariaLabel={mainButtonTooltip}
         icon={<SpeedDialIcon icon={mainButtonIcon} />}

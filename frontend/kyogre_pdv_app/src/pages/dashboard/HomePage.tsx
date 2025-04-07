@@ -64,11 +64,17 @@ export function HomePage() {
   return (
       <div>
 
-<div className="grid grid-cols-1 pt-4">
+<div className="grid grid-cols-1 pt-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <Card
-          title="Pedidos Recebidos"
+          title="Produtos Cadastrados"
           value={orders.length.toString()}
+          className="w-full"
+          color="lightblue"
+        />
+        <Card 
+          title="Pedidos Recebidos hoje"
+          value="1"
           className="w-full"
           color="lightblue"
         />

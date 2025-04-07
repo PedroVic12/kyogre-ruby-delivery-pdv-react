@@ -1,12 +1,12 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { useCart as useCartHook } from '../hooks/useCart';
-import { CartItem,Product } from '../types/menu';
+import { CartItem, Product } from '../types/menu';
 
 interface CartContextType {
   items: CartItem[];
   total: number;
   itemCount: number;
-  addToCart: (menuItem: Product) => void;
+  addToCart: (menuItem: Product & { adicionais?: any[]; price: number }) => void;
   removeFromCart: (itemId: number) => void;
   updateQuantity: (itemId: number, quantity: number) => void;
 }
@@ -25,7 +25,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useCart = () => {
   const context = useContext(CartContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
