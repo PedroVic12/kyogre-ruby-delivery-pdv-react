@@ -329,95 +329,38 @@ const handleChangeAdicionais = (index: number, field: keyof Adicional, value: st
   );
 };
 
-// CategoryCard Component
-const CategoryCard = ({
-  category,
-  onAddProduct,
-  onDeleteCategory,
-  onEditProduct,
-  onDeleteProduct
-}: {
-  category: Category,
-  onAddProduct: (categoryName: string) => void,
-  onDeleteCategory: (categoryId: number) => void,
-  onEditProduct: (product: Product) => void,
-  onDeleteProduct: (productId: number) => void
-}) => {
-  // Get background color based on category name
-  const getBgColor = () => category.color || '#9c27b0'; // Usar a cor da categoria ou uma cor padrão
-
-  // Get lighter background color for content
-  // const getContentBgColor = () => {
-  //   switch (category.name) {
-  //     case 'Hamburguer': return '#bbdefb';
-  //     case 'Pizza': return '#c8e6c9';
-  //     case 'Sucos': return '#bbdefb';
-  //     case 'Salgados': return '#c8e6c9';
-  //     default: return '#e1bee7';
-  //   }
-  // };
-
-  return (
-    <Card sx={{
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: 2,
-      overflow: 'hidden',
-      bgcolor: getBgColor(), // Aplicar a cor da categoria como fundo do card inteiro
-      color: 'white' // Ajustar a cor do texto para contraste
-    }}>
-      <Box sx={{
-        p: 1,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-      }}>
-        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onDeleteCategory(category.id)}>
-          <RemoveIcon />
-        </IconButton>
-        <Typography variant="h6">{category.name}</Typography>
-        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onAddProduct(category.name)}>
-          <AddIcon />
-        </IconButton>
-      </Box>
-      <Box sx={{
-        p: 1,
-        flexGrow: 1,
-        minHeight: 200,
-        overflowY: 'auto'
-      }}>
-        {category.products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onEdit={onEditProduct}
-            onDelete={onDeleteProduct}
-          />
-        ))}
-      </Box>
-    </Card>
-  );
+// Mapeamento de cores por nome de categoria
+const categoryColors: { [key: string]: string } = {
+  Hamburguer: '#000000',
+  Pizza: '#9c27b0',
+  Bebidas: '#2196f3',
+  Salgados: '#4caf50',
+  Sobremesas: '#ff9800',
+  // Adicione mais categorias e cores aqui
 };
 
-// CategoryModal Component
 const CategoryModal = ({
   open,
   onClose,
-  onSave
+  onSave,
 }: {
-  open: boolean,
-  onClose: () => void,
-  onSave: (categoryName: string, categoryColor: string) => void // Ajustado para incluir a cor
+  open: boolean;
+  onClose: () => void;
+  onSave: (categoryName: string, categoryColor: string) => void;
 }) => {
   const [categoryName, setCategoryName] = useState('');
-  const [categoryColor, setCategoryColor] = useState('#9c27b0'); // Cor padrão
+  const [categoryColor, setCategoryColor] = useState('#000000'); // Cor padrão
 
   const handleSubmit = () => {
     if (categoryName.trim()) {
+      // Adiciona a nova categoria ao estado global de cores
+      if (!categoryColors[categoryName]) {
+        categoryColors[categoryName] = categoryColor;
+      }
+
       onSave(categoryName, categoryColor); // Enviar a cor junto com o nome
       setCategoryName('');
-      setCategoryColor('#9c27b0'); // Resetar a cor para o padrão
+      setCategoryColor('#000000'); // Resetar a cor para o padrão
       onClose();
     }
   };
@@ -436,62 +379,98 @@ const CategoryModal = ({
         <Box sx={{ mt: 2 }}>
           <Typography variant="subtitle1">Escolha uma Cor:</Typography>
           <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
-            {/* Botões de seleção de cores */}
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                bgcolor: '#9c27b0',
-                border: categoryColor === '#9c27b0' ? '3px solid black' : '1px solid #ccc',
-                borderRadius: '50%',
-                cursor: 'pointer',
-              }}
-              onClick={() => setCategoryColor('#9c27b0')}
-            />
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                bgcolor: '#2196f3',
-                border: categoryColor === '#2196f3' ? '3px solid black' : '1px solid #ccc',
-                borderRadius: '50%',
-                cursor: 'pointer',
-              }}
-              onClick={() => setCategoryColor('#2196f3')}
-            />
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                bgcolor: '#4caf50',
-                border: categoryColor === '#4caf50' ? '3px solid black' : '1px solid #ccc',
-                borderRadius: '50%',
-                cursor: 'pointer',
-              }}
-              onClick={() => setCategoryColor('#4caf50')}
-            />
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                bgcolor: '#ff9800',
-                border: categoryColor === '#ff9800' ? '3px solid black' : '1px solid #ccc',
-                borderRadius: '50%',
-                cursor: 'pointer',
-              }}
-              onClick={() => setCategoryColor('#ff9800')}
-            />
+            {/* Gerar opções de cores dinamicamente a partir de categoryColors */}
+            {Object.values(categoryColors).map((color) => (
+              <Box
+                key={color}
+                sx={{
+                  width: 40,
+                  height: 40,
+                  bgcolor: color,
+                  border: categoryColor === color ? '3px solid black' : '1px solid #ccc',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                }}
+                onClick={() => setCategoryColor(color)}
+              />
+            ))}
           </Box>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>
-        <Button onClick={handleSubmit} variant="contained">Adicionar</Button>
+        <Button onClick={handleSubmit} variant="contained">
+          Adicionar
+        </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
+const CategoryCard = ({
+  category,
+  onAddProduct,
+  onDeleteCategory,
+  onEditProduct,
+  onDeleteProduct,
+}: {
+  category: Category;
+  onAddProduct: (categoryName: string) => void;
+  onDeleteCategory: (categoryId: number) => void;
+  onEditProduct: (product: Product) => void;
+  onDeleteProduct: (productId: number) => void;
+}) => {
+  // Determinar a cor com base no nome da categoria
+  const getBgColor = () => categoryColors[category.name] || '#000000'; // Cor padrão é preta
+
+  return (
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 2,
+        overflow: 'hidden',
+        bgcolor: getBgColor(), // Aplicar a cor da categoria como fundo do card inteiro
+        color: 'white', // Ajustar a cor do texto para contraste
+      }}
+    >
+      <Box
+        sx={{
+          p: 1,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onDeleteCategory(category.id)}>
+          <RemoveIcon />
+        </IconButton>
+        <Typography variant="h6">{category.name}</Typography>
+        <IconButton size="small" sx={{ color: 'white' }} onClick={() => onAddProduct(category.name)}>
+          <AddIcon />
+        </IconButton>
+      </Box>
+      <Box
+        sx={{
+          p: 1,
+          flexGrow: 1,
+          minHeight: 200,
+          overflowY: 'auto',
+        }}
+      >
+        {category.products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            onEdit={onEditProduct}
+            onDelete={onDeleteProduct}
+          />
+        ))}
+      </Box>
+    </Card>
+  );
+};
 //! Cardapio Manager
 
 //TODO -> Arrumar editar produto e adicionar categoria. Tem que receber o cardapio de cada cliente separado e ter CRUD completo com a restapi pro supabase
@@ -530,15 +509,16 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
     try {
       setIsLoading(true);
       const produtos = await cardapioService.buscarProdutos();
-
+  
       // Agrupa produtos por categoria
-      const categoriaMap = new Map<string, Product[]>();
+      const categoriaMap = new Map<string, { products: Product[]; color: string }>();
       produtos.forEach((produto) => {
         const categoria = produto.categoria || '';
+        const corCategoria =  '#000000'; // Recupera a cor da categoria ou usa preto como padrão
         if (!categoriaMap.has(categoria)) {
-          categoriaMap.set(categoria, []);
+          categoriaMap.set(categoria, { products: [], color: corCategoria });
         }
-        categoriaMap.get(categoria)?.push({
+        categoriaMap.get(categoria)?.products.push({
           id: produto.id,
           nome_produto: produto.nome_produto,
           preco: produto.preco,
@@ -550,16 +530,17 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           name: undefined,
           description: undefined
         });
+      
       });
-
+  
       // Converte o Map para o formato de categorias
-      const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, products], index) => ({
+      const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, { products, color }], index) => ({
         id: index,
         name,
         products,
-        color: '#000000' // Adicionei uma cor padrão, você pode alterar conforme necessário
+        color, // Usa a cor recuperada do backend
       }));
-
+  
       setCategories(novasCategorias);
       setIsLoading(false);
     } catch (error) {
@@ -567,7 +548,6 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       setIsLoading(false);
     }
   };
-
 
 
 
@@ -594,7 +574,9 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
   const handleDeleteCategory = (categoryId: number) => {
     // Just for the demo, in a real app this would call an API
-    setCategories(prev => prev.filter(cat => cat.id !== categoryId));
+    //setCategories(prev => prev.filter(cat => cat.id !== categoryId));
+    setCategories(categories.filter((category) => category.id !== categoryId));
+
     alert(`Categoria ${categories.find(c => c.id === categoryId)?.name} removida!`);
   };
 
@@ -636,20 +618,23 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   };
 
   const handleAddCategory = (categoryName: string, categoryColor: string) => {
-    if (categories.some(cat => cat.name === categoryName)) {
+    if (categories.some((cat) => cat.name === categoryName)) {
       alert('Esta categoria já existe!');
       return;
     }
-  
+
     const newCategory: Category = {
-      id: Math.max(0, ...categories.map(c => c.id)) + 1,
+      id: Math.max(0, ...categories.map((c) => c.id)) + 1,
       name: categoryName,
+      color: categoryColor,
       products: [],
-      color: categoryColor // Adicionar a cor à categoria
     };
-  
+
+    console.log('Nova categoria adicionada:', newCategory); // Log para depuração
     setCategories([...categories, newCategory]);
   };
+
+
 
   const categoryNames = categories.map(category => category.name);
 
@@ -686,12 +671,13 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       
      
       <div>
-          <h1>Bem-vindo! {nome?.toLocaleUpperCase()}</h1>
           {/* <h2>Tabela: {tabela}</h2>
           <h2>Bucket: {bucket}</h2> */}
-        </div>
+          <h1>Bem-vindo! {nome?.toLocaleUpperCase()},</h1>
+      </div>
 
-        <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciador de Cardápio</Typography> {/* Adicionado marginBottom para mobile */}
+          {/* <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Ao seu Gerenciador de Cardápio Digital. Aqui você pode criar, editar e deletar os seus produtos e ainda personalizar do jeito que você quiser!</Typography> Adicionado marginBottom para mobile */}
+          <Typography variant="h4" component="h1" sx={{ mb: { xs: 2, sm: 0 } }}>Gerenciamento de Cardápio Digital.</Typography> 
 
 
       <Stack
@@ -731,10 +717,11 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       )}
 
 
-      <br />
-      <br />
-      <br />
-      
+      {/* Separador BR para ter espaço para editar ou deletar o prdouto. Ao subir o icone fica em cima */}
+      {[...Array(6)].map((_, i) => (
+        <br key={i} />
+      ))}
+
 
       <FloatActionButton
         mainButtonIcon={<AddIcon />}
