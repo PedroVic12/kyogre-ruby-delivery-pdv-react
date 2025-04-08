@@ -33,6 +33,26 @@ import { useAuth } from '../../contexts/AuthContext';
 import {FloatActionButton} from '../../components/ui/FloatActionButton';
 
 
+// Inicializa categoryColors a partir do localStorage ou com valores padrão
+const getInitialCategoryColors = (): { [key: string]: string } => {
+  const savedColors = localStorage.getItem('categoryColors');
+  return savedColors
+    ? JSON.parse(savedColors)
+    : {
+        Hamburguer: '#000000',
+        Pizza: '#9c27b0',
+        Bebidas: '#2196f3',
+        Salgados: '#4caf50',
+        Sobremesas: '#ff9800',
+        // Adicione mais categorias e cores aqui
+      };
+};
+
+const categoryColors = getInitialCategoryColors();
+
+const saveCategoryColorsToLocalStorage = (colors: { [key: string]: string }) => {
+  localStorage.setItem('categoryColors', JSON.stringify(colors));
+};
 
 
 // ProductCard Component
@@ -329,16 +349,10 @@ const handleChangeAdicionais = (index: number, field: keyof Adicional, value: st
   );
 };
 
-// Mapeamento de cores por nome de categoria
-const categoryColors: { [key: string]: string } = {
-  Hamburguer: '#000000',
-  Pizza: '#9c27b0',
-  Bebidas: '#2196f3',
-  Salgados: '#4caf50',
-  Sobremesas: '#ff9800',
-  // Adicione mais categorias e cores aqui
-};
 
+
+
+//! Categoria Component
 const CategoryModal = ({
   open,
   onClose,
@@ -356,6 +370,7 @@ const CategoryModal = ({
       // Adiciona a nova categoria ao estado global de cores
       if (!categoryColors[categoryName]) {
         categoryColors[categoryName] = categoryColor;
+        saveCategoryColorsToLocalStorage(categoryColors); // Salva no localStorage
       }
 
       onSave(categoryName, categoryColor); // Enviar a cor junto com o nome
@@ -471,6 +486,8 @@ const CategoryCard = ({
     </Card>
   );
 };
+
+
 //! Cardapio Manager
 
 //TODO -> Arrumar editar produto e adicionar categoria. Tem que receber o cardapio de cada cliente separado e ter CRUD completo com a restapi pro supabase
@@ -622,19 +639,22 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       alert('Esta categoria já existe!');
       return;
     }
-
+  
     const newCategory: Category = {
       id: Math.max(0, ...categories.map((c) => c.id)) + 1,
       name: categoryName,
       color: categoryColor,
       products: [],
     };
-
-    console.log('Nova categoria adicionada:', newCategory); // Log para depuração
+  
+    // Adiciona a nova categoria ao estado global de cores
+    if (!categoryColors[categoryName]) {
+      categoryColors[categoryName] = categoryColor;
+      saveCategoryColorsToLocalStorage(categoryColors); // Salva no localStorage
+    }
+  
     setCategories([...categories, newCategory]);
   };
-
-
 
   const categoryNames = categories.map(category => category.name);
 
