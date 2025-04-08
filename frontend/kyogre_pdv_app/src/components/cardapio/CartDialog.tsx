@@ -37,6 +37,7 @@ export const CartDialog: React.FC<CartDialogProps> = ({
 }) => {
 
   const EnviarPedidoGroundonBot = () => {
+    const numeroGroundon = "5521989776697"; // Número do Groundon Bot
     const now = new Date();
     const dataPedido = {
       data: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
@@ -84,7 +85,7 @@ export const CartDialog: React.FC<CartDialogProps> = ({
     texto_pedido += `🚀 *Obrigado por comprar conosco!* 😊`;
   
     // Enviar mensagem no WhatsApp
-    const url_whatsapp = `https://api.whatsapp.com/send/?phone=5521999289987&text=${encodeURIComponent(texto_pedido)}`;
+    const url_whatsapp = `https://api.whatsapp.com/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
     window.open(url_whatsapp, '_blank');
   };
 
