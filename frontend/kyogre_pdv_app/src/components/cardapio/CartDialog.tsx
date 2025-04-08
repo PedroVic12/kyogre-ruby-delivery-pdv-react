@@ -68,13 +68,12 @@ export const CartDialog: React.FC<CartDialogProps> = ({
     console.log("Novo Pedido enviando para o Groundon:", newPedido);
   
     // Formatar mensagem para WhatsApp
-    let texto_pedido = `📦 *Detalhes do Pedido* 📦\n\n`;
-    texto_pedido += `🆔 *Pedido ID*: ${newPedido.id}\n`;
+    let texto_pedido = `📦 *Detalhes do Pedido* ${newPedido.id} 📦\n\n`;
     texto_pedido += `🗓️ *Data*: ${dataPedido.data}\n`;
     texto_pedido += `⏰ *Hora*: ${dataPedido.hora}\n\n`;
-    texto_pedido += `👤 *Cliente*: ${newPedido.nome_cliente}\n`;
-    texto_pedido += `📍 *Endereço*: ${newPedido.endereco}\n`;
-    texto_pedido += `🏠 *Complemento*: ${newPedido.complemento}\n\n`;
+    //texto_pedido += `👤 *Cliente*: ${newPedido.nome_cliente}\n`;
+    //texto_pedido += `📍 *Endereço*: ${newPedido.endereco}\n`;
+    //texto_pedido += `🏠 *Complemento*: ${newPedido.complemento}\n\n`;
     texto_pedido += `🛒 *Itens do Carrinho*:\n`;
   
     carrinho.forEach(item => {
