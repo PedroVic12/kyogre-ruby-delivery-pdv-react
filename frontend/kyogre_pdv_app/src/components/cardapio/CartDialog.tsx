@@ -57,9 +57,9 @@ export const CartDialog: React.FC<CartDialogProps> = ({
   
     const newPedido = {
       id: pedidoId, // Usando o pedidoId recebido como prop
-      nome_cliente: "🧑‍💼 Nome do Cliente",
+      nome_cliente: "🧑‍💼 substituir pelo Cliente",
       complemento: "🏠 Complemento do endereço com rua e número",
-      endereco: "📍 Endereço do cliente",
+      endereco: "📍 substituir Endereço do cliente",
       total_pagar: calculateTotal(),
       data_pedido: dataPedido,
       carrinho: carrinho,
@@ -81,10 +81,11 @@ export const CartDialog: React.FC<CartDialogProps> = ({
     });
   
     texto_pedido += `\n💰 *Total a Pagar*: R$ ${newPedido.total_pagar}\n\n`;
-    texto_pedido += `🚀 *Obrigado por comprar conosco!* 😊`;
   
     // Enviar mensagem no WhatsApp
-    const url_whatsapp = `https://api.whatsapp.com/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
+    //const url_whatsapp = `https://api.whatsapp.com/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
+    const url_whatsapp = `https://wa.me/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
+
     window.open(url_whatsapp, '_blank');
   };
 

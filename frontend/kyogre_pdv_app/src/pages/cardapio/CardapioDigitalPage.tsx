@@ -110,7 +110,7 @@ export const CardapioDigitalPage: React.FC = () => {
         </Box>
 
         <Box component="section" sx={{ mb: 2 }}>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+          <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
             Destaques
           </Typography>
           <FeaturedCarousel items={featuredProducts} />
