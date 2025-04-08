@@ -92,12 +92,19 @@ export const CartDialog: React.FC<CartDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      
       <DialogTitle
         fontSize={{ xs: '1.8rem', sm: '2rem' }}
         sx={{ textAlign: 'center' }}
       >
         🛒 Seu Carrinho
       </DialogTitle>
+      <hr 
+        style={{
+          border: '1px solid #ccc',
+          margin: '0 16px',
+        }}
+      />
       <DialogContent>
         <List>
           {items.map((item) => (
@@ -108,6 +115,12 @@ export const CartDialog: React.FC<CartDialogProps> = ({
                   edge="end"
                   aria-label="delete"
                   onClick={() => onRemoveItem(item.id)}
+                  sx={{
+                    color: 'red',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                  }}
                 >
                   <Trash2 size={20} />
                 </IconButton>
@@ -121,21 +134,25 @@ export const CartDialog: React.FC<CartDialogProps> = ({
 
               <ListItemText
                 primary={item.name}
+                primaryTypographyProps={{ fontSize: '1.2rem' }}
                 secondary={`R$ ${(item.price * item.quantity).toFixed(2)}`}
               />
               <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
                 <IconButton
-                  size="small"
+                  size="large"
+                  color="primary"
+
                   onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
                 >
-                  <Minus size={16} />
+                  <Minus size={20} />
                 </IconButton>
-                <Typography sx={{ mx: 1 }}>{item.quantity}</Typography>
+                <Typography sx={{ mx: 1 }} variant="h6">{item.quantity}</Typography>
                 <IconButton
-                  size="small"
+                  size="large"
+                  color="success"
                   onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                 >
-                  <Plus size={16} />
+                  <Plus size={20} />
                 </IconButton>
               </Box>
             </ListItem>

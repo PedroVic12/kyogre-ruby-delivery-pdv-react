@@ -130,16 +130,13 @@ export const ProductDetailsPage: React.FC = () => {
           }}
         />
 
-        {/* <Typography variant="h4" gutterBottom>
-          {item.name}
-        </Typography> */}
 
-        <Typography variant="h6" color="success" gutterBottom>
-         Preço: R$ {item.price.toFixed(2)}
+      <Typography variant="subtitle1" color="text.secondary" gutterBottom  >
+          {item.description}
         </Typography>
 
-        <Typography variant="subtitle1" color="text.secondary" >
-          {item.description}
+        <Typography variant="h6" color="success" gutterBottom>
+         Preço: R$ {item.price.toFixed(2) } 
         </Typography>
 
         {item.adicionais && Array.isArray(item.adicionais) && item.adicionais.length > 0 && (
