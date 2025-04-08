@@ -11,7 +11,7 @@ export const useCart = () => {
   const addToCart = useCallback((menuItem: Product & { adicionais?: any[]; price: number }) => {
     setItems(currentItems => {
       console.log("Estado atual do carrinho:", currentItems);
-      console.log("Item sendo adicionado:", menuItem);
+      //console.log("Item sendo adicionado:", menuItem);
 
       const existingItem = currentItems.find(item =>
         item.id === menuItem.id &&

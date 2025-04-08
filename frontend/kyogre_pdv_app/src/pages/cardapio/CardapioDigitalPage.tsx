@@ -13,11 +13,11 @@ import { CartDialog } from '../../components/cardapio/CartDialog';
 import { CategoryTabs } from '../../components/cardapio/CategoryTabs';
 import { SearchBar } from '../../components/cardapio/SearchBar';
 import { FeaturedCarousel } from '../../components/cardapio/FeaturedCarousel';
-import { useCart } from '../../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 import { MenuCard } from '../../components/cardapio/MenuCard';
 import ProductCardapioRepository from '../../repositories/cardapio_repository';
 import { Category, Product } from '../../types/menu';
+import { useCart } from '../../contexts/CartContext';
 
 export const CardapioDigitalPage: React.FC = () => {
   const navigate = useNavigate();

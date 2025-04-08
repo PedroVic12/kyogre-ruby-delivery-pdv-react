@@ -8,7 +8,7 @@ import {
   Box,
 } from '@mui/material';
 import { Product } from '../../types/menu'; // Import Product instead of MenuItem
-import { blue, grey } from '@mui/material/colors';
+import {  blueGrey, grey } from '@mui/material/colors';
 
 interface MenuCardProps {
   item: Product; // Change type to Product
@@ -26,10 +26,11 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
   return (
     <Card
       sx={{
-        mb: 2,
+        mb: 3,
         display: 'flex',
-        bgcolor: grey,
+        bgcolor: 'transparent',
         alignItems: 'center',
+        border: `1px solid ${grey[300]}`,
         cursor: 'pointer',
         '&:hover': {
           boxShadow: 10
@@ -39,11 +40,11 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
     >
       <CardMedia
         component="img"
-        sx={{ width: 120, height: 120, objectFit: 'cover' }}
+        sx={{ width: 120, height: 120, objectFit: 'contain',  }}
         image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
         alt={item.name}
       />
-      <CardContent sx={{ flex: 1, backgroundColor: blue[100], borderRadius: 1  }}>
+      <CardContent sx={{ flex: 1, backgroundColor: blueGrey[100], borderRadius: 1  }}>
         <Typography variant="h6" component="div">
           {item.name}
         </Typography>

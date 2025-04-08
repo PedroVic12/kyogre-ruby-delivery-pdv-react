@@ -54,7 +54,7 @@ const CheckoutPage = () => {
       pedidoController.updatePaymentMethod(pedido.id, selectedMethod as never);
       TableController.getInstance().updateTableStatus(pedido.id, 'free');
 
-      alert('Pedido enviado!');
+      //alert('Pedido enviado!');
 
       navigate('/');
 

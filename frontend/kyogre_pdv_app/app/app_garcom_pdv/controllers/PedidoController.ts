@@ -136,15 +136,29 @@ class PedidoController {
   };
 
 
+
+
   createPedido(pedido: Omit<PedidoMesa, 'id' | 'status' | 'endereco' | "telefone">): PedidoMesa {
     const newPedido: PedidoMesa = {
       ...pedido,
       id: Math.floor(Math.random() * 9000) + 1000,
       status: 'em processo',
       endereco: "Pedido no local",
-      telefone: " "
-      
+      telefone: ""
+    };
 
+    this.pedidos.push(newPedido);
+    this.savePedidos();
+    return newPedido;
+  }
+
+
+  criarPedidoGroundon(pedido: Omit<PedidoMesa,  'status'  | "telefone">): PedidoMesa {
+
+    const newPedido: PedidoMesa = {
+      ...pedido,
+      status: 'em processo',
+      telefone: "telefone do cliente",
     };
 
     this.pedidos.push(newPedido);

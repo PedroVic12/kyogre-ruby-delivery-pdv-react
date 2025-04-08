@@ -1,4 +1,3 @@
-// src/pages/cardapio/ProductDetailsPage.tsx
 import React, { useState, useEffect } from 'react';
 import {
   Container,
@@ -16,14 +15,14 @@ import {
 
 import { ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useCart } from '../../hooks/useCart';
+import { useCart } from '../../contexts/CartContext'; // Importar do contexto global
 import ProductCardapioRepository from '../../repositories/cardapio_repository';
 import { Product } from '../../types/menu';
 
 export const ProductDetailsPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart } = useCart(); // Usar o contexto global
   const [item, setItem] = useState<Product | undefined>(undefined);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,6 +75,7 @@ export const ProductDetailsPage: React.FC = () => {
     }
     return item.price + addonsTotal;
   };
+
   const handleAddToCart = () => {
     if (item) {
       const selectedAdicionais = item.adicionais?.filter(addon =>
@@ -88,13 +88,10 @@ export const ProductDetailsPage: React.FC = () => {
         adicionais: selectedAdicionais,
       };
 
-      console.log("Adicionando ao carrinho:", itemToAdd);
       addToCart(itemToAdd);
       navigate('/cardapio');
     }
   };
-
-
 
   return (
     <Box sx={{ pb: 8 }}>
@@ -146,9 +143,11 @@ export const ProductDetailsPage: React.FC = () => {
 
         {item.adicionais && Array.isArray(item.adicionais) && item.adicionais.length > 0 && (
           <Paper sx={{ p: 2, mt: 2 }}>
+            
             <Typography variant="h6" gutterBottom>
               Adicionais
             </Typography>
+
             {item.adicionais.map((adicional, index) => (
               <FormControlLabel
                 key={index}
@@ -156,9 +155,30 @@ export const ProductDetailsPage: React.FC = () => {
                   <Checkbox
                     checked={selectedAddons.includes(adicional.nome_adicional)}
                     onChange={() => handleAddonToggle(adicional.nome_adicional)}
+                    color="primary"
+                    size="large"
+                    
+                    sx={{
+                      '&.Mui-checked': {
+                        color: 'primary.main',
+                      },
+                      '&.Mui-checked:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                      },
+                      '&.Mui-checked:focus': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                      },
+                      '&.Mui-checked:active': {
+                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                      },
+                    }}
                   />
                 }
-                label={`${adicional.nome_adicional} (+R$ ${adicional.preco.toFixed(2)})`}
+                label={
+                  <Typography variant="body1" color="green" style={{ fontSize: '18px' }}>
+                    {`${adicional.nome_adicional} + R$ ${adicional.preco.toFixed(2)}`}
+                  </Typography>
+                }
               />
             ))}
           </Paper>

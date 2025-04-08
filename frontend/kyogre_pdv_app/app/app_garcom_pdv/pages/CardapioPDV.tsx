@@ -344,7 +344,7 @@ const CardapioPDV = () => {
           <AppBar position="static" style={{ backgroundColor: '#054f77', display: 'flex', justifyContent: 'center' }}>
             <Toolbar>
 
-              <Typography variant="h6">
+              <Typography variant="h4">
                 Sistema PDV
               </Typography>
             </Toolbar>
@@ -352,14 +352,8 @@ const CardapioPDV = () => {
 
 
           {/* Tabs de navegacao */}
-          <Box sx={{ 
-                     backgroundColor: '#C0C0C0', 
-                     padding: 2, 
-                     borderRadius: 1,
-                     position: 'sticky', // Adiciona position sticky
-                     top: 0,             // Garante que fique no topo
-                     zIndex: 10,          // Garante que sobreponha outros elementos
-          }}>
+          <Box sx={{ backgroundColor: '#B0C4DE', padding: 1, borderRadius: 3}}>
+
             <Tabs
               value={activeTab}
               onChange={handleTabChange}
@@ -370,13 +364,17 @@ const CardapioPDV = () => {
               textColor='primary'
             >
               {categories.map((tab) => (
-                <Tab key={tab.name} label={tab.name} value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()}          sx={{
+                <Tab key={tab.name}   label={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <h1 style={{ fontSize: '1.2rem' }}>{tab.name}</h1> 
+                  </Box>
+                }value={tab.name.toLowerCase()} data-value={tab.name.toLowerCase()}          sx={{
                   '&.Mui-selected': {
                     color: '#0000FF',
-                    backgroundColor: '#DCDCDC',
+                    backgroundColor: '#FFFFE0',
                     borderRadius: 2,
                     '&:hover': {
-                      backgroundColor: '#4682B4',
+                      backgroundColor: '#D3D3D3',
                     },
                   },
                 }}

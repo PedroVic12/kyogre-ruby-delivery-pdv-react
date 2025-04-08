@@ -16,12 +16,14 @@ export const Cart: React.FC<CartProps> = ({ total, itemCount, onViewCart }) => {
         bottom: 0,
         left: 0,
         right: 0,
-        bgcolor: 'white',
+        bgcolor: 'grey.300',
         boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
         p: 2,
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        borderRadius: '8px 8px 0 0',
+        zIndex: 1000,
       }}
     >
       <Typography variant="subtitle1">

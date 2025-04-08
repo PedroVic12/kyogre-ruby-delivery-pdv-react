@@ -41,7 +41,7 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
             value={category.name} // Changed here
             label={
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <h1>{category.name}</h1>
+                <h1 style={{ fontSize: '1.2rem' }}>{category.name}</h1> 
               </Box>
             }
             sx={{

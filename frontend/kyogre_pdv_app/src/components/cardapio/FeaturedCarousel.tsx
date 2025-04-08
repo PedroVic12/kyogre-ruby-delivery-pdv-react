@@ -68,7 +68,7 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
               image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
               alt={item.name}
               sx={{
-                objectFit: 'cover',
+                objectFit: 'contain',
                 transition: 'transform 0.3s ease',
                 '&:hover': {
                   transform: { xs: 'none', sm: 'scale(1.05)' },
@@ -89,7 +89,7 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
               <Typography
                 variant={isMobile ? "subtitle1" : "h6"}
                 sx={{
-                  fontSize: { xs: '0.9rem', sm: '1.25rem' },
+                  fontSize: { xs: '1.2rem', sm: '1.55rem' },
                   lineHeight: { xs: '1.2', sm: '1.5' }
                 }}
               >
@@ -98,7 +98,8 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
               <Typography
                 variant="subtitle1"
                 sx={{
-                  fontSize: { xs: '0.8rem', sm: '1rem' }
+                  fontSize: { xs: '0.9rem', sm: '1.4rem' },
+                  lineHeight: { xs: '1.2', sm: '1.5rem' }
                 }}
               >
                 R$ {item.price.toFixed(2)}
