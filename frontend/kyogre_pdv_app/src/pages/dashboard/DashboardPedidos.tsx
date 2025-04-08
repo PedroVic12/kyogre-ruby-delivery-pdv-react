@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import "../../index.css"
+import { useNavigate } from 'react-router-dom';
 
 //import { TestePedidoButton } from "./MenuPage"
 
@@ -198,6 +199,7 @@ export function DashboardPedidosPage() {
     const [, setLastOrdersLength] = useState(0);
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
     const [allOrders, setAllOrders] = useState<Order[]>([]);
+    const navigate = useNavigate();
 
     const API_ENDPOINT = 'https://raichu-server.up.railway.app/api/pedidos/'; // Rota da sua API para buscar pedidos
 
@@ -350,6 +352,9 @@ export function DashboardPedidosPage() {
     }
 
     if (error) {
+        setTimeout(() => {
+            navigate('/login');
+        }, 1000);
         return <div className="flex justify-center items-center h-screen text-red-500">Erro ao carregar pedidos: {error}</div>;
     }
 

@@ -20,6 +20,7 @@ import CardapioPDV from '../app/app_garcom_pdv/pages/CardapioPDV.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 import { useAuth } from './contexts/AuthContext';
+import PDFGeneratorPage from './components/ui/pdf_generator';
 
 const isProduction = true; //! Altere para false se quiser simular login automático em desenvolvimento
 
@@ -116,6 +117,7 @@ function App() {
                                         path="login"
                                         element={<LoginPageComponent isDebug={!isProduction} />}
                                     />
+                                    <Route path="pedido_pdf" element={<PDFGeneratorPage />} />
                                     <Route path="controle_estoque" element={<ControleEstoquePage />} />
                                     <Route path="pagina_componentes" element={<PaginaComponentes />} />
                                     <Route path="app_garcom" element={<GarcomMesas />} />

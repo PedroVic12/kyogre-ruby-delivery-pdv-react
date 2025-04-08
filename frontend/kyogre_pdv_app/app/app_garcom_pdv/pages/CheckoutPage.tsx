@@ -35,7 +35,8 @@ const CheckoutPage = () => {
     if (pedido) {
       TableController.getInstance().updateTableStatus(pedido.id, 'free');
       alert("Gerando arquivo pdf...")
-      //navigate('/');
+      
+      navigate('/pedido_pdf' );
     }
   };
 
