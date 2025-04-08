@@ -57,7 +57,7 @@ export const CartDialog: React.FC<CartDialogProps> = ({
   
     const newPedido = {
       id: pedidoId, // Usando o pedidoId recebido como prop
-      nome_cliente: "🧑‍💼 substituir pelo Cliente",
+      nome_cliente: "🧑‍💼 substituir pelo nome do Cliente",
       complemento: "🏠 Complemento do endereço com rua e número",
       endereco: "📍 substituir Endereço do cliente",
       total_pagar: calculateTotal(),
@@ -83,8 +83,8 @@ export const CartDialog: React.FC<CartDialogProps> = ({
     texto_pedido += `\n💰 *Total a Pagar*: R$ ${newPedido.total_pagar}\n\n`;
   
     // Enviar mensagem no WhatsApp
-    //const url_whatsapp = `https://api.whatsapp.com/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
-    const url_whatsapp = `https://wa.me/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
+    const url_whatsapp = `https://api.whatsapp.com/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
+    //const url_whatsapp = `https://wa.me/send/?phone=${numeroGroundon}&text=${encodeURIComponent(texto_pedido)}`;
 
     window.open(url_whatsapp, '_blank');
   };
@@ -101,14 +101,23 @@ export const CartDialog: React.FC<CartDialogProps> = ({
       </DialogTitle>
       <hr 
         style={{
-          border: '1px solid #ccc',
+          border: '2px solid #ccc',
           margin: '0 16px',
         }}
       />
       <DialogContent>
-        <List>
+        <List >
           {items.map((item) => (
             <ListItem
+
+
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '8px 0',
+                borderBottom: '1px solid #ccc',
+              }}
               key={item.id}
               secondaryAction={
                 <IconButton
@@ -129,7 +138,7 @@ export const CartDialog: React.FC<CartDialogProps> = ({
               <img
                 src={item.imageUrl || ''}
                 alt={item.name}
-                style={{ width: 50, height: 50, borderRadius: '50%', marginRight: 16 }}
+                style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'fill', marginRight: '10px',   }}
               />
 
               <ListItemText
@@ -141,10 +150,17 @@ export const CartDialog: React.FC<CartDialogProps> = ({
                 <IconButton
                   size="large"
                   color="primary"
-
+                  
+                  
                   onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                  sx={{
+                    color: 'slateblue',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    },
+                  }}
                 >
-                  <Minus size={20} />
+                  <Minus size={18} />
                 </IconButton>
                 <Typography sx={{ mx: 1 }} variant="h6">{item.quantity}</Typography>
                 <IconButton
@@ -152,23 +168,25 @@ export const CartDialog: React.FC<CartDialogProps> = ({
                   color="success"
                   onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
                 >
-                  <Plus size={20} />
+                  <Plus size={18} />
                 </IconButton>
               </Box>
             </ListItem>
           ))}
         </List>
+
         {items.length === 0 && (
-          <Typography variant="body1" sx={{ textAlign: 'center', my: 3 }}>
+          <Typography variant="h2" sx={{ textAlign: 'center', my: 3 }}>
             Seu carrinho está vazio
           </Typography>
         )}
         {items.length > 0 && (
-          <Typography variant="h6" align="center" sx={{ mt: 2 }}>
-            Total: R$ {total.toFixed(2)}
+          <Typography variant="h5"  align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
+            <span role="img" aria-label="money">💰</span> Total: R$ {total.toFixed(2)}
           </Typography>
         )}
       </DialogContent>
+
       <DialogActions>
         <Button onClick={onClose}>Fechar</Button>
         {items.length > 0 && (
