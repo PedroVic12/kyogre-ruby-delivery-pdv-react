@@ -11,6 +11,7 @@ import {
   Button,
   Paper,
   CircularProgress,
+  TextField,
 } from '@mui/material';
 
 import { ArrowLeft } from 'lucide-react';
@@ -111,7 +112,7 @@ export const ProductDetailsPage: React.FC = () => {
           >
             <ArrowLeft />
           </IconButton>
-          <Typography variant="h6">Product Details</Typography>
+          <Typography variant="h3" >{item.name}</Typography>
         </Toolbar>
       </AppBar>
 
@@ -123,21 +124,21 @@ export const ProductDetailsPage: React.FC = () => {
           sx={{
             width: '100%',
             height: 300,
-            objectFit: 'fill',
+            objectFit: 'contain',
             borderRadius: 5,
             mb: 2,
           }}
         />
 
-        <Typography variant="h4" gutterBottom>
+        {/* <Typography variant="h4" gutterBottom>
           {item.name}
+        </Typography> */}
+
+        <Typography variant="h6" color="success" gutterBottom>
+         Preço: R$ {item.price.toFixed(2)}
         </Typography>
 
-        <Typography variant="h5" color="primary" gutterBottom>
-          R$ {item.price.toFixed(2)}
-        </Typography>
-
-        <Typography variant="body1" color="text.secondary" paragraph>
+        <Typography variant="subtitle1" color="text.secondary" >
           {item.description}
         </Typography>
 
@@ -183,6 +184,19 @@ export const ProductDetailsPage: React.FC = () => {
             ))}
           </Paper>
         )}
+
+
+        <Box sx={{ mt: 2 }}>
+          <TextField
+            id="observacoes"
+            label="Observações do pedido"
+            multiline
+            rows={3}
+            fullWidth
+            sx={{ mb: 2 }}
+            variant="outlined"
+          />
+        </Box>
 
         <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, p: 2, bgcolor: 'background.paper' }}>
           <Button

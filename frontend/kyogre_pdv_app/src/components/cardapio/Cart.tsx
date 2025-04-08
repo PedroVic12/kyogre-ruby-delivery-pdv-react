@@ -16,7 +16,7 @@ export const Cart: React.FC<CartProps> = ({ total, itemCount, onViewCart }) => {
         bottom: 0,
         left: 0,
         right: 0,
-        bgcolor: 'grey.300',
+        bgcolor: 'grey.900',
         boxShadow: '0 -2px 10px rgba(0,0,0,0.1)',
         p: 2,
         display: 'flex',
@@ -26,12 +26,12 @@ export const Cart: React.FC<CartProps> = ({ total, itemCount, onViewCart }) => {
         zIndex: 1000,
       }}
     >
-      <Typography variant="subtitle1">
+      <Typography variant="h5" color="white">
         Total: R$ {total.toFixed(2)}
       </Typography>
       <Button
         variant="contained"
-        color="primary"
+        color="success"
         onClick={onViewCart}
         startIcon={
           <Badge badgeContent={itemCount} color="error">
