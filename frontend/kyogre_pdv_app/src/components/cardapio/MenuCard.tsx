@@ -8,7 +8,7 @@ import {
   Box,
 } from '@mui/material';
 import { Product } from '../../types/menu'; // Import Product instead of MenuItem
-import {  blueGrey, grey, indigo, lightBlue, teal } from '@mui/material/colors';
+import {   grey, indigo, } from '@mui/material/colors';
 
 interface MenuCardProps {
   item: Product; // Change type to Product

@@ -1,6 +1,6 @@
 // Sidebar.jsx
 import { Link } from 'react-router-dom';
-import { Home, LayoutDashboard, Book, UserPlus, Coffee,  Menu } from 'lucide-react';
+import { Home,  Book, UserPlus, Coffee,  Menu, Calculator, Palette, NotebookPen } from 'lucide-react';
 import { IconButton } from '@mui/material';
 import rubyLogo from '../assets/ruby_logo.png'; // <--- IMPORT THE IMAGE HERE
 
@@ -11,16 +11,16 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const menuItems = [
-    { icon: Coffee, label: 'Dashboard', href: '/dashboard/pedidos' },
-    { icon: Home, label: 'Pedidos', href: '/dashboard' },
-    { icon: Book, label: 'Editar Cardapio', href: '/dashboard/cardapioManager' },
+    { icon: Home, label: 'Dashboard', href: '/dashboard/pedidos' },
+    { icon: Coffee, label: 'Pedidos', href: '/dashboard' },
+    { icon: Palette, label: 'Editar Cardapio', href: '/dashboard/cardapioManager' },
 
     // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
-    { icon: Coffee, label: 'Cardápio Digital', href: '/cardapio' },
-    { icon: LayoutDashboard, label: 'App Garçom', href: '/app_garcom' },
+    { icon: NotebookPen, label: 'Cardápio Digital', href: '/cardapio' },
+    { icon: Book, label: 'App Garçom', href: '/app_garcom' },
     //{ icon: Coffee, label: 'Cardapio PDV', href: '/cardapio/:mesa' },
-    { icon: UserPlus, label: 'Controle Estoque', href: '/controle_estoque' },
+    { icon: Calculator, label: 'Controle Estoque', href: '/controle_estoque' },
    // { icon: Book, label: 'Pagina Componentes', href: '/pagina_componentes' },
     { icon: UserPlus, label: 'Login', href: '/login' },
 
@@ -40,21 +40,27 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
 
           </IconButton>
-          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V8.1.3</h2>
+          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V9.2.3</h2>
         </div>
-
+ 
+       
         <nav className="flex-1 px-3 space-y-1">
-          {menuItems.map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-600 transition-colors"
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              <span className="truncate">{item.label}</span>
-            </Link>
+          {menuItems.map((item, index) => (
+            <div key={item.href}>
+              <Link
+                to={item.href}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-600 transition-colors"
+              >
+                <item.icon className="h-5 w-5 flex-shrink-0" />
+                
+                <span className="truncate">{item.label}</span>
+              </Link>
+              {index !== menuItems.length  && <hr className="border-gray-400" />}
+            </div>
+            
           ))}
-        </nav>
+        
+          </nav>
 
         <br />
 
