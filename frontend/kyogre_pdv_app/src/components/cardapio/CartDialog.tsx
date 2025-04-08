@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { CartItem } from '../../types/menu';
-import PedidoController from '../../../app/app_garcom_pdv/controllers/PedidoController';
 
 interface CartDialogProps {
   open: boolean;
@@ -23,6 +22,7 @@ interface CartDialogProps {
   total: number;
   onUpdateQuantity: (itemId: number, quantity: number) => void;
   onRemoveItem: (itemId: number) => void;
+  pedidoId: number | null; // Estado para o ID do pedido
 }
 
 export const CartDialog: React.FC<CartDialogProps> = ({
@@ -32,8 +32,9 @@ export const CartDialog: React.FC<CartDialogProps> = ({
   total,
   onUpdateQuantity,
   onRemoveItem,
+  pedidoId, // Recebendo o pedidoId
+
 }) => {
-  const pedidoController = PedidoController.getInstance();
 
   const EnviarPedidoGroundonBot = () => {
     const now = new Date();
@@ -41,33 +42,52 @@ export const CartDialog: React.FC<CartDialogProps> = ({
       data: `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`,
       hora: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
     };
-
+  
     const carrinho = items.map(item => ({
       quantidade: item.quantity,
       nome: item.name,
       preco: item.price,
+      total: (item.price * item.quantity).toFixed(2),
     }));
-
+  
     const calculateTotal = () => {
-      return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+      return items.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
     };
-
-    const newPedido = pedidoController.criarPedidoGroundon({
-      id: Math.floor(Math.random() * 9000) + 1000,
-      nome_cliente: "nome do cliente ",
-      complemento: `complemento do endereço com rua e numero`,
-      endereco: "endereço do cliente",
+  
+    const newPedido = {
+      id: pedidoId, // Usando o pedidoId recebido como prop
+      nome_cliente: "🧑‍💼 Nome do Cliente",
+      complemento: "🏠 Complemento do endereço com rua e número",
+      endereco: "📍 Endereço do cliente",
       total_pagar: calculateTotal(),
       data_pedido: dataPedido,
       carrinho: carrinho,
-    });
+    };
+  
     console.log("Novo Pedido enviando para o Groundon:", newPedido);
-
+  
+    // Formatar mensagem para WhatsApp
+    let texto_pedido = `📦 *Detalhes do Pedido* 📦\n\n`;
+    texto_pedido += `🆔 *Pedido ID*: ${newPedido.id}\n`;
+    texto_pedido += `🗓️ *Data*: ${dataPedido.data}\n`;
+    texto_pedido += `⏰ *Hora*: ${dataPedido.hora}\n\n`;
+    texto_pedido += `👤 *Cliente*: ${newPedido.nome_cliente}\n`;
+    texto_pedido += `📍 *Endereço*: ${newPedido.endereco}\n`;
+    texto_pedido += `🏠 *Complemento*: ${newPedido.complemento}\n\n`;
+    texto_pedido += `🛒 *Itens do Carrinho*:\n`;
+  
+    carrinho.forEach(item => {
+      texto_pedido += `  - ${item.nome} | Quantidade: ${item.quantidade} | Total: R$ ${item.total}\n`;
+    });
+  
+    texto_pedido += `\n💰 *Total a Pagar*: R$ ${newPedido.total_pagar}\n\n`;
+    texto_pedido += `🚀 *Obrigado por comprar conosco!* 😊`;
+  
     // Enviar mensagem no WhatsApp
-    const texto_pedido = `Aqui estão os detalhes do meu pedido: ${JSON.stringify(newPedido, null, 2)}`;
     const url_whatsapp = `https://api.whatsapp.com/send/?phone=5521999289987&text=${encodeURIComponent(texto_pedido)}`;
     window.open(url_whatsapp, '_blank');
   };
+
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>

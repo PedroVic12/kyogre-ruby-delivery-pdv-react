@@ -28,6 +28,7 @@ export const CardapioDigitalPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pedidoId, setPedidoId] = useState<number | null>(null); // Estado para o ID do pedido
 
   const productRepository = new ProductCardapioRepository();
 
@@ -35,6 +36,10 @@ export const CardapioDigitalPage: React.FC = () => {
 
 
   useEffect(() => {
+    // Gerar um ID único para o pedido ao acessar a página
+    const generatedId = Math.floor(Math.random() * 9000) + 1000;
+    setPedidoId(generatedId);
+
     const loadProducts = async () => {
       setIsLoading(true);
       try {
@@ -94,7 +99,7 @@ export const CardapioDigitalPage: React.FC = () => {
       >
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Sua Lanchonete | Pedido: #123
+           Sua Lanchonete | Pedido: #{pedidoId}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -152,10 +157,8 @@ export const CardapioDigitalPage: React.FC = () => {
       <CartDialog
         open={openCart}
 
-        //! debug aqui
-        //onClose={()=> pedidoController.fazerPedido(
-        //  
-        //)}
+        pedidoId={pedidoId} // Passando o pedidoId como prop
+
         onClose={() => setOpenCart(false)}
         items={items}
         total={total}
