@@ -518,6 +518,8 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   
   useEffect(() => {
     console.log("🔍 Sessão:", nome, tabela, bucket);
+    console.log("Token:", token); // Adicione esta linha
+
     carregarProdutos();
 
   }, []);

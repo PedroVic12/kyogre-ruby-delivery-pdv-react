@@ -88,7 +88,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (response.ok) {
         const userData = await response.json();
 
-        const access_token = userData.acess_token; // Use userData.acess_token
+        console.log("[AUTH CONTEXT] Dados do usuário:", userData);
+        if (!userData.acess_token) {
+          console.warn("[AUTH CONTEXT] Token de acesso não encontrado na resposta.");
+          return false;
+        }
+
+        const access_token = userData.acess_token; 
 
         console.log("[AUTH CONTEXT] Token recebido:", access_token);
 
