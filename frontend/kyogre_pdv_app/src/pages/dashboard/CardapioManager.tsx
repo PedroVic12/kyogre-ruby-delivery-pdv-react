@@ -528,6 +528,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       setIsLoading(true);
       if (token) {
         const produtos = await cardapioService.buscarProdutos(token);
+        console.log("Produtos buscados:", produtos); // Verifique se os produtos estão chegando
 
         // Agrupa produtos por categoria
         const categoriaMap = new Map<string, { products: Product[]; color: string }>();
@@ -549,7 +550,6 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             name: undefined,
             description: undefined
           });
-
         });
         // Converte o Map para o formato de categorias
         const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, { products, color }], index) => ({
@@ -559,15 +559,14 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           color, // Usa a cor recuperada do backend
         }));
         setCategories(novasCategorias);
-        setIsLoading(false);
+        setIsLoading(false); // Certifique-se de que está aqui em caso de sucesso
+      } else {
+        console.warn("Token não encontrado ao carregar produtos.");
+        setIsLoading(false); // Se não houver token, também deve parar o loading
       }
-  
-  
-
-  
     } catch (error) {
       console.error('Erro ao carregar produtos:', error);
-      setIsLoading(false);
+      setIsLoading(false); // Certifique-se de que está aqui em caso de erro
     }
   };
 
