@@ -17,7 +17,7 @@ interface AuthContextType {
   isAuthLoading: boolean;
   login: (email: string, senha: string) => Promise<boolean>;
   logout: () => void;
-  //token: string | null;
+  token: string | null; // Adicione esta linha
   //fetchSecure: (endpoint: string) => Promise<any>;
 }
 
@@ -36,6 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userSession = JSON.parse(session);
       setUser(userSession);
       setIsAuthenticated(true);
+      setToken(userSession.acess_token || null); // Tenta pegar o token da sessão restaurada
       console.log('[AUTH CONTEXT] Sessão restaurada:', userSession);
     }
     setIsAuthLoading(false);
@@ -43,7 +44,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchSecureGet = async (endpoint: string) => {
     try {
-      const response = await axios.get(`/api${endpoint}`);
+      const response = await axios.get(`/api${endpoint}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use o token do estado
+        },
+      });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -55,7 +60,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   const fetchSecurePost = async (endpoint: string, data: any) => {
     try {
-      const response = await axios.post(`/api${endpoint}`, data);
+      const response = await axios.post(`/api${endpoint}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Use o token do estado
+        },
+      });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
@@ -79,7 +88,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (response.ok) {
         const userData = await response.json();
 
-        const access_token = userData.access_token;
+        const access_token = userData.acess_token; // Use userData.acess_token
+
         console.log("[AUTH CONTEXT] Token recebido:", access_token);
 
         const userToStore: User = {
@@ -88,6 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           tabela: userData.tabela || 'default_table',
           storage: userData.storage || 'default_bucket',
           nome: userData.user || 'Usuário',
+          acess_token: access_token, // Adicione o token ao objeto do usuário no localStorage
         };
 
         setUser(userToStore);
@@ -112,12 +123,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
+    setToken(null); // Limpe o token ao fazer logout
     localStorage.removeItem("usuarios");
     console.log("[AUTH CONTEXT] Logout realizado com sucesso");
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isAuthLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isAuthLoading, login, logout, token }}>
       {children}
     </AuthContext.Provider>
   );

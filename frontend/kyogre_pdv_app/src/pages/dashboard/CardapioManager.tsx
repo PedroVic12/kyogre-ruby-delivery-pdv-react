@@ -504,7 +504,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [, setSelectedCategory] = useState('');
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
 
   // com o context do login, consumir a API para buscar os produtos de cada usuario. 
@@ -514,6 +514,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const nome = user?.nome;
   const tabela = user?.tabela;
   const bucket = user?.storage;
+  
   
   useEffect(() => {
     console.log("🔍 Sessão:", nome, tabela, bucket);
@@ -525,41 +526,45 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const carregarProdutos = async () => {
     try {
       setIsLoading(true);
-      const produtos = await cardapioService.buscarProdutos();
-  
-      // Agrupa produtos por categoria
-      const categoriaMap = new Map<string, { products: Product[]; color: string }>();
-      produtos.forEach((produto) => {
-        const categoria = produto.categoria || '';
-        const corCategoria =  '#000000'; // Recupera a cor da categoria ou usa preto como padrão
-        if (!categoriaMap.has(categoria)) {
-          categoriaMap.set(categoria, { products: [], color: corCategoria });
-        }
-        categoriaMap.get(categoria)?.products.push({
-          id: produto.id,
-          nome_produto: produto.nome_produto,
-          preco: produto.preco,
-          imageUrl: produto.url_imagem,
-          descricao: produto.descricao,
-          isAvailable: produto.disponivel || true,
-          categoria: produto.categoria,
-          price: undefined,
-          name: undefined,
-          description: undefined
+      if (token) {
+        const produtos = await cardapioService.buscarProdutos(token);
+
+        // Agrupa produtos por categoria
+        const categoriaMap = new Map<string, { products: Product[]; color: string }>();
+        produtos.forEach((produto) => {
+          const categoria = produto.categoria || '';
+          const corCategoria = '#000000'; // Recupera a cor da categoria ou usa preto como padrão
+          if (!categoriaMap.has(categoria)) {
+            categoriaMap.set(categoria, { products: [], color: corCategoria });
+          }
+          categoriaMap.get(categoria)?.products.push({
+            id: produto.id,
+            nome_produto: produto.nome_produto,
+            preco: produto.preco,
+            imageUrl: produto.url_imagem,
+            descricao: produto.descricao,
+            isAvailable: produto.disponivel || true,
+            categoria: produto.categoria,
+            price: undefined,
+            name: undefined,
+            description: undefined
+          });
+
         });
-      
-      });
+        // Converte o Map para o formato de categorias
+        const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, { products, color }], index) => ({
+          id: index,
+          name,
+          products,
+          color, // Usa a cor recuperada do backend
+        }));
+        setCategories(novasCategorias);
+        setIsLoading(false);
+      }
   
-      // Converte o Map para o formato de categorias
-      const novasCategorias: Category[] = Array.from(categoriaMap).map(([name, { products, color }], index) => ({
-        id: index,
-        name,
-        products,
-        color, // Usa a cor recuperada do backend
-      }));
   
-      setCategories(novasCategorias);
-      setIsLoading(false);
+
+  
     } catch (error) {
       console.error('Erro ao carregar produtos:', error);
       setIsLoading(false);
@@ -611,21 +616,26 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
           adicionais: productData.adicionais.length > 0 ? productData.adicionais : null, // Enviar null se não houver adicionais
         });
       } else {
+
+        
         // Criar novo produto
-        await cardapioService.criarProduto({
-          id: 0, // ID será gerado automaticamente
-          nome_produto: productData.name,
-          preco: productData.price,
-          categoria: productData.category,
-          url_imagem: productData.imageUrl,
-          descricao: productData.description,
-          disponivel: productData.isAvailable,
-          adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
-          isAvailable: true,
-          price: undefined,
-          name: undefined,
-          description: undefined
-        });
+        if (token){
+          await cardapioService.criarProduto({
+            id: 0, // ID será gerado automaticamente
+            nome_produto: productData.name,
+            preco: productData.price,
+            categoria: productData.category,
+            url_imagem: productData.imageUrl,
+            descricao: productData.description,
+            disponivel: productData.isAvailable,
+            adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
+            isAvailable: true,
+            price: undefined,
+            name: undefined,
+            description: undefined
+          }, token);
+        }
+
       }
   
       await carregarProdutos(); // Recarrega os produtos

@@ -14,18 +14,19 @@ class CardapioService {
   /**
    * Busca todos os produtos do cardápio
    */
-  async buscarProdutos(): Promise<Product[]> {
+  async buscarProdutos(token: string): Promise<Product[]> {
     try {
-      const response = await fetch(`${this.baseUrl}/produtos/`);
+      const response = await fetch(`${this.baseUrl}/produtos/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Incluindo o token no header
+          'Content-Type': 'application/json', // Adicionado por boa prática
+        },
+      });
       if (!response.ok) {
         throw new Error(`Erro ao buscar produtos: ${response.status} - ${response.statusText}`);
       }
       const data = await response.json();
-
-      //console.log("Buscando produtos", data);
-      //console.log("Consultando os dados no redis e jogando na api");
-
-      return data; // Directly return the parsed JSON data
+      return data;
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       throw error;
@@ -35,11 +36,12 @@ class CardapioService {
   /**
    * Cria um novo produto no cardápio
    */
-  async criarProduto(produto: Product): Promise<Product> {
+  async criarProduto(produto: Product, token: string): Promise<Product> {
     try {
       const response = await fetch(`${this.baseUrl}/produtos/`, {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${token}`, // Incluindo o token no header
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(produto),
@@ -48,7 +50,7 @@ class CardapioService {
         throw new Error(`Erro ao criar produto: ${response.status} - ${response.statusText}`);
       }
       const data = await response.json();
-      return data; // Assuming the API returns the created product directly
+      return data;
     } catch (error) {
       console.error('Erro ao criar produto:', error);
       throw error;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight } from 'lucide-react';
 import "../../index.css"
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 //import { TestePedidoButton } from "./MenuPage"
 
@@ -200,6 +201,8 @@ export function DashboardPedidosPage() {
     const [novosPedidos, setNovosPedidos] = useState<Order[]>([]); // Armazena os novos pedidos para aceitar
     const [allOrders, setAllOrders] = useState<Order[]>([]);
     const navigate = useNavigate();
+    const { token } = useAuth();
+
 
     const API_ENDPOINT = 'https://raichu-server.up.railway.app/api/pedidos/'; // Rota da sua API para buscar pedidos
 
@@ -210,7 +213,12 @@ export function DashboardPedidosPage() {
         try {
             console.log("Iniciando busca de pedidos na API:", API_ENDPOINT);
 
-            const response = await fetch(API_ENDPOINT);
+            const response = await fetch(API_ENDPOINT, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Inclua o token no header
+                    'Content-Type': 'application/json', // Boa prática incluir o Content-Type
+                },
+            });
             console.log("Status da resposta:", response.status);
 
             if (!response.ok) {
@@ -229,6 +237,9 @@ export function DashboardPedidosPage() {
                 throw new Error(`Resposta inválida da API: ${responseText}`);
             }
             setAllOrders(data);
+
+
+
             // Verificar se há novos pedidos
             const newOrders = data.filter(order => order.status === 'em processo');
             const newOrdersIds = newOrders.map(order => order.id);
