@@ -94,9 +94,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return false;
         }
 
-        const access_token = userData.acess_token; 
+        const token_login = userData.acess_token; 
 
-        console.log("[AUTH CONTEXT] Token recebido:", access_token);
+        console.log("[AUTH CONTEXT] Token recebido:", token_login);
 
         const userToStore: User = {
           ...userData,
@@ -104,16 +104,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           tabela: userData.tabela || 'default_table',
           storage: userData.storage || 'default_bucket',
           nome: userData.user || 'Usuário',
-          acess_token: access_token, // Adicione o token ao objeto do usuário no localStorage
+          acess_token: token_login, // Adicione o token ao objeto do usuário no localStorage
         };
 
         setUser(userToStore);
         setIsAuthenticated(true);
-        setToken(access_token);
+        setToken(token_login);
         console.log("[AUTH CONTEXT] Login efetuado e salvo no Storage:", userToStore);
         localStorage.setItem("usuarios", JSON.stringify(userToStore));
 
-        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token_login}`; // Configura o token padrão para todas as requisições
+        axios.defaults.headers.common['Content-Type'] = 'application/json'; // Adiciona o header Content-Type padrão
 
         return true;
       } else {
