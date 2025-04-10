@@ -88,16 +88,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (response.ok) {
         const userData = await response.json();
 
-        console.log("[AUTH CONTEXT] Dados do usuário:", userData);
-        if (!userData.acess_token) {
+        //console.log("\n[AUTH CONTEXT] Dados do usuário:", userData);
+        const token_login = userData.acess_token; 
+        //console.log("[AUTH CONTEXT] Token recebido:", token_login);
+        if (!token_login) {
           console.warn("[AUTH CONTEXT] Token de acesso não encontrado na resposta.");
           return false;
         }
+    
 
-        const token_login = userData.acess_token; 
-
-        console.log("[AUTH CONTEXT] Token recebido:", token_login);
-
+        // Salva os dados do login no storage para SESSION 1 (dev)
         const userToStore: User = {
           ...userData,
           email: userData.email || email,
@@ -110,8 +110,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(userToStore);
         setIsAuthenticated(true);
         setToken(token_login);
-        console.log("[AUTH CONTEXT] Login efetuado e salvo no Storage:", userToStore);
         localStorage.setItem("usuarios", JSON.stringify(userToStore));
+        console.log("[AUTH CONTEXT] Login efetuado e salvo no Storage:");
+        console.log(userToStore);
 
         axios.defaults.headers.common['Authorization'] = `Bearer ${token_login}`; // Configura o token padrão para todas as requisições
         axios.defaults.headers.common['Content-Type'] = 'application/json'; // Adiciona o header Content-Type padrão

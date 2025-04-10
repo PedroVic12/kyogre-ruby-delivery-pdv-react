@@ -61,7 +61,7 @@ export const LoginPageComponent: React.FC<LoginPageProps> = ({ isDebug }) => {
                 {isLogin ? (
                     <div className="bg-white p-8 rounded-xl shadow-sm">
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">Login</h2>
-                        {loginError && <p className="text-red-500 text-sm mb-2">{loginError}</p>}
+                        {loginError && <h2 className="text-red-500 text-sm mb-2">{loginError}</h2>}
                         <form onSubmit={handleLogin} className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
