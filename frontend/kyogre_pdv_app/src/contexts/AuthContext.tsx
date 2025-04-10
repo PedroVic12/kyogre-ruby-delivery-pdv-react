@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userSession = JSON.parse(session);
       setUser(userSession);
       setIsAuthenticated(true);
-      setToken(userSession.acess_token || null); // Tenta pegar o token da sessão restaurada
+      setToken(userSession.access_token || null); // Tenta pegar o token da sessão restaurada
       console.log('[AUTH CONTEXT] Sessão restaurada:', userSession);
     }
     setIsAuthLoading(false);
@@ -89,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const userData = await response.json();
 
         //console.log("\n[AUTH CONTEXT] Dados do usuário:", userData);
-        const token_login = userData.acess_token; 
+        const token_login = userData.access_token; 
         //console.log("[AUTH CONTEXT] Token recebido:", token_login);
         if (!token_login) {
           console.warn("[AUTH CONTEXT] Token de acesso não encontrado na resposta.");
@@ -104,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           tabela: userData.tabela || 'default_table',
           storage: userData.storage || 'default_bucket',
           nome: userData.user || 'Usuário',
-          acess_token: token_login, // Adicione o token ao objeto do usuário no localStorage
+          access_token: token_login, // Adicione o token ao objeto do usuário no localStorage
         };
 
         setUser(userToStore);
