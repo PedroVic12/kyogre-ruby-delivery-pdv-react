@@ -142,7 +142,7 @@ const ProductModal = ({
 
   const folder_name = useAuth().user?.storage;
 
-  console.log("🔍 Folder Name:", folder_name);
+  //console.log("🔍 Folder Name:", folder_name);
 
   
   const handleAddAdicional = () => {
@@ -514,10 +514,11 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const nome = user?.nome;
   const tabela = user?.tabela;
   const bucket = user?.storage;
+  const email_user = user?.email;
   
   
   useEffect(() => {
-    console.log("🔍 Sessão:", nome, tabela, bucket);
+    console.log("🔍 Sessão Atual:", email_user, nome, tabela, bucket);
 
     carregarProdutos();
 

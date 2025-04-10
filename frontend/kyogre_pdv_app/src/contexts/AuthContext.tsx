@@ -36,8 +36,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userSession = JSON.parse(session);
       setUser(userSession);
       setIsAuthenticated(true);
-      setToken(userSession.access_token || null); // Tenta pegar o token da sessão restaurada
-      console.log('[AUTH CONTEXT] Sessão restaurada:', userSession);
+      setToken(userSession.access_token || null); // Tenta pegar o token do usuário que fez o login 
+      //console.log('[AUTH CONTEXT] Sessão restaurada:', userSession);
     }
     setIsAuthLoading(false);
   }, []);

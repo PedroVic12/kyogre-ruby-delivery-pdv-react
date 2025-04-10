@@ -31,6 +31,8 @@ const CardapioPDV = () => {
   const [categories, setCategories] = useState<Category[]>([]); // State to hold categories from repository
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
   const tabsRef = useRef<HTMLDivElement>(null);
+  const [people, setPeople] = useState<{ id: string, name: string }[]>([]);
+  const [selectedEntityId, setSelectedEntityId] = useState<string>('mesa'); // Começa com 'mesa' selecionado por padrão? Ou null?
 
 
   useEffect(() => {
@@ -172,6 +174,7 @@ const CardapioPDV = () => {
     </div>; // Simple loading message
   }
 
+  
 
 
   return (
