@@ -291,6 +291,8 @@ export function DashboardPedidosPage() {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Inclua o token no header
+
                     },
                 });
 
@@ -331,6 +333,8 @@ export function DashboardPedidosPage() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`, // Inclua o token no header
+
                 },
             });
             if (!response.ok) {
