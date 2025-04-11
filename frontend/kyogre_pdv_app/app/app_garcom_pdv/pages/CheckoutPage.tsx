@@ -25,7 +25,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     if (pedido) {
-      TableController.getInstance().updateTableStatus(pedido.id, 'closing');
+      TableController.getInstance().updateTableStatus(pedido.id, 'finalizando');
     }
   }, [pedido]);
 
@@ -36,7 +36,7 @@ const CheckoutPage = () => {
 
   const handleFinalizarImprimir = () => {
     if (pedido) {
-      TableController.getInstance().updateTableStatus(pedido.id, 'free');
+      TableController.getInstance().updateTableStatus(pedido.id, 'livre');
       alert("Gerando arquivo pdf...")
       
       navigate('/pedido_pdf' );
@@ -62,7 +62,7 @@ const CheckoutPage = () => {
 
       pedidoController.fazerPedido(pedidoToSend,token);
       pedidoController.updatePaymentMethod(pedido.id, selectedMethod as never);
-      TableController.getInstance().updateTableStatus(pedido.id, 'free');
+      TableController.getInstance().updateTableStatus(pedido.id, 'livre');
 
       //alert('Pedido enviado!');
       navigate('/');
@@ -75,9 +75,9 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold mb-6">Formas de pagamento</h1>
+    <div className="max-w-screen-md mx-auto min-h-screen bg-gray-400 p-4 flex items-center justify-center">
+      <div className="max-w-screen-md mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 className="text-3xl font-bold mb-6 text-center">Formas de pagamento</h1>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           {PaymentMethods.map((method) => (
@@ -85,7 +85,7 @@ const CheckoutPage = () => {
               key={method.id}
               className={`p-4 rounded-lg text-center transition-colors ${selectedMethod === method.id
                   ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 hover:bg-gray-200'
+                  : 'bg-gray-100 hover:bg-gray-300'
                 }`}
               onClick={() => setSelectedMethod(method.id)}
             >

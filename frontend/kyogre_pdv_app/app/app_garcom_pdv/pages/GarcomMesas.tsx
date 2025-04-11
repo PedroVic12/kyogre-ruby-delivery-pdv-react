@@ -11,7 +11,7 @@ const GarcomMesas = () => {
   const tableController = TableController.getInstance();
 
   useEffect(() => {
-    localStorage.clear();
+    //localStorage.clear();
     console.log('[DEBUG] Componente montado');
     console.log('[DEBUG] Inicializando TableController:', tableController);
 
@@ -60,7 +60,7 @@ const GarcomMesas = () => {
       case 'ocupada':
         return 'bg-red-600';
       case 'finalizando':
-        return 'bg-orange-600';
+        return 'bg-orange-500';
       default:
         return 'bg-green-600';
     }
@@ -123,7 +123,7 @@ const GarcomMesas = () => {
                 onClick={() => handleCreateOrder(table.id)}
                 className="mt-2 w-full bg-blue-500 hover:bg-blue-600 py-2 rounded-md transition-colors"
               >
-                Criar Pedido
+                Acompanhar Pedido
               </button>
             </div>
           ))}

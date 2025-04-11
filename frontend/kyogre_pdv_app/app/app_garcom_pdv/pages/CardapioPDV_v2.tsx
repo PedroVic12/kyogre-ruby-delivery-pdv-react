@@ -254,6 +254,8 @@ const CartDisplay: React.FC<CartDisplayProps> = ({
 // Componente principal
 const CardapioSistemaPDV = () => {
   const pedidoController = PedidoController.getInstance();
+  const tableController = TableController.getInstance();
+  
 
   const { mesa } = useParams<{ mesa: string }>();
   const navigate = useNavigate();
@@ -290,6 +292,7 @@ const CardapioSistemaPDV = () => {
     if (!cardapioService) {
       console.error("Serviço de cardápio não inicializado (sem token?)");
       setIsLoading(false);
+      navigate("/login")
       return;
     }
 
@@ -464,11 +467,14 @@ const CardapioSistemaPDV = () => {
     );
 
     try {
+      tableController.updateTableStatus(mesa?.length ? Number(mesa) : 0, 'finalizando');
+
 
        const novoPedidoPDV = pedidoController.createPedido({
          //nome_cliente: people.find(p => p.id === selectedPersonId)?.name || "mesa",
          nome_cliente:nomeCliente,
-         complemento: `Nome dos clientes: ${pessoas.map(p => p.name).join(', ')}`,
+         //complemento: `Nome dos clientes: ${pessoas.map(p => p.name).join(', ')}`,
+         complemento: pessoas.map(p => p.name).join(', ').toUpperCase(),
          total_pagar: calculateTotalGeral(),
          data_pedido: {
            data: dataHoraPedido["data"],
