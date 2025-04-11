@@ -7,14 +7,13 @@ import { Fab, Dialog, DialogTitle, DialogContent, TextField, Tabs, Tab, AppBar, 
 import { Product, Category } from "../../../src/types/menu"
 import CardapioService from '../../../src/controllers/cardapio_controller';
 import { useAuth } from '../../../src/contexts/AuthContext';
+import PessoasChips from '../widgets/PessoasChip';
 
 interface CartItem extends Product { // CartItem now extends Product
   quantity: number;
 }
 
-
 //!Loading o controlador do cardapio pegando do supabase
-
 const pedidoController = PedidoController.getInstance();
 
 
@@ -30,13 +29,13 @@ const CardapioPDV = () => {
   const [categories, setCategories] = useState<Category[]>([]); // State to hold categories from repository
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
   const tabsRef = useRef<HTMLDivElement>(null);
-  const [people, setPeople] = useState<{ id: string, name: string }[]>([]);
-  const [selectedEntityId, setSelectedEntityId] = useState<string>('mesa'); // Começa com 'mesa' selecionado por padrão? Ou null?
-
+  const [cartsByPerson, setCartsByPerson] = useState<Record<string, CartItem[]>>({});
+  const [selectedPersonId, setSelectedPersonId] = useState<string>('mesa');
+  
   const {token} = useAuth()
   const productRepository = new CardapioService(token);
 
-  
+
   useEffect(() => {
     const loadProducts = async () => {
       setIsLoading(true);
@@ -96,24 +95,7 @@ const CardapioPDV = () => {
     navigate(`/checkout/${newPedido.id}`);
   };
 
-  //! metodos do carrinho
 
-  // Validação dos nomes das pessoas
-  // const validatePeopleNames = (): boolean => {
-  //   const nameList = peopleNames
-  //     .split(',')
-  //     .map(name => name.trim())
-  //     .filter(name => name.length > 0);
-  //   return nameList.length === customersCount;
-  // };
-
-  // // Função para obter array de nomes limpos
-  // const getPeopleNamesList = (): string[] => {
-  //   return peopleNames
-  //     .split(',')
-  //     .map(name => name.trim())
-  //     .filter(name => name.length > 0);
-  // };
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + (item.preco * item.quantity), 0);
@@ -273,6 +255,8 @@ const CardapioPDV = () => {
             placeholder="Nome do cliente"
           />
         </div>
+        
+        <PessoasChips></PessoasChips>
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
