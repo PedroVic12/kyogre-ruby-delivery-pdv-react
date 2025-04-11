@@ -13,18 +13,19 @@ COPY frontend/kyogre_pdv_app/vite.config.ts ./
 COPY frontend/kyogre_pdv_app/tsconfig.json ./
 
 # Instala as dependências do frontend - ALL INSTALLS IN ONE RUN FOR CLEANER DOCKERFILE
-RUN npm install --force \  
+RUN npm install --force \
     @mui/material \
     @emotion/react \
     @emotion/styled \
     @mui/icons-material \
     @ionic/react \
     @types/sqlite3 \
-    @types/bcrypt \   
-    uuidv4 \               
-    sqlite \ 
+    @types/bcrypt \
+    uuidv4 \
+    sqlite \
     lucide-react \
     framer-motion \
+    react-magic-motion \
     axios \
     react-hot-toast \
     plotly.js \
@@ -70,7 +71,7 @@ COPY backend/server .
 # ==============================
 # FINALIZAÇÃO - EXECUTANDO AMBOS (MULTI-SERVICE)
 # ==============================
-FROM node:20.13.1-bookworm-slim AS final 
+FROM node:20.13.1-bookworm-slim AS final
 
 WORKDIR /app
 
