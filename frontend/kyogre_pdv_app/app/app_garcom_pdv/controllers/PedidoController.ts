@@ -1,4 +1,7 @@
 //PedidoCOntroller.ts
+
+import { useAuth } from "../../../src/contexts/AuthContext";
+
 // src/types/menu.ts
 export interface Adicional {
   nome_adicional: string;
@@ -86,6 +89,7 @@ export interface PedidoMesa {
     preco: number;
   }[];
 }
+const { token } = useAuth();
 
 class PedidoController {
   private static instance: PedidoController;
@@ -100,9 +104,11 @@ class PedidoController {
     return PedidoController.instance;
   }
 
+
   fazerPedido = async (pedidoData: PedidoMesa) => {
     console.log('Iniciando envio do pedido de teste...');
     console.log('Dados do pedido:', pedidoData);
+    console.log('Token:', token);
 
     try {
       const resposta = await fetch('https://raichu-server.up.railway.app/api/pedidos/', {
@@ -110,6 +116,7 @@ class PedidoController {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(pedidoData),
       });
@@ -120,7 +127,7 @@ class PedidoController {
         const data = await resposta.json();
         console.log('Pedido criado com sucesso:', data);
 
-        alert('Pedido criado com sucesso!');
+        alert('Pedido enviado com sucesso!');
       } else {
         const erroTexto = await resposta.text();
         console.error('Erro ao criar pedido:', erroTexto);

@@ -56,7 +56,6 @@ const CheckoutPage = () => {
       TableController.getInstance().updateTableStatus(pedido.id, 'free');
 
       //alert('Pedido enviado!');
-
       navigate('/');
 
     } else {
