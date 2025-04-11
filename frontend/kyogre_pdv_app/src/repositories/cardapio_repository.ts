@@ -1,17 +1,16 @@
-// src/repositories/cardapio_repository.ts
-import { cardapioService } from "../controllers/cardapio_controller";
-import { Category, Product } from '../types/menu';
+import CardapioService from "../controllers/cardapio_controller";
+import { Category, Product } from "../types/menu";
 
-class ProductCardapioRepository {
-  private categoriesCache: Category[] | null = null;
+// productCardapioRepository.ts
+export const createProductCardapioRepository = (token: string) => {
+  const cardapioService = new CardapioService(token);
 
-  public async fetchProducts(): Promise<Category[]> {
+  const fetchProducts = async (): Promise<Category[]> => {
     try {
       const produtosDoServico = await cardapioService.buscarProdutos();
-
       const categoriaMap = new Map<string, Product[]>();
+
       produtosDoServico.forEach((produto) => {
-        // Ensure produto.adicionais is an array or undefined
         const adicionais = Array.isArray(produto.adicionais)
           ? produto.adicionais.map((adicional: any) => ({
               nome_adicional: adicional.nome_adicional || "",
@@ -19,39 +18,34 @@ class ProductCardapioRepository {
             }))
           : [];
 
-        if (!categoriaMap.has(produto.categoria)) {
+        if (produto.categoria && !categoriaMap.has(produto.categoria)) {
           categoriaMap.set(produto.categoria, []);
         }
-        categoriaMap.get(produto.categoria)?.push({
-          id: produto.id,
-          name: produto.nome_produto,
-          price: produto.preco,
-          imageUrl: produto.url_imagem,
-          description: produto.descricao,
-          isAvailable: produto.disponivel,
-          adicionais: adicionais,
-          categoria: produto.categoria
-        });
+        if (produto.categoria) {
+          categoriaMap.get(produto.categoria)?.push({
+            id: produto.id,
+            nome_produto: produto.nome_produto,
+            preco: produto.preco,
+            url_imagem: produto.url_imagem,
+            description: produto.descricao,
+            isAvailable: produto.disponivel ?? true,
+            adicionais,
+            categoria: produto.categoria,
+          });
+        }
       });
 
-      const categorias: Category[] = Array.from(categoriaMap).map(([name, products], index) => ({
+      return Array.from(categoriaMap).map(([name, products], index) => ({
         id: index,
         name,
-        products
+        products,
+        color: 'black'
       }));
-
-      this.categoriesCache = categorias;
-      return categorias;
-
     } catch (error) {
-      console.error('Error fetching and formatting products in ProductRepository:', error);
+      console.error('Erro ao buscar produtos:', error);
       throw error;
     }
-  }
+  };
 
-  public getCategoriesFromCache(): Category[] | null {
-    return this.categoriesCache;
-  }
-}
-
-export default ProductCardapioRepository;
+  return { fetchProducts };
+};

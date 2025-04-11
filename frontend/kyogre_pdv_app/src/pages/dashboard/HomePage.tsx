@@ -16,7 +16,8 @@ interface OrderPedidos {
 export function HomePage() {
   const [orders, setOrders] = useState<OrderPedidos[]>([]);
   const [loading, setLoading] = useState(true);
-  const token = useAuth
+  const context = useAuth()
+  const token = context.token; // Obter o token do contexto de autenticação
 
   useEffect(() => {
     const fetchOrders = async () => {

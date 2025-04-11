@@ -1,14 +1,16 @@
-import { Product } from "../types/menu";
-import { useAuth } from "../contexts/AuthContext";
+import { Category, Product } from "../types/menu";
 
-class CardapioService {
+export default class CardapioService {
   private baseUrl: string = 'https://raichu-server.up.railway.app/api';
+  private token: string | null;
+
+  constructor(token: string | null) {
+    this.token = token;
+  }
 
   private getAuthHeaders(): HeadersInit {
-    const context = useAuth();
-    const token = context.token;
     return {
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     };
   }
@@ -54,6 +56,48 @@ class CardapioService {
       method: 'DELETE',
       headers: this.getAuthHeaders(),
     });
+  }
+
+  async fetchProdutosCardapioDigital(): Promise<Category[]> {
+    try {
+      const produtosDoServico = await this.buscarProdutos();
+      const categoriaMap = new Map<string, Product[]>();
+
+      produtosDoServico.forEach((produto) => {
+        const adicionais = Array.isArray(produto.adicionais)
+          ? produto.adicionais.map((adicional: any) => ({
+              nome_adicional: adicional.nome_adicional || "",
+              preco: adicional.preco || 0,
+            }))
+          : [];
+
+        if (produto.categoria && !categoriaMap.has(produto.categoria)) {
+          categoriaMap.set(produto.categoria, []);
+        }
+        if (produto.categoria) {
+          categoriaMap.get(produto.categoria)?.push({
+            id: produto.id,
+            nome_produto: produto.nome_produto,
+            preco: produto.preco,
+            url_imagem: produto.url_imagem,
+            description: produto.descricao,
+            isAvailable: produto.disponivel ?? true,
+            adicionais,
+            categoria: produto.categoria,
+          });
+        }
+      });
+
+      return Array.from(categoriaMap).map(([name, products], index) => ({
+        id: index,
+        name,
+        products,
+        color: 'black'
+      }));
+    } catch (error) {
+      console.error('Erro ao montar cardápio digital:', error);
+      throw error;
+    }
   }
 
   async buscarFotoStorage(): Promise<any[]> {
@@ -149,4 +193,3 @@ class CardapioService {
   }
 }
 
-export const cardapioService = new CardapioService();

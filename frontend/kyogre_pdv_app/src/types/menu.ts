@@ -5,16 +5,13 @@ export interface Adicional {
 }
 
 export interface Product {
-  price: any;
-  name: any;
-  description: any;
   id: number;
   nome_produto: string;
   preco: number;
-  imageUrl?: string;
+  description: any;
+  categoria?: string;
   isAvailable: boolean;
   adicionais?: Adicional[]; //! Changed to an array of Adicional objects
-  categoria?: string;
   url_imagem?: string;
   descricao?: string;
   disponivel?: boolean;

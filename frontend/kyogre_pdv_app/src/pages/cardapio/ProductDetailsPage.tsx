@@ -17,8 +17,9 @@ import {
 import { ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../../contexts/CartContext'; // Importar do contexto global
-import ProductCardapioRepository from '../../repositories/cardapio_repository';
 import { Product } from '../../types/menu';
+import CardapioService from '../../controllers/cardapio_controller';
+import { useAuth } from '../../contexts/AuthContext';
 
 export const ProductDetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -27,14 +28,16 @@ export const ProductDetailsPage: React.FC = () => {
   const [item, setItem] = useState<Product | undefined>(undefined);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const productCardapioRepository = new ProductCardapioRepository();
+  const { token } = useAuth();
+
+  const productCardapioRepository = new CardapioService(token);
 
   useEffect(() => {
     const loadProduct = async () => {
       setIsLoading(true);
       try {
         if (id) {
-          const fetchedCategories = await productCardapioRepository.fetchProducts();
+          const fetchedCategories = await productCardapioRepository.fetchProdutosCardapioDigital();
           const allProds: Product[] = fetchedCategories.flatMap(cat => cat.products);
           const product = allProds.find(prod => prod.id === Number(id));
           setItem(product);
@@ -74,7 +77,7 @@ export const ProductDetailsPage: React.FC = () => {
         }
       });
     }
-    return item.price + addonsTotal;
+    return item.preco + addonsTotal;
   };
 
   const handleAddToCart = () => {
@@ -112,15 +115,15 @@ export const ProductDetailsPage: React.FC = () => {
           >
             <ArrowLeft />
           </IconButton>
-          <Typography variant="h3" >{item.name}</Typography>
+          <Typography variant="h3" >{item.nome_produto}</Typography>
         </Toolbar>
       </AppBar>
 
       <Container maxWidth="sm" sx={{ mt: 2 }}>
         <Box
           component="img"
-          src={item.imageUrl}
-          alt={item.name}
+          src={item.url_imagem}
+          alt={item.nome_produto}
           sx={{
             width: '100%',
             height: 300,
@@ -136,7 +139,7 @@ export const ProductDetailsPage: React.FC = () => {
         </Typography>
 
         <Typography variant="h6" color="success" gutterBottom>
-         Preço: R$ {item.price.toFixed(2) } 
+         Preço: R$ {item.preco.toFixed(2) } 
         </Typography>
 
         {item.adicionais && Array.isArray(item.adicionais) && item.adicionais.length > 0 && (

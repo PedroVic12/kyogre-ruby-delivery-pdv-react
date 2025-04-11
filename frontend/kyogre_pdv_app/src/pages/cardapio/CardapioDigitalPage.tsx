@@ -15,9 +15,10 @@ import { SearchBar } from '../../components/cardapio/SearchBar';
 import { FeaturedCarousel } from '../../components/cardapio/FeaturedCarousel';
 import { useNavigate } from 'react-router-dom';
 import { MenuCard } from '../../components/cardapio/MenuCard';
-import ProductCardapioRepository from '../../repositories/cardapio_repository';
 import { Category, Product } from '../../types/menu';
 import { useCart } from '../../contexts/CartContext';
+import { useAuth } from '../../contexts/AuthContext';
+import CardapioService from '../../controllers/cardapio_controller';
 
 export const CardapioDigitalPage: React.FC = () => {
   const navigate = useNavigate();
@@ -30,9 +31,9 @@ export const CardapioDigitalPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [pedidoId, setPedidoId] = useState<number | null>(null); // Estado para o ID do pedido
 
-  const productRepository = new ProductCardapioRepository();
-
-  //const pedidoController = PedidoController.getInstance();
+  const { token } = useAuth();
+  
+  const cardapioService = new CardapioService(token);
 
 
   useEffect(() => {
@@ -41,11 +42,14 @@ export const CardapioDigitalPage: React.FC = () => {
     setPedidoId(generatedId);
 
     const loadProducts = async () => {
+
       setIsLoading(true);
       try {
-        const fetchedCategories = await productRepository.fetchProducts();
+        const fetchedCategories = await cardapioService.fetchProdutosCardapioDigital();
+        //console.log("Fetched categories:", fetchedCategories);
         setCategories(fetchedCategories);
         const allProds: Product[] = fetchedCategories.flatMap(cat => cat.products);
+        //console.log("All products:", allProds);
         setAllProducts(allProds);
         if (fetchedCategories.length > 0) {
           setSelectedCategory(fetchedCategories[0].name);
@@ -62,7 +66,7 @@ export const CardapioDigitalPage: React.FC = () => {
 
   const featuredProducts = useMemo(() => {
     return [...allProducts]
-      .sort((a, b) => b.price - a.price)
+      .sort((a, b) => b.preco - a.preco)
       .slice(0, 5);
   }, [allProducts]);
 
@@ -75,7 +79,7 @@ export const CardapioDigitalPage: React.FC = () => {
     if (!searchQuery) return categoryProducts;
 
     return categoryProducts.filter(product =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.nome_produto.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [allProducts, selectedCategory, searchQuery]);

@@ -65,8 +65,8 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
             <CardMedia
               component="img"
               height={isMobile ? "100" : "200"}
-              image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
-              alt={item.name}
+              image={item.url_imagem || ""} // Use url_imagem and provide a default empty string
+              alt={item.nome_produto}
               sx={{
                 objectFit: 'contain',
                 transition: 'transform 0.3s ease',
@@ -93,7 +93,7 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
                   lineHeight: { xs: '1.2', sm: '1.5' }
                 }}
               >
-                {item.name}
+                {item.nome_produto}
               </Typography>
               <Typography
                 variant="subtitle1"
@@ -102,7 +102,7 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({ items }) => 
                   lineHeight: { xs: '1.2', sm: '1.5rem' }
                 }}
               >
-                R$ {item.price.toFixed(2)}
+                R$ {item.preco.toFixed(2)}
               </Typography>
             </Box>
           </Card>

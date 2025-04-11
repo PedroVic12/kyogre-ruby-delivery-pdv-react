@@ -4,10 +4,9 @@ import { Plus, Minus, NavigationIcon } from 'lucide-react';
 import PedidoController from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
 import { Fab, Dialog, DialogTitle, DialogContent, TextField, Tabs, Tab, AppBar, Toolbar, Typography, Box, CircularProgress } from '@mui/material';
-
-import ProductCardapioRepository from "../../../src/repositories/cardapio_repository"; // Import ProductRepository and types
-
 import { Product, Category } from "../../../src/types/menu"
+import CardapioService from '../../../src/controllers/cardapio_controller';
+import { useAuth } from '../../../src/contexts/AuthContext';
 
 interface CartItem extends Product { // CartItem now extends Product
   quantity: number;
@@ -15,7 +14,7 @@ interface CartItem extends Product { // CartItem now extends Product
 
 
 //!Loading o controlador do cardapio pegando do supabase
-const productRepository = new ProductCardapioRepository();
+
 const pedidoController = PedidoController.getInstance();
 
 
@@ -34,12 +33,15 @@ const CardapioPDV = () => {
   const [people, setPeople] = useState<{ id: string, name: string }[]>([]);
   const [selectedEntityId, setSelectedEntityId] = useState<string>('mesa'); // Começa com 'mesa' selecionado por padrão? Ou null?
 
+  const {token} = useAuth()
+  const productRepository = new CardapioService(token);
 
+  
   useEffect(() => {
     const loadProducts = async () => {
       setIsLoading(true);
       try {
-        const fetchedCategories = await productRepository.fetchProducts();
+        const fetchedCategories = await productRepository.fetchProdutosCardapioDigital();
         setCategories(fetchedCategories);
         if (fetchedCategories.length > 0) {
           setActiveTab(fetchedCategories[0].name.toLowerCase()); // Set initial tab to the first category
@@ -77,8 +79,8 @@ const CardapioPDV = () => {
 
     const carrinho = cart.map(item => ({
       quantidade: item.quantity,
-      nome: item.name,
-      preco: item.price,
+      nome: item.nome_produto,
+      preco: item.preco,
     }));
 
     const newPedido = pedidoController.createPedido({
@@ -114,7 +116,7 @@ const CardapioPDV = () => {
   // };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cart.reduce((total, item) => total + (item.preco * item.quantity), 0);
   };
 
   const addToCart = (item: Product) => { // item is now of type Product
@@ -209,14 +211,14 @@ const CardapioPDV = () => {
             {cart.map((item) => (
               <div key={item.id} className="flex justify-between items-center">
                 <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {item.imageUrl ?
-                    <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
+                  {item.url_imagem ?
+                    <img src={item.url_imagem} alt={item.nome_produto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
                     <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
                   }
                 </Box>
                 <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-500">R$ {item.price.toFixed(2)}</p>
+                  <p className="font-medium">{item.nome_produto}</p>
+                  <p className="text-sm text-gray-500">R$ {item.preco.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -291,14 +293,14 @@ const CardapioPDV = () => {
           {cart.map((item) => (
             <div key={item.id} className="flex justify-between items-center">
               <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {item.imageUrl ?
-                  <img src={item.imageUrl} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
+                {item.url_imagem ?
+                  <img src={item.url_imagem} alt={item.nome_produto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> :
                   <Box sx={{ width: '100%', height: '100%', border: '1px solid #ccc' }} />
                 }
               </Box>
               <div>
-                <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-gray-500">R$ {item.price.toFixed(2)}</p>
+                <p className="font-medium">{item.nome_produto}</p>
+                <p className="text-sm text-gray-500">R$ {item.preco.toFixed(2)}</p>
               </div>
               <div className="flex items-center gap-2">
                 <button
@@ -400,19 +402,19 @@ const CardapioPDV = () => {
 
 
               <img
-                src={item.imageUrl}
-                alt={item.name}
+                src={item.url_imagem}
+                alt={item.nome_produto}
                 className="w-full h-40 object-cover"
               />
               <div className="p-4">
-                <h2 className="font-semibold">{item.name}</h2>
-                <p className="text-gray-100 font-semibold">R$ {item.price.toFixed(2)}</p>
+                <h2 className="font-semibold">{item.nome_produto}</h2>
+                <p className="text-gray-100 font-semibold">R$ {item.preco.toFixed(2)}</p>
                 <br />
                 <button
                   onClick={() => addToCart(item)}
                   className="bg-emerald-700 hover:bg-purple-900 text-white font-bold py-2 px-3 border-b-6 border-emerald-700 hover:border-red-500 rounded"
                 >
-                  Adicionar
+                  Adicionar 
                 </button>
               </div>
             </div>

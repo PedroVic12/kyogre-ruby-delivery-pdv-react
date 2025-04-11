@@ -9,7 +9,7 @@ interface CartContextType {
   items: CartItem[];
   total: number;
   itemCount: number;
-  addToCart: (menuItem: Product & { adicionais?: any[]; price: number }) => void;
+  addToCart: (menuItem: Product & { adicionais?: any[]; preco: number }) => void;
   removeFromCart: (itemId: number) => void;
   updateQuantity: (itemId: number, quantity: number) => void;
 }
@@ -19,7 +19,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
-  const addToCart = useCallback((menuItem: Product & { adicionais?: any[]; price: number }) => {
+  const addToCart = useCallback((menuItem: Product & { adicionais?: any[]; preco: number }) => {
     setItems(currentItems => {
       const existingItem = currentItems.find(item =>
         item.id === menuItem.id &&
@@ -57,7 +57,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     );
   }, []);
 
-  const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const total = items.reduce((sum, item) => sum + (item.preco * item.quantity), 0);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (

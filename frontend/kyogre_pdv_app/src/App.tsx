@@ -1,7 +1,6 @@
 // App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
-import { MenuPage } from './pages/dashboard/MenuPage';
 import { ClientsPage } from './pages/dashboard/ClientsPage';
 import { LoginPageComponent } from './pages/dashboard/LoginPage';
 import { ChatPage } from './pages/dashboard/ChatPage';
@@ -84,7 +83,7 @@ function App() {
                                         <main className="p-4 sm:p-6 md:p-8 pt-16">
                                             <Routes>
                                                 <Route index element={<DashboardPedidosPage />} />
-                                                <Route path="produtos" element={<MenuPage />} />
+                                                {/* <Route path="produtos" element={<MenuPage />} /> */}
                                                 <Route path="clientes" element={<ClientsPage />} />
                                                 <Route path="pedidos" element={<HomePage />} />
                                                 <Route path="atendimento" element={<ChatPage />} />

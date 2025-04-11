@@ -27,7 +27,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Category, Product, Adicional} from '../../types/menu';
-import { cardapioService } from '../../controllers/cardapio_controller';
+import  CardapioService  from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import {FloatActionButton} from '../../components/ui/FloatActionButton';
@@ -506,6 +506,8 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
   const { user, token } = useAuth();
 
+  const cardapioService = new CardapioService(token);
+  
 
   // com o context do login, consumir a API para buscar os produtos de cada usuario. 
 
@@ -567,7 +569,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
         setIsLoading(false); // Se não houver token, também deve parar o loading
       }
     } catch (error) {
-      console.error('Erro ao carregar produtos:', error);
+      console.error('\nErro ao carregar produtos:', error);
       setIsLoading(false); // Certifique-se de que está aqui em caso de erro
     }
   };

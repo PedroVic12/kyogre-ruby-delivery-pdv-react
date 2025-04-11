@@ -41,12 +41,12 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
       <CardMedia
         component="img"
         sx={{ width: 120, height: 120, objectFit: 'contain',  }}
-        image={item.imageUrl || ""} // Use url_imagem and provide a default empty string
-        alt={item.name}
+        image={item.url_imagem || ""} // Use url_imagem and provide a default empty string
+        alt={item.nome_produto}
       />
       <CardContent sx={{ flex: 1, backgroundColor: indigo[100], borderRadius: 1  }}>
         <Typography variant="h6" component="div">
-          {item.name}
+          {item.nome_produto}
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 1 }}>
           {item.description}
@@ -54,7 +54,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item, onAddToCart, onClick }
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }}>
 
           <Typography variant="h6"color="success">
-            R$ {item.price.toFixed(2)}
+            R$ {item.preco.toFixed(2)}
           </Typography>
           <Button
             variant="contained"
