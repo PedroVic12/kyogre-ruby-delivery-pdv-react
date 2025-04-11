@@ -1,6 +1,7 @@
 import { Card } from '../../components/ui/Card';
 import { OrdersTable } from '../../components/OrdersTable';
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Definir o tipo esperado pelo OrdersTable
 interface OrderPedidos {
@@ -15,11 +16,18 @@ interface OrderPedidos {
 export function HomePage() {
   const [orders, setOrders] = useState<OrderPedidos[]>([]);
   const [loading, setLoading] = useState(true);
+  const token = useAuth
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('https://raichu-server.up.railway.app/api/pedidos/status/finalizados');
+        const response = await fetch('https://raichu-server.up.railway.app/api/pedidos/status/finalizados',{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // Inclua o token no header
+            'Content-Type': 'application/json', // Boa prática incluir o Content-Type
+        },
+        });
 
         // Verificar se a resposta é válida
         if (!response.ok) {
