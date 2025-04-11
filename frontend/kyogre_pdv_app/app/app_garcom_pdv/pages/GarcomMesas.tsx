@@ -11,15 +11,25 @@ const GarcomMesas = () => {
   const tableController = TableController.getInstance();
 
   useEffect(() => {
+    localStorage.clear();
+    console.log('[DEBUG] Componente montado');
+    console.log('[DEBUG] Inicializando TableController:', tableController);
+
     // Atualizar o estado local quando o estado das mesas mudar
     const interval = setInterval(() => {
-      setTables(tableController.getTables());
-    }, 500);
+      const currentTables = tableController.getTables();
+      console.log('[DEBUG] Mesas carregadas do TableController:', currentTables);
+      setTables(currentTables);
+    }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      console.log('[DEBUG] Componente desmontado');
+      clearInterval(interval);
+    };
   }, []);
 
   const handleCallWaiter = (tableId: number): void => {
+    console.log(`[DEBUG] Chamando garçom para a mesa ${tableId}`);
     tableController.updateTableStatus(tableId, 'finalizando');
     toast.success(`Garçom chamado para a Mesa ${tableId}`, {
       icon: '🔔',
@@ -29,13 +39,23 @@ const GarcomMesas = () => {
   };
 
   const handleTableAction = (tableId: number, status: Table['status']): void => {
+    console.log(`[DEBUG] Ação na mesa ${tableId} com status ${status}`);
     if (status === 'livre') {
       tableController.updateTableStatus(tableId, 'ocupada', 0);
     }
     navigate(`/pdv/${tableId}`);
   };
 
+  const handleCreateOrder = (tableId: number) => {
+    toast.success(`Pedido criado para a Mesa ${tableId}`, {
+      icon: '📝',
+      duration: 3000,
+      position: 'top-center',
+    });
+  };
+
   const getTableColor = (status: Table['status']): string => {
+    console.log(`[DEBUG] Obtendo cor para o status ${status}`);
     switch (status) {
       case 'ocupada':
         return 'bg-red-600';
@@ -98,6 +118,12 @@ const GarcomMesas = () => {
                 className="mt-3 w-full bg-white/20 hover:bg-white/30 py-2 rounded-md transition-colors"
               >
                 {table.status === 'livre' ? 'Abrir Mesa' : 'Ver Pedidos'}
+              </button>
+              <button
+                onClick={() => handleCreateOrder(table.id)}
+                className="mt-2 w-full bg-blue-500 hover:bg-blue-600 py-2 rounded-md transition-colors"
+              >
+                Criar Pedido
               </button>
             </div>
           ))}

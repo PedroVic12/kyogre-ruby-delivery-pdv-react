@@ -208,7 +208,7 @@ class PedidoController {
     const savedPedidos = localStorage.getItem('pedidos');
     if (savedPedidos) {
       this.pedidos = JSON.parse(savedPedidos);
-      console.log("Historico Salvo carregado",this.pedidos)
+      console.log("\n\nHistorico de Pedidos Salvo no Storage carregado",this.pedidos)
     }
   }
 }

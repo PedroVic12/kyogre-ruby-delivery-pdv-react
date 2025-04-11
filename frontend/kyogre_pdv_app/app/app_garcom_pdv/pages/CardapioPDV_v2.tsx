@@ -439,17 +439,22 @@ const CardapioSistemaPDV = () => {
     }
 
 
+    //Pegamdp oss dados
+    const nomeCliente = people.find(p => p.id === selectedPersonId)?.name || `MESA ${mesa ? mesa.charAt(0).toUpperCase() + mesa.slice(1) : 'N/A'}`;
     const now = new Date();
     const dataHoraPedido = {
       data: `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`,
       hora: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
     };
 
+    const pessoas = people.filter(p => p.id !== selectedPersonId)
+    console.log(pessoas)
+
+    // Pegando os dados do carrinho
+    cartsByPerson[mesa ? mesa.charAt(0).toUpperCase() + mesa.slice(1) : 'N/A'] = itemsParaEntidadeSelecionada;
+
     const pedidosCarrinho = cartsByPerson.mesa.map(
       (item) => {
-        console.log(item.quantity)
-        console.log(item.nome_produto)
-        console.log(item.preco)
         return {
           quantidade: item.quantity,
           nome: item.nome_produto,
@@ -458,18 +463,12 @@ const CardapioSistemaPDV = () => {
       }
     );
 
-
-    console.log("Carrinho", cartsByPerson.mesa)
-    console.log(people.values)
-      
-
-    // --- TODO: Adaptar Controller/Backend para receber esta estrutura ---
     try {
 
-
        const novoPedidoPDV = pedidoController.createPedido({
-         nome_cliente: people.values.name,
-         complemento: `Mesa ${mesa ? mesa.charAt(0).toUpperCase() + mesa.slice(1) : 'N/A'}`,
+         //nome_cliente: people.find(p => p.id === selectedPersonId)?.name || "mesa",
+         nome_cliente:nomeCliente,
+         complemento: `Nome dos clientes: ${pessoas.map(p => p.name).join(', ')}`,
          total_pagar: calculateTotalGeral(),
          data_pedido: {
            data: dataHoraPedido["data"],
@@ -477,11 +476,9 @@ const CardapioSistemaPDV = () => {
          },
          carrinho:  pedidosCarrinho
        });
-       console.log("\n\nNovo Pedido enviado do app de Garçom!", novoPedidoPDV)
+       console.log("\n\nNovo Pedido enviado do app de Garçom!")
+       //console.log(novoPedidoPDV)
       navigate(`/checkout/${novoPedidoPDV.id}`);
-
-      alert("Pedido pronto para ser enviado ao Controller/Backend! (Implementação pendente)");
-
 
     } catch (error) {
       console.error("Erro ao tentar finalizar pedido:", error);
