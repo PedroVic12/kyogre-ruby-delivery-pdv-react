@@ -1,6 +1,5 @@
 //PedidoCOntroller.ts
 
-import { useAuth } from "../../../src/contexts/AuthContext";
 
 // src/types/menu.ts
 export interface Adicional {
@@ -209,7 +208,7 @@ class PedidoController {
     const savedPedidos = localStorage.getItem('pedidos');
     if (savedPedidos) {
       this.pedidos = JSON.parse(savedPedidos);
-      console.log(this.pedidos)
+      console.log("Historico Salvo carregado",this.pedidos)
     }
   }
 }

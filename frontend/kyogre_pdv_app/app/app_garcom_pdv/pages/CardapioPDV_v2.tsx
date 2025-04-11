@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import PersonIcon from '@mui/icons-material/Person'; // Ícone para pessoa
 import PeopleIcon from '@mui/icons-material/People'; // Ícone para Mesa
+import PedidoController from '../controllers/PedidoController';
 
 // Função para gerar IDs aleatórios de 4 dígitos
 const generateRandomId = (): string => {
@@ -228,9 +229,15 @@ const CartDisplay: React.FC<CartDisplayProps> = ({
 
     {/* Total e Botão Finalizar */}
     <Box className="border-t pt-3 mt-auto">
-      <div className="flex justify-between text-lg font-semibold mb-3">
+      <div className="col justify-between text-lg font-semibold mb-3">
         <Typography variant="h6">Total da Mesa:</Typography>
+
         <Typography variant="h6">R$ {calculateTotalGeral().toFixed(2)}</Typography>
+        <br />
+        <h1>Total do cliente {}</h1>
+
+
+
       </div>
       <Button
         variant="contained" color="success" fullWidth size="large"
@@ -246,6 +253,8 @@ const CartDisplay: React.FC<CartDisplayProps> = ({
 
 // Componente principal
 const CardapioSistemaPDV = () => {
+  const pedidoController = PedidoController.getInstance();
+
   const { mesa } = useParams<{ mesa: string }>();
   const navigate = useNavigate();
   const { token } = useAuth(); // Obter token do contexto
@@ -416,7 +425,7 @@ const CardapioSistemaPDV = () => {
     return cartsByPerson[selectedPersonId] || []; // Retorna array vazio se não houver carrinho
   }, [cartsByPerson, selectedPersonId]);
 
-  // --- Finalizar Pedido ---
+  // TODO --- Finalizar Pedido ---
   const handleFinishOrder = () => {
     const hasItems = Object.values(cartsByPerson).some(cart => cart.length > 0);
     if (!hasItems) {
@@ -424,32 +433,62 @@ const CardapioSistemaPDV = () => {
       return;
     }
 
+    if (!people) {
+      alert('Por favor, insira o nome do cliente');
+      return;
+    }
+
+
     const now = new Date();
     const dataHoraPedido = {
       data: `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`,
       hora: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`,
     };
 
-    // --- ESTRUTURA PARA UM PEDIDO ÚNICO ---
-    const orderData = {
-      mesa: mesa || 'N/A',
-      people: people, // Lista de pessoas [{id, name}]
-      itemsByEntity: cartsByPerson, // Objeto { 'p1': [items], 'p2': [items], 'mesa': [items] }
-      totalGeral: calculateTotalGeral(),
-      timestamp: dataHoraPedido
-    };
+    const pedidosCarrinho = cartsByPerson.mesa.map(
+      (item) => {
+        console.log(item.quantity)
+        console.log(item.nome_produto)
+        console.log(item.preco)
+        return {
+          quantidade: item.quantity,
+          nome: item.nome_produto,
+          preco: item.preco
+        };
+      }
+    );
 
-    console.log("Estrutura do Pedido Único para Enviar:", orderData);
+
+    console.log("Carrinho", cartsByPerson.mesa)
+    console.log(people.values)
+      
 
     // --- TODO: Adaptar Controller/Backend para receber esta estrutura ---
     try {
-      // Exemplo: await pedidoController.createSingleStructuredOrder(orderData);
+
+
+       const novoPedidoPDV = pedidoController.createPedido({
+         nome_cliente: people.values.name,
+         complemento: `Mesa ${mesa ? mesa.charAt(0).toUpperCase() + mesa.slice(1) : 'N/A'}`,
+         total_pagar: calculateTotalGeral(),
+         data_pedido: {
+           data: dataHoraPedido["data"],
+           hora: dataHoraPedido["hora"],
+         },
+         carrinho:  pedidosCarrinho
+       });
+       console.log("\n\nNovo Pedido enviado do app de Garçom!", novoPedidoPDV)
+      navigate(`/checkout/${novoPedidoPDV.id}`);
+
       alert("Pedido pronto para ser enviado ao Controller/Backend! (Implementação pendente)");
+
+
     } catch (error) {
       console.error("Erro ao tentar finalizar pedido:", error);
       alert("Erro ao finalizar pedido.");
     }
   };
+
 
   // --- Handlers restantes ---
   const handleOpenCart = () => setIsCartOpen(true);
