@@ -24,6 +24,7 @@ RUN npm install --force \
     uuidv4 \               
     sqlite \ 
     lucide-react \
+    framer-motion \
     axios \
     react-hot-toast \
     plotly.js \

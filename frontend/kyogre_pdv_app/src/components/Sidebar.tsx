@@ -18,6 +18,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: NotebookPen, label: 'Cardápio Digital', href: '/cardapio' },
+    { icon: Book, label: 'Splash Screen', href: '/splash' },
     { icon: Book, label: 'App Garçom', href: '/app_garcom' },
     //{ icon: Coffee, label: 'Cardapio PDV', href: '/cardapio/:mesa' },
     { icon: Calculator, label: 'Controle Estoque', href: '/controle_estoque' },
@@ -40,7 +41,7 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <img src={rubyLogo} alt="Logo" className="h-8 w-8" />
 
           </IconButton>
-          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V9.7.5</h2>
+          <h2 className="text-4x2 font-bold">Ruby Delivery PDV App V9.7.7</h2>
         </div>
  
        

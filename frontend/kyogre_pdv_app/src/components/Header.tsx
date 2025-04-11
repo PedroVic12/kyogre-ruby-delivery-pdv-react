@@ -23,7 +23,7 @@ export function Header({ toggleSidebar, isSidebarOpen }: HeaderProps) {
           >
             <Menu className="h-5 w-5 text-gray900" />
           </button>
-          <h2 className="text-xl font-semibold text-white">Dashboard</h2>
+          <h2 className="text-xl font-semibold text-white">Ruby Delivery PDV</h2>
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">

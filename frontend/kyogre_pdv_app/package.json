@@ -17,6 +17,7 @@
     "@react-pdf/renderer": "^4.3.0",
     "axios": "^1.8.2",
     "bcrypt": "^5.1.1",
+    "framer-motion": "^12.6.5",
     "ionic": "^5.4.16",
     "lucide-react": "^0.471.2",
     "plotly.js": "^3.0.1",

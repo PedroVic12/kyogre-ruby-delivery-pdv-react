@@ -74,7 +74,11 @@ export function HomePage() {
       <div>
 
 <div className="grid grid-cols-1 pt-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+
+
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 m-10">
+        
         <Card
           title="Produtos Cadastrados"
           value={orders.length.toString()}

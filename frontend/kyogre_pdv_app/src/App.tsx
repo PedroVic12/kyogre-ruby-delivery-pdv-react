@@ -15,12 +15,12 @@ import { DashboardPedidosPage } from './pages/dashboard/DashboardPedidos';
 import PaginaComponentes from './pages/UI/pagina_componentes.js';
 import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage.jsx';
 import GarcomMesas from '../app/app_garcom_pdv/pages/GarcomMesas.js';
-import CardapioPDV from '../app/app_garcom_pdv/pages/CardapioPDV.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 import { useAuth } from './contexts/AuthContext';
 import PDFGeneratorPage from './components/ui/pdf_generator';
-import CardapioSistemaPDV from '../app/app_garcom_pdv/pages/CardapioPDV_v2.js';
+import CardapioSistemaPDV from '../app/app_garcom_pdv/pages/CardapioPDV_v2';
+import SplashScreen from './pages/splash_screen/react_splash__screen.js';
 
 const isProduction = true; //! Altere para false se quiser simular login automático em desenvolvimento
 
@@ -113,9 +113,13 @@ function App() {
                         element={
                             <div className="min-h-screen bg-gray-50">
                                 <Routes>
+                                    <Route path="app_garcom" element={<GarcomMesas />} />
                                     <Route path="cardapio" element={<CardapioDigitalPage />} />
                                     <Route path="product/:id" element={<ProductDetailsPage />} />
                                     <Route path="pdv/:mesa" element={<CardapioSistemaPDV />} />
+                                    <Route path="splash" element={<SplashScreen />} />
+                                    <Route path="checkout/:pedidoId" element={<CheckoutPage />} />
+
 
                                     <Route
                                         path="login"
@@ -124,9 +128,7 @@ function App() {
                                     <Route path="pedido_pdf" element={<PDFGeneratorPage />} />
                                     <Route path="controle_estoque" element={<ControleEstoquePage />} />
                                     <Route path="pagina_componentes" element={<PaginaComponentes />} />
-                                    <Route path="app_garcom" element={<GarcomMesas />} />
-                                    <Route path="cardapio/:mesa" element={<CardapioPDV />} />
-                                    <Route path="checkout/:pedidoId" element={<CheckoutPage />} />
+                                    {/* <Route path="cardapio/:mesa" element={<CardapioPDV />} /> */}
                                 </Routes>
                             </div>
                         }
