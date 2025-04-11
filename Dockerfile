@@ -20,7 +20,8 @@ RUN npm install --force \
     @mui/icons-material \
     @ionic/react \
     @types/sqlite3 \
-    @types/bcrypt \                  
+    @types/bcrypt \   
+    uuidv4 \               
     sqlite \ 
     lucide-react \
     axios \

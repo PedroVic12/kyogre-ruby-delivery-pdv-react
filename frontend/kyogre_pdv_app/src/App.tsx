@@ -20,6 +20,7 @@ import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
 import { useAuth } from './contexts/AuthContext';
 import PDFGeneratorPage from './components/ui/pdf_generator';
+import CardapioSistemaPDV from '../app/app_garcom_pdv/pages/CardapioPDV_v2.js';
 
 const isProduction = true; //! Altere para false se quiser simular login automático em desenvolvimento
 
@@ -83,7 +84,9 @@ function App() {
                                         <main className="p-4 sm:p-6 md:p-8 pt-16">
                                             <Routes>
                                                 <Route index element={<DashboardPedidosPage />} />
+                                                
                                                 {/* <Route path="produtos" element={<MenuPage />} /> */}
+
                                                 <Route path="clientes" element={<ClientsPage />} />
                                                 <Route path="pedidos" element={<HomePage />} />
                                                 <Route path="atendimento" element={<ChatPage />} />
@@ -112,6 +115,8 @@ function App() {
                                 <Routes>
                                     <Route path="cardapio" element={<CardapioDigitalPage />} />
                                     <Route path="product/:id" element={<ProductDetailsPage />} />
+                                    <Route path="pdv/:mesa" element={<CardapioSistemaPDV />} />
+
                                     <Route
                                         path="login"
                                         element={<LoginPageComponent isDebug={!isProduction} />}

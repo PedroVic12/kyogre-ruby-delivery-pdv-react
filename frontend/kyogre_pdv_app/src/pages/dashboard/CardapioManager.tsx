@@ -31,6 +31,7 @@ import  CardapioService  from '../../controllers/cardapio_controller';
 import UploadImage from '../../utils/upload_files_supabase';
 import { useAuth } from '../../contexts/AuthContext';
 import {FloatActionButton} from '../../components/ui/FloatActionButton';
+import {  useNavigate } from 'react-router-dom';
 
 
 // Inicializa categoryColors a partir do localStorage ou com valores padrão
@@ -79,8 +80,8 @@ const ProductCard = ({
   return (
     <Card sx={{ display: 'flex', alignItems: 'center', p: 1, mb: 1, bgcolor: '#f5f5f5' }}>
       <Box sx={{ width: 40, height: 40, bgcolor: '#e0e0e0', mr: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {product.imageUrl ?
-          <img src={product.imageUrl} alt={product.nome_produto} style={{ width: '100%', height: '100%' }} /> :
+        {product.url_imagem ?
+          <img src={product.url_imagem} alt={product.nome_produto} style={{ width: '100%', height: '100%' }} /> :
           <Box sx={{ width: '100%', height: '100%', border: '10px solid #ccc' }} />
         }
       </Box>
@@ -170,7 +171,7 @@ const ProductModal = ({
         name: editingProduct.nome_produto,
         price: editingProduct.preco,
         category: editingProduct.categoria || '',
-        imageUrl: editingProduct.imageUrl || '',
+        imageUrl: editingProduct.url_imagem || '',
         description: editingProduct.descricao || '',
         isAvailable: editingProduct.isAvailable || false,
         adicionais: editingProduct.adicionais || [], // Carregar adicionais existentes ou array vazio
@@ -503,7 +504,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [, setSelectedCategory] = useState('');
-
+  const navigate = useNavigate();
   const { user, token } = useAuth();
 
   const cardapioService = new CardapioService(token);
@@ -546,12 +547,10 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             id: produto.id,
             nome_produto: produto.nome_produto,
             preco: produto.preco,
-            imageUrl: produto.url_imagem,
+            url_imagem: produto.url_imagem,
             descricao: produto.descricao,
             isAvailable: produto.disponivel || true,
             categoria: produto.categoria,
-            price: undefined,
-            name: undefined,
             description: undefined
           });
         });
@@ -570,7 +569,9 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
       }
     } catch (error) {
       console.error('\nErro ao carregar produtos:', error);
-      setIsLoading(false); // Certifique-se de que está aqui em caso de erro
+      setIsLoading(true); // Certifique-se de que está aqui em caso de erro
+      navigate("/login")
+
     }
   };
 
@@ -633,8 +634,6 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             disponivel: productData.isAvailable,
             adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
             isAvailable: true,
-            price: undefined,
-            name: undefined,
             description: undefined
           });
         }

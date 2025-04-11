@@ -29,8 +29,6 @@ const CardapioPDV = () => {
   const [categories, setCategories] = useState<Category[]>([]); // State to hold categories from repository
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
   const tabsRef = useRef<HTMLDivElement>(null);
-  const [cartsByPerson, setCartsByPerson] = useState<Record<string, CartItem[]>>({});
-  const [selectedPersonId, setSelectedPersonId] = useState<string>('mesa');
   
   const {token} = useAuth()
   const productRepository = new CardapioService(token);
@@ -60,7 +58,7 @@ const CardapioPDV = () => {
 
   useEffect(() => {
     if (mesa) {
-      TableController.getInstance().updateTableStatus(Number(mesa), 'occupied', customersCount);
+      TableController.getInstance().updateTableStatus(Number(mesa), 'ocupada', customersCount);
     }
   }, [mesa, customersCount]);
 

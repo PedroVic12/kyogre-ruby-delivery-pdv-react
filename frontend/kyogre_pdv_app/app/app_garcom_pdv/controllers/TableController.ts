@@ -1,19 +1,19 @@
-interface Table {
+export interface Table {
   id: number;
   name: string;
-  status: 'free' | 'occupied' | 'closing';
+  status: 'livre' | 'ocupada' | 'finalizando';
   customers?: number;
 }
 
 class TableController {
   private static instance: TableController;
   private tables: Table[] = [
-    { id: 1, name: 'Mesa 1', status: 'free' },
-    { id: 2, name: 'Mesa 2', status: 'free' },
-    { id: 3, name: 'Mesa 3', status: 'free' },
-    { id: 4, name: 'Mesa 4', status: 'free' },
-    { id: 5, name: 'Mesa 5', status: 'free' },
-    { id: 6, name: 'Mesa 6', status: 'free' },
+    { id: 1, name: 'Mesa 1', status: 'livre' },
+    { id: 2, name: 'Mesa 2', status: 'livre' },
+    { id: 3, name: 'Mesa 3', status: 'livre' },
+    { id: 4, name: 'Mesa 4', status: 'livre' },
+    { id: 5, name: 'Mesa 5', status: 'livre' },
+    { id: 6, name: 'Mesa 6', status: 'livre' },
   ];
 
   private constructor() {
