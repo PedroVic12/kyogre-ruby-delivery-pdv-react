@@ -89,13 +89,15 @@ export interface PedidoMesa {
     preco: number;
   }[];
 }
-const { token } = useAuth();
 
 class PedidoController {
   private static instance: PedidoController;
   private pedidos: PedidoMesa[] = [];
 
-  private constructor() { }
+
+  private constructor() {
+    this.loadPedidos();
+   }
 
   static getInstance(): PedidoController {
     if (!PedidoController.instance) {
@@ -105,10 +107,10 @@ class PedidoController {
   }
 
 
-  fazerPedido = async (pedidoData: PedidoMesa) => {
+
+  fazerPedido = async (pedidoData: PedidoMesa,token: string) => {
     console.log('Iniciando envio do pedido de teste...');
     console.log('Dados do pedido:', pedidoData);
-    console.log('Token:', token);
 
     try {
       const resposta = await fetch('https://raichu-server.up.railway.app/api/pedidos/', {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PedidoController, {PedidoMesa} from '../controllers/PedidoController';
 import TableController from '../controllers/TableController';
+import { useAuth } from '../../../src/contexts/AuthContext';
 
 
 const PaymentMethods = [
@@ -15,6 +16,8 @@ const CheckoutPage = () => {
   const { pedidoId } = useParams<{ pedidoId: string }>();
   const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+
+  const {token} = useAuth()
 
   const pedidoController = PedidoController.getInstance();
   // Ensure pedidoId is a number when fetching the pedido
@@ -51,7 +54,13 @@ const CheckoutPage = () => {
       const pedidoToSend = { ...pedido, forma_pagamento: selectedMethod as PedidoMesa['forma_pagamento'] };
       console.log("Enviando pedido pelo PDV...")
       console.log(pedido)
-      pedidoController.fazerPedido(pedidoToSend);
+
+      if (!token){
+        alert('Token não encontrado');
+        return;
+      }
+
+      pedidoController.fazerPedido(pedidoToSend,token);
       pedidoController.updatePaymentMethod(pedido.id, selectedMethod as never);
       TableController.getInstance().updateTableStatus(pedido.id, 'free');
 
