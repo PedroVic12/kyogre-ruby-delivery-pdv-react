@@ -529,7 +529,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
     try {
       setIsLoading(true);
       if (token) {
-        const produtos = await cardapioService.buscarProdutos(token);
+        const produtos = await cardapioService.buscarProdutos();
         console.log("Produtos buscados:", produtos); // Verifique se os produtos estão chegando
 
         // Agrupa produtos por categoria
@@ -634,7 +634,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             price: undefined,
             name: undefined,
             description: undefined
-          }, token);
+          });
         }
 
       }

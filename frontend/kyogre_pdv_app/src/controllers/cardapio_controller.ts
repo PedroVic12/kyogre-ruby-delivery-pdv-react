@@ -1,105 +1,59 @@
-// src/services/api.ts
-
-/**
- * Interface para representar um produto do cardápio
- */
 import { Product } from "../types/menu";
+import { useAuth } from "../contexts/AuthContext";
 
-/**
- * Classe responsável por gerenciar as chamadas à API
- */
 class CardapioService {
   private baseUrl: string = 'https://raichu-server.up.railway.app/api';
 
-  /**
-   * Busca todos os produtos do cardápio
-   */
-  async buscarProdutos(token: string): Promise<Product[]> {
+  private getAuthHeaders(): HeadersInit {
+    const context = useAuth();
+    const token = context.token;
+    return {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    };
+  }
+
+  async buscarProdutos(): Promise<Product[]> {
     try {
       const response = await fetch(`${this.baseUrl}/produtos/`, {
-        headers: {
-          'Authorization': `Bearer ${token}`, // Incluindo o token no header
-          'Content-Type': 'application/json', // Adicionado por boa prática
-        },
+        headers: this.getAuthHeaders(),
       });
       if (!response.ok) {
         throw new Error(`Erro ao buscar produtos: ${response.status} - ${response.statusText}`);
       }
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       throw error;
     }
   }
 
-  /**
-   * Cria um novo produto no cardápio
-   */
-  async criarProduto(produto: Product, token: string): Promise<Product> {
-    try {
-      const response = await fetch(`${this.baseUrl}/produtos/`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`, // Incluindo o token no header
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(produto),
-      });
-      if (!response.ok) {
-        throw new Error(`Erro ao criar produto: ${response.status} - ${response.statusText}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Erro ao criar produto:', error);
-      throw error;
-    }
+  async editarProduto(produto: Product): Promise<Product> {
+    const response = await fetch(`${this.baseUrl}/produtos/${produto.id}`, {
+      method: 'PUT',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(produto),
+    });
+    if (!response.ok) throw new Error("Erro ao editar produto");
+    return await response.json();
   }
 
-  async criarNovoProduto(produto: Product): Promise<Product> {
-    try {
-      console.log("Enviando produto para API:", produto); // Log do objeto antes do envio
-
-      const response = await fetch(`${this.baseUrl}/produtos/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(produto),
-      });
-
-      console.log("Resposta bruta da API:", response);
-
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status} - ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log("Resposta JSON da API:", data);
-
-      return data; // Assuming the API returns the created product directly
-    } catch (error) {
-      console.error('Erro ao criar produto:', error);
-      throw error;
-    }
+  // Mesma lógica pros outros métodos:
+  async criarProduto(produto: Product): Promise<Product> {
+    const response = await fetch(`${this.baseUrl}/produtos/`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(produto),
+    });
+    if (!response.ok) throw new Error("Erro ao criar produto");
+    return await response.json();
   }
 
-  /**
-   * Deleta um produto do cardápio
-   */
   async deletarProduto(id: number): Promise<void> {
-    try {
-      const response = await fetch(`${this.baseUrl}/produtos/${id}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error(`Erro ao deletar produto: ${response.status} - ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error('Erro ao deletar produto:', error);
-      throw error;
-    }
+    await fetch(`${this.baseUrl}/produtos/${id}`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders(),
+    });
   }
 
   async buscarFotoStorage(): Promise<any[]> {
