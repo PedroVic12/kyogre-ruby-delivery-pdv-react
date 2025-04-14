@@ -115,7 +115,7 @@ export const ProductDetailsPage: React.FC = () => {
           >
             <ArrowLeft />
           </IconButton>
-          <Typography variant="h3" >{item.nome_produto}</Typography>
+          <Typography variant="h6" >{item.nome_produto}</Typography>
         </Toolbar>
       </AppBar>
 

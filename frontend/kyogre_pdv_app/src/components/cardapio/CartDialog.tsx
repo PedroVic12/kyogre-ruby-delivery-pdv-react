@@ -46,13 +46,13 @@ export const CartDialog: React.FC<CartDialogProps> = ({
   
     const carrinho = items.map(item => ({
       quantidade: item.quantity,
-      nome: item.name,
-      preco: item.price,
-      total: (item.price * item.quantity).toFixed(2),
+      nome: item.nome_produto,
+      preco: item.preco,
+      total: (item.preco * item.quantity).toFixed(2),
     }));
   
     const calculateTotal = () => {
-      return items.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+      return items.reduce((total, item) => total + (item.preco * item.quantity), 0).toFixed(2);
     };
   
     const newPedido = {
@@ -91,117 +91,144 @@ export const CartDialog: React.FC<CartDialogProps> = ({
 
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      
-      <DialogTitle
-        fontSize={{ xs: '1.8rem', sm: '2rem' }}
-        sx={{ textAlign: 'center' }}
-      >
-        🛒 Seu Carrinho
-      </DialogTitle>
-      <hr 
-        style={{
-          border: '2px solid #ccc',
-          margin: '0 16px',
-        }}
-      />
-      <DialogContent>
-        <List >
-          {items.map((item) => (
-            <ListItem
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+  <DialogTitle
+    fontSize={{ xs: '1.8rem', sm: '1.5rem' }}
+    sx={{ textAlign: 'center' }}
+  >
+    🛒 Seu Carrinho
+  </DialogTitle>
+  <hr
+    style={{
+      border: '2px solid #ccc',
+      margin: '0 8px',
+    }}
+  />
+  <DialogContent>
+    <List>
+      {items.map((item) => (
+        <ListItem
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '4px 0',
+            borderBottom: '2px solid #ccc',
+          }}
+          key={item.id}
+          
 
-
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '8px 0',
-                borderBottom: '1px solid #ccc',
-              }}
-              key={item.id}
-              secondaryAction={
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={() => onRemoveItem(item.id)}
-                  sx={{
-                    color: 'red',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                    },
-                  }}
-                >
-                  <Trash2 size={20} />
-                </IconButton>
-              }
-            >
-              <img
-                src={item.imageUrl || ''}
-                alt={item.name}
-                style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'fill', marginRight: '10px',   }}
-              />
-
-              <ListItemText
-                primary={item.name}
-                primaryTypographyProps={{ fontSize: '1.2rem' }}
-                secondary={`R$ ${(item.price * item.quantity).toFixed(2)}`}
-              />
-              <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-                <IconButton
-                  size="large"
-                  color="primary"
-                  
-                  
-                  onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                  sx={{
-                    color: 'slateblue',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 0, 0, 0.1)',
-                    },
-                  }}
-                >
-                  <Minus size={18} />
-                </IconButton>
-                <Typography sx={{ mx: 1 }} variant="h6">{item.quantity}</Typography>
-                <IconButton
-                  size="large"
-                  color="success"
-                  onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                >
-                  <Plus size={18} />
-                </IconButton>
-              </Box>
-            </ListItem>
-          ))}
-        </List>
-
-        {items.length === 0 && (
-          <Typography variant="h2" sx={{ textAlign: 'center', my: 3 }}>
-            Seu carrinho está vazio
-          </Typography>
-        )}
-        {items.length > 0 && (
-          <Typography variant="h5"  align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
-            <span role="img" aria-label="money">💰</span> Total: R$ {total.toFixed(2)}
-          </Typography>
-        )}
-      </DialogContent>
-
-      <DialogActions>
-        <Button onClick={onClose}>Fechar</Button>
-        {items.length > 0 && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              EnviarPedidoGroundonBot();
-              onClose();
+          //! BOTAO DE DELETAR VERMELHO OCUPANDO MUITO ESPAÇO NO DIALOG
+          // secondaryAction={
+          //   <IconButton
+          //     edge="end"
+          //     aria-label="delete"
+          //     onClick={() => onRemoveItem(item.id)}
+          //     sx={{
+          //       color: 'red',
+          //       '&:hover': {
+          //         backgroundColor: 'rgba(255, 0, 0, 0.1)',
+          //       },
+          //       marginLeft: '8px', // Adiciona espaçamento
+          //     }}
+          //   >
+          //     <Trash2 size={16} />
+          //   </IconButton>
+          // }
+        >
+          <img
+            src={item.url_imagem || ''}
+            alt={item.nome_produto}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: '50%',
+              objectFit: 'fill',
+              marginRight: '5px',
             }}
-          >
-            Finalizar Pedido
-          </Button>
-        )}
-      </DialogActions>
-    </Dialog>
+          />
+
+          <ListItemText
+            primary={item.nome_produto}
+            primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: 'bold' }}
+            secondary={`R$ ${(item.preco * item.quantity).toFixed(2)}`}
+            secondaryTypographyProps={{ fontSize: '0.7rem', color: 'success' }}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
+            <IconButton
+              size="medium"
+              color="primary"
+              onClick={() => {
+                if (item.quantity - 1 === 0) {
+                  // Remove o item se a quantidade for 0
+                  onRemoveItem(item.id);
+                } else {
+                  // Atualiza a quantidade normalmente
+                  onUpdateQuantity(item.id, item.quantity - 1);
+                }
+              }}
+              sx={{
+                color: 'slateblue',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                },
+                marginRight: '4px', // Adiciona espaçamento
+              }}
+            >
+              <Minus size={18} />
+            </IconButton>
+            <Typography sx={{ mx: 1 }} variant="h6">
+              {item.quantity}
+            </Typography>
+            <IconButton
+              size="medium"
+              color="success"
+              onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+              sx={{
+                marginLeft: '4px', // Adiciona espaçamento
+              }}
+            >
+              <Plus size={18} />
+            </IconButton>
+          </Box>
+        </ListItem>
+      ))}
+    </List>
+
+    {items.length === 0 && (
+      <Typography variant="h2" sx={{ textAlign: 'center', my: 3 }}>
+        Seu carrinho está vazio
+      </Typography>
+    )}
+    {items.length > 0 && (
+      <Typography
+        variant="h5"
+        align="center"
+        sx={{ mt: 2, fontWeight: 'bold' }}
+      >
+        <span role="img" aria-label="money">
+          💰
+        </span>{' '}
+        Total: R$ {total.toFixed(2)}
+      </Typography>
+    )}
+  </DialogContent>
+
+  <DialogActions>
+    <Button onClick={onClose}>Fechar</Button>
+    {items.length > 0 && (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          EnviarPedidoGroundonBot();
+          onClose();
+        }}
+      >
+        Finalizar Pedido
+      </Button>
+    )}
+  </DialogActions>
+</Dialog>
   );
 };

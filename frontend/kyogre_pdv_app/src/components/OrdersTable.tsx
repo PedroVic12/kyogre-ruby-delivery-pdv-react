@@ -33,7 +33,7 @@ function OrderRow({ order }: { order: Order }) {
         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{order.customer}</td>
         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{order.items}</td>
         <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{order.total}</td>
-        <td className="px-4 py-2 whitespace-nowrap">
+        {/* <td className="px-4 py-2 whitespace-nowrap">
           <span
             className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
               order.status === 'Pendente'
@@ -52,9 +52,9 @@ function OrderRow({ order }: { order: Order }) {
           <button onClick={() => setIsOpen(!isOpen)} className="text-blue-500 hover:underline">
             {isOpen ? 'Ocultar Itens' : 'Ver Itens'}
           </button>
-        </td>
+        </td> */}
       </tr>
-      {isOpen && (
+      {/* {isOpen && (
         <tr>
           <td colSpan={6} className="px-4 py-2">
             <ul className="list-disc pl-5">
@@ -66,7 +66,7 @@ function OrderRow({ order }: { order: Order }) {
             </ul>
           </td>
         </tr>
-      )}
+      )} */}
     </>
   );
 }
@@ -95,7 +95,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
     datasets: [
       {
         label: 'Pedidos',
-        data: [5, 8, 25, 30, 15, 30, 35, 45, 25], // Substitua pelos dados reais
+        data: [5, 8, 25, 30, 15, 30, 55, 90, 25], // Substitua pelos dados reais
         backgroundColor: 'rgba(54, 162, 235, 0.5)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
@@ -126,12 +126,13 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           <table className="w-full table-auto">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pedido</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produtos</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Protudos</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Preço</th>
+
+                {/* <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th> */}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">

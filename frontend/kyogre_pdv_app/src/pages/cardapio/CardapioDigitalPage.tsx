@@ -114,7 +114,7 @@ export const CardapioDigitalPage: React.FC = () => {
         >
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Cardapio Digital QR CODE | Pedido: #{pedidoId}
+              Cardapio Digital | Pedido: #{pedidoId}
             </Typography>
           </Toolbar>
         </AppBar>

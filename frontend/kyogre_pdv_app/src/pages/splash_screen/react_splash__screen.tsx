@@ -103,7 +103,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
 
   // Variants for the logo card animation (slide up and fade in)
   const logoCardVariants = {
-    initial: { opacity: 0, y: 100 }, // Start off-screen and invisible
+    initial: { opacity: 0, y: 50 }, // Start off-screen and invisible
     animate: {
       opacity: 1,
       y: 0, // Animate to final position
@@ -121,7 +121,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
       opacity: 1,
       scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 1.5,  // Slower fade-in
         ease: 'easeOut',
       },
     },
@@ -145,13 +145,10 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
           Bike,
           Settings,
           Wifi,
-          Utensils,
           Ship,
-          Ban,
-          Table,
         ].map((IconComponent, index) => (
           <motion.div key={index} variants={iconVariants}>
-            <IconComponent size={36} color="white" />
+            <IconComponent size={42} color="white" />
           </motion.div>
         ))}
       </motion.div>
@@ -189,8 +186,8 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
             animate="visible"
             exit="hidden" // Optional: define exit animation if needed
           >
-            <CheckCircle size={48} className="mb-2" />
-            <p className="text-2xl font-semibold">Seja bem vindo(a) a nova era digital!</p>
+            <CheckCircle size={42}/>
+            <p className="font-semibold">Seja bem vindo(a) a nova era digital!</p>
           </motion.div>
         )}
       </AnimatePresence>
