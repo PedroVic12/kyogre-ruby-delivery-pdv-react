@@ -369,8 +369,8 @@ export function DashboardPedidosPage() {
             fetchOrders()
 
         } catch (e) {
-            setError(`Erro ao avançar pedido ${orderId}.`);
-            console.error(`Erro ao avançar pedido ${orderId}:`, e);
+            //setError(`Erro ao avançar pedido ${orderId}.`);
+            console.error(`\n\n [ERRO SUPABASE] Erro ao avançar pedido ${orderId}:`, e);
         }
     };
 
