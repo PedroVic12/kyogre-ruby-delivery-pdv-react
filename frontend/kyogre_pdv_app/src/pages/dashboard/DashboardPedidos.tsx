@@ -399,21 +399,21 @@ export function DashboardPedidosPage() {
                 <OrderColumn
                     title="Cozinha"
                     orders={pedidosCozinha}
-                    color="border-yellow-500 bg-yellow-100"
+                    color="border-yellow-500 bg-yellow-200"
                     onAdvance={advanceOrder}
                     buttonIcon={<ChevronRight />}
                 />
                 <OrderColumn
                     title="Entrega"
                     orders={pedidosEntrega}
-                    color="border-green-700 bg-green-200"
+                    color="border-green-700 bg-green-300"
                     onAdvance={advanceOrder}
                     buttonIcon={<ChevronRight />}
                 />
                 <OrderColumn
                     title="Finalizado"
                     orders={pedidosFinalizados}
-                    color="border-gray-500 bg-gray-300"
+                    color="border-gray-500 bg-gray-400"
                 />
             </div>
         </div>
