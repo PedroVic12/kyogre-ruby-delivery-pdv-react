@@ -267,6 +267,28 @@ export function DashboardPedidosPage() {
             console.log("Pedidos em entrega:", entrega.length);
             console.log("Pedidos finalizados:", finalizados.length);
 
+            // Salvar os finalizados no supabase
+            if (finalizados.length > 0){
+
+                const response = await fetch("https://raichu-server.up.railway.app/api/pedidos/status/finalizados", {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Inclua o token no header
+                    },
+                }
+                );
+
+                if (response.status ==200){
+                    console.log("Salvando no supabase...")
+                    const data = await response.json();
+                    
+                    console.log(data)
+                }
+
+                console.log(response)
+            }
+
             setPedidosEmProcesso(processando);
             setPedidosCozinha(cozinha);
             setPedidosEntrega(entrega);
@@ -323,27 +345,30 @@ export function DashboardPedidosPage() {
 
     //! Função para avançar o status do pedido
     const advanceOrder = async (orderId: number, nextStatus: string) => {
-        const UPDATE_API_ENDPOINT = `https://raichu-server.up.railway.app/api/pedidos/${orderId}/status?status=${nextStatus}`; // Changed here
-        //const UPDATE_API_ENDPOINT = `http://localhost:8000/api/pedidos/${orderId}/status?status=${nextStatus}`; // This SHOULD work based on code given.
-        //docker-raichu 
-
-        
+        const UPDATE_API_ENDPOINT = `https://raichu-server.up.railway.app/api/pedidos/${orderId}/status?status=${nextStatus}`;
+    
         try {
             const response = await fetch(UPDATE_API_ENDPOINT, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`, // Inclua o token no header
-
                 },
             });
+    
+            console.log(`Tentando atualizar pedido ${orderId} para o status: ${nextStatus}`);
+            console.log(`Endpoint: ${UPDATE_API_ENDPOINT}`);
+    
             if (!response.ok) {
-                throw new Error(`Erro ao atualizar pedido ${orderId}: ${response.status} - ${response.statusText}`);
+                console.error(`Erro ao atualizar pedido ${orderId}: ${response.status} - ${response.statusText}`);
+                return;
             }
-            fetchOrders();
-            console.log(`Pedido ${orderId} avançado para status: ${nextStatus} (ID: ${orderId})`);
+    
+            const data = await response.json();
+            console.log(`Pedido ${orderId} avançado para status: ${nextStatus}`, data);
+            fetchOrders()
 
-        } catch (e: unknown) {
+        } catch (e) {
             setError(`Erro ao avançar pedido ${orderId}.`);
             console.error(`Erro ao avançar pedido ${orderId}:`, e);
         }
@@ -355,7 +380,7 @@ export function DashboardPedidosPage() {
         fetchOrders(); // Busca inicial de pedidos ao montar o componente
 
         // Configurar intervalo para buscar pedidos a cada 5 segundos
-        const intervalId = setInterval(fetchOrders, 10000); // 5000 milissegundos = 5 segundos
+        const intervalId = setInterval(fetchOrders, 15000); // 5000 milissegundos = 5 segundos
 
         // Limpar o intervalo ao desmontar o componente para evitar vazamentos de memória
         return () => clearInterval(intervalId);

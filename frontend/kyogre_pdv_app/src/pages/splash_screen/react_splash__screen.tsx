@@ -166,8 +166,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
 
   // --- Render Logic ---
   return (
-    <div className="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-indigo-600 font-sans">
-      {/* 1. Icon Column (Animated) */}
+<div className="relative flex h-screen w-screen items-center justify-center overflow-hidden bg-indigo-600 font-sans border border-red-500">      {/* 1. Icon Column (Animated) */}
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center space-y-2"
         variants={iconContainerVariants}
