@@ -1,3 +1,9 @@
+import { createClient } from '@supabase/supabase-js'
+import {dotenv} from 'dotenv';
+
+dotenv.config()
+
+
 export interface Table {
   id: number;
   name: string;
@@ -8,9 +14,14 @@ export interface Table {
 class TableController {
   private static instance: TableController;
   private tables: Table[] = [];
+  private supabase;
 
   private constructor() {
-    this.loadTables();
+    this.supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_KEY!
+    );
+    this.initializeRealtimeSubscription();
   }
 
   public static getInstance(): TableController {
@@ -20,46 +31,65 @@ class TableController {
     return TableController.instance;
   }
 
-  public loadTables(): Table[] {
-    console.log('[DEBUG] Carregando mesas do localStorage...');
-    const savedTables = localStorage.getItem('tables');
-    if (savedTables) {
-      this.tables = JSON.parse(savedTables) as Table[];
-      console.log('[DEBUG] Mesas carregadas do localStorage:', this.tables);
-    } else {
-      console.log('[DEBUG] Nenhuma mesa encontrada no localStorage. Inicializando mesas padrão...');
-      // Inicializa com mesas padrão
-      this.tables = [
-        { id: 1, name: 'Mesa 1', status: 'livre' },
-        { id: 2, name: 'Mesa 2', status: 'livre' },
-        { id: 3, name: 'Mesa 3', status: 'livre' },
-        { id: 4, name: 'Mesa 4', status: 'livre' },
-        { id: 5, name: 'Mesa 5', status: 'livre' },
-        { id: 6, name: 'Mesa 6', status: 'livre' },
-      ];
-      this.saveTables();
-      console.log('[DEBUG] Mesas padrão inicializadas e salvas no localStorage:', this.tables);
-    }
-    return this.tables;
+  private async initializeRealtimeSubscription() {
+    // Subscribe to changes on the tables
+    this.supabase
+      .channel('tables-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tables'
+        },
+        (payload) => {
+          console.log('[DEBUG] Realtime update received:', payload);
+          this.loadTables(); // Reload tables when changes occur
+        }
+      )
+      .subscribe();
+
+      console.log("Web socket Supabase iniciado")
   }
 
-  public saveTables(): void {
-    localStorage.setItem('tables', JSON.stringify(this.tables));
-    console.log('[DEBUG] Mesas salvas no localStorage:', this.tables);
+  public async loadTables(): Promise<Table[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('tables')
+        .select('*')
+        .order('id');
+
+      if (error) throw error;
+
+      this.tables = data;
+      return this.tables;
+    } catch (error) {
+      console.error('[ERROR] Failed to load tables:', error);
+      return [];
+    }
+  }
+
+  public async updateTableStatus(tableId: number, status: Table['status'], customers?: number): Promise<void> {
+    try {
+      const { error } = await this.supabase
+        .from('tables')
+        .update({ 
+          status, 
+          customers: customers || 0,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', tableId);
+
+      if (error) throw error;
+
+      console.log(`[DEBUG] Status da mesa ${tableId} atualizado para ${status}`);
+    } catch (error) {
+      console.error('[ERROR] Failed to update table status:', error);
+    }
   }
 
   public getTables(): Table[] {
     return this.tables;
-  }
-
-  public updateTableStatus(tableId: number, status: Table['status'], customers?: number): void {
-    const table = this.tables.find((t) => t.id === tableId);
-    if (table) {
-      table.status = status;
-      table.customers = customers || 0;
-      this.saveTables();
-      console.log(`[DEBUG] Status da mesa ${tableId} atualizado para ${status}`);
-    }
   }
 }
 

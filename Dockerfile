@@ -22,6 +22,7 @@ RUN npm install --force \
     @types/sqlite3 \
     @types/bcrypt \
     @supabase/supabase-js \
+    dotenv \
     uuidv4 \
     sqlite \
     lucide-react \

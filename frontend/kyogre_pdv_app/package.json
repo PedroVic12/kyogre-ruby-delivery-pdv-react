@@ -18,6 +18,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "axios": "^1.8.2",
     "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
     "framer-motion": "^12.6.5",
     "ionic": "^5.4.16",
     "lucide-react": "^0.471.2",

@@ -14,18 +14,18 @@ const GarcomMesas = () => {
   const tableController = TableController.getInstance();
 
   useEffect(() => {
-    //localStorage.clear();
     console.log("[DEBUG] Componente montado");
     console.log("[DEBUG] Inicializando TableController:", tableController);
 
-    // Atualizar o estado local quando o estado das mesas mudar
-    const interval = setInterval(() => {
+    // Initial load
+    tableController.loadTables().then((loadedTables) => {
+      setTables(loadedTables);
+    });
+
+    // Update local state when tables change
+    const interval = setInterval(async () => {
       const currentTables = tableController.getTables();
-      console.log(
-        "[DEBUG] Mesas carregadas do TableController:",
-        currentTables,
-      );
-      setTables(currentTables);
+      setTables([...currentTables]);
     }, 1000);
 
     return () => {
