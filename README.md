@@ -48,6 +48,7 @@ The Kyogre Ruby Delivery PDV (Point of Sale) project is a full-stack web applica
 
 ![image](https://github.com/user-attachments/assets/5e0cfd64-2bbc-4e48-8ddd-4f9dc3b277cb)
 ![image](https://github.com/user-attachments/assets/df9ee24e-1039-45f5-b106-24f171c289e9)
+![image](https://github.com/user-attachments/assets/a0367fb4-38e9-458f-a556-bf468443066d)
 
 ## Cardapio digital
 
