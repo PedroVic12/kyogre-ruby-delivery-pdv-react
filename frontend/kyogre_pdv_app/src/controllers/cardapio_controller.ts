@@ -163,6 +163,8 @@ export default class CardapioService {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.token}`,
+
         },
         body: JSON.stringify(updates), // Enviar apenas os campos que precisam ser atualizados
       });

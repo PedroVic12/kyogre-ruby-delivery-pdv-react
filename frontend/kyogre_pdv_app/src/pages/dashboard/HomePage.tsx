@@ -103,6 +103,13 @@ export function HomePage() {
           className="w-full"
           color="lightblue"
         />
+
+      <Card
+          title="Faturamento do dia"
+          value="R$ 510,00"
+          className="w-full"
+          color="lightblue"
+        />  
       </div>
       <div className="overflow-x-auto bg-white rounded-lg shadow-md p-4 border border-green-500 w-full">
         <OrdersTable orders={orders} />

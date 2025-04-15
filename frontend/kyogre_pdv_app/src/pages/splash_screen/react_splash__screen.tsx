@@ -13,6 +13,7 @@ import {
   Table,
   CheckCircle, // Icon for completion message
 } from 'lucide-react'; // Using lucide-react for icons
+import { useAuth } from '../../contexts/AuthContext';
 
 // Define the props for the component (if any were needed)
 interface SplashScreenProps {
@@ -30,7 +31,43 @@ const SplashScreen: React.FC<SplashScreenProps> = ({
   const [loadingComplete, setLoadingComplete] = useState(false);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
 
+  const { user, token } = useAuth();
+
   // --- Effects for Animation Sequencing ---
+
+
+  const fazLoginServidorTest = async () => {
+
+    console.log(token)
+
+    let email = user?.email
+
+    let senha = user?.senha
+
+
+ 
+    try {
+      const response = await fetch("https://raichu-server.up.railway.app/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({  user, senha }),
+      });
+
+      console.log("Tentando logar como:", email);
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log("Login bem-sucedido:", userData);
+
+        return true;
+      } else {
+        console.warn("[SPLASH CONTEXT] Login falhou - usuário ou senha inválidos");
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
 
   // Effect 1: Trigger initial animations on component mount
   useEffect(() => {

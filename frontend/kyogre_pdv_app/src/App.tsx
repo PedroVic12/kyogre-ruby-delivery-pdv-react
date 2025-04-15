@@ -21,6 +21,8 @@ import { useAuth } from './contexts/AuthContext';
 import PDFGeneratorPage from './components/ui/pdf_generator';
 import CardapioSistemaPDV from '../app/app_garcom_pdv/pages/CardapioPDV_v2';
 import SplashScreen from './pages/splash_screen/react_splash__screen.js';
+import StockManagerpage from '../app/controle_estoque/StockManagerPage.jsx';
+import EstoquePageTemplate from '../app/controle_estoque/EstoquePageTemplate1.jsx';
 
 const isProduction = true; //! Altere para false se quiser simular login automático em desenvolvimento
 
@@ -127,6 +129,9 @@ function App() {
                                     />
                                     <Route path="pedido_pdf" element={<PDFGeneratorPage />} />
                                     <Route path="controle_estoque" element={<ControleEstoquePage />} />
+                                    <Route path="controle_estoque_mui" element={<StockManagerpage />} />
+                                    <Route path="controle_estoque_tailwind" element={<EstoquePageTemplate />} />
+
                                     <Route path="pagina_componentes" element={<PaginaComponentes />} />
                                     {/* <Route path="cardapio/:mesa" element={<CardapioPDV />} /> */}
                                 </Routes>

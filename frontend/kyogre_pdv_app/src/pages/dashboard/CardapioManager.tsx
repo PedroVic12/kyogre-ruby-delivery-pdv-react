@@ -166,6 +166,7 @@ const ProductModal = ({
   };
   useEffect(() => {
     if (editingProduct) {
+
       setFormData({
         id: editingProduct.id,
         name: editingProduct.nome_produto,
@@ -177,19 +178,7 @@ const ProductModal = ({
         adicionais: editingProduct.adicionais || [], // Carregar adicionais existentes ou array vazio
       });
       setHasAdditionals(!!editingProduct.adicionais && editingProduct.adicionais.length > 0); // Ativar o switch se houver adicionais
-    } else {
-      setFormData({
-        id: 0,
-        name: '',
-        price: 0,
-        category: categoryOptions[0] || '',
-        imageUrl: 'https://picsum.photos/200/300',
-        description: '',
-        isAvailable: true,
-        adicionais: [],
-      });
-      setHasAdditionals(false);
-    }
+    } 
   }, [editingProduct, categoryOptions, open]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
@@ -585,6 +574,7 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
   };
 
   const handleEditProduct = (product: Product) => {
+    console.log("[DEBUG] Produto selecionado para edição:", product);
     setEditingProduct(product);
     setIsProductModalOpen(true);
   };
@@ -608,23 +598,39 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
 
   const handleSaveProduct = async (productData: any) => {
     try {
+      console.log("[DEBUG] Dados do produto antes de salvar:", productData);
+  
       if (productData.id > 0) {
-        // Atualizar produto existente
-        await cardapioService.updateProduct(productData.id, {
+        console.log("[DEBUG] Atualizando produto com ID:", productData.id);
+  
+        const payload = {
           nome_produto: productData.name,
           preco: productData.price,
           categoria: productData.category,
           url_imagem: productData.imageUrl,
           descricao: productData.description,
           disponivel: productData.isAvailable,
-          adicionais: productData.adicionais.length > 0 ? productData.adicionais : null, // Enviar null se não houver adicionais
-        });
+          adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
+        };
+  
+        console.log("[DEBUG] Payload enviado ao backend:", payload);
+  
+        const response = await cardapioService.updateProduct(productData.id, payload);
+  
+        console.log("[DEBUG] Resposta do backend ao atualizar produto:", response);
+  
+        if (response) {
+          console.log(response)
+          console.log("[DEBUG] Produto atualizado com sucesso no backend.");
+        } else {
+          console.warn("[WARN] O backend não retornou sucesso ao atualizar o produto:", response);
+        }
       } else {
-
-        
         // Criar novo produto
-        if (token){
-          await cardapioService.criarProduto({
+        console.log("[DEBUG] Criando novo produto...");
+  
+        if (token) {
+          const response = await cardapioService.criarProduto({
             id: 0, // ID será gerado automaticamente
             nome_produto: productData.name,
             preco: productData.price,
@@ -634,18 +640,18 @@ export function CardapioManagerPage({ isSidebarOpen,  }: CardapioManagerPageProp
             disponivel: productData.isAvailable,
             adicionais: productData.adicionais.length > 0 ? productData.adicionais : null,
             isAvailable: true,
-            description: undefined
+            description: undefined,
           });
+  
+          console.log("[DEBUG] Resposta do backend ao criar produto:", response);
         }
-
       }
   
       await carregarProdutos(); // Recarrega os produtos
     } catch (error) {
-      console.error('Erro ao salvar produto:', error);
+      console.error("[ERROR] Erro ao salvar produto:", error);
     }
   };
-
   const handleAddCategory = (categoryName: string, categoryColor: string) => {
     if (categories.some((cat) => cat.name === categoryName)) {
       alert('Esta categoria já existe!');

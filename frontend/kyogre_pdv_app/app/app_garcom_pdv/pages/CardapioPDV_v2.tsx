@@ -93,7 +93,7 @@ function PessoasChips({
   };
 
   return (
-    <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" sx={{ mb: 2, p: 1, border: '1px dashed grey', borderRadius: 1 }}>
+    <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" sx={{ mb: 2, p: 1, border: '2px dashed grey', borderRadius: 1 }}>
        <Typography variant="subtitle2" sx={{ mr: 1, color: 'text.secondary' }}>Para:</Typography>
       {/* Chip Fixo da Mesa */}
       <Chip
@@ -104,28 +104,36 @@ function PessoasChips({
         onClick={() => onSelectPerson('mesa')} // Chama o callback do pai
         clickable
         size="medium"
+        sx={{ p: 1 }} 
+
       />
+      <br />
 
       {/* Chips das Pessoas */}
       {people.map((person) => (
-        <Chip
-          icon={<PersonIcon />} // Icone para Pessoa
-          key={person.id}
-          label={person.name}
-          onClick={() => onSelectPerson(person.id)} // Chama o callback do pai
-          onDelete={() => onDeletePerson(person.id)} // Chama o callback do pai
-          deleteIcon={<DeleteIcon />}
-          color={selectedPersonId === person.id ? 'secondary' : 'default'}
-          variant={selectedPersonId === person.id ? 'filled' : 'outlined'}
-          clickable
-          size="medium"
-        />
+        <React.Fragment key={person.id}>
+          <Chip
+            icon={<PersonIcon />} // Icone para Pessoa
+            label={person.name}
+            onClick={() => onSelectPerson(person.id)} // Chama o callback do pai
+            onDelete={() => onDeletePerson(person.id)} // Chama o callback do pai
+            deleteIcon={<DeleteIcon />}
+            color={selectedPersonId === person.id ? 'secondary' : 'default'}
+            variant={selectedPersonId === person.id ? 'filled' : 'outlined'}
+            clickable
+            size="medium"
+            sx={{ p: 1 }} 
+          />
+          <br />
+
+
+        </React.Fragment>
       ))}
 
       {/* Adicionar Pessoa */}
       {isAdding ? (
         <TextField
-          size="small"
+          size="medium"
           variant="outlined"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
@@ -133,7 +141,7 @@ function PessoasChips({
           onBlur={handleAddConfirm} // Confirma ao perder o foco também
           autoFocus
           placeholder="Nome da Pessoa"
-          sx={{ maxWidth: '200px' }}
+          sx={{ maxWidth: '200px', padding: "4px" }}
         />
       ) : (
         <Chip
@@ -143,8 +151,12 @@ function PessoasChips({
           variant="outlined"
           clickable
           size="medium"
+          sx={{ p: 1 }} 
+
         />
+        
       )}
+
     </Stack>
   );
 }
@@ -193,15 +205,15 @@ const CartDisplay: React.FC<CartDisplayProps> = ({
         itemsParaEntidadeSelecionada.map((item) => (
           <div key={item.instanceId} className="flex justify-between items-center">
             {/* Imagem */}
-            <Box sx={{ width: 40, height: 40, mr: 1.5, flexShrink: 0 }}>
+            <Box sx={{ width: 60, height: 40, mr: 1.2, flexShrink: 0 }}>
               {item.url_imagem ?
-                <img src={item.url_imagem} alt={item.nome_produto} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} /> :
+                <img src={item.url_imagem} alt={item.nome_produto} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '4px' }} /> :
                 <Box sx={{ width: '100%', height: '100%', border: '1px solid #eee', borderRadius: '4px', bgcolor: '#f0f0f0' }} />
               }
             </Box>
             {/* Nome e Preço */}
             <div style={{ flexGrow: 1, marginRight: '8px' }}>
-              <Typography variant="body2" fontWeight="medium" noWrap title={item.nome_produto}>{item.nome_produto}</Typography>
+              <Typography variant="body2" fontWeight="medium"  title={item.nome_produto}>{item.nome_produto}</Typography>
               <Typography variant="caption" color="textSecondary">R$ {item.preco.toFixed(2)}</Typography>
             </div>
             {/* Controles */}
@@ -527,7 +539,7 @@ const CardapioSistemaPDV = () => {
         <DialogTitle sx={{ borderBottom: '1px solid #eee', pb: 1.5 }}>
           Revisar Pedido - Mesa {mesa || 'N/A'}
         </DialogTitle>
-        <DialogContent sx={{ p: 2 }}>
+        <DialogContent sx={{ p: 4 }}>
           <CartDisplay 
             isMobile={true}
             people={people}
@@ -595,7 +607,7 @@ const CardapioSistemaPDV = () => {
                   <Typography  component="h1" fontWeight="medium" gutterBottom noWrap title={item.nome_produto}>{item.nome_produto}</Typography>
                   <Typography variant="body1" color="success" fontWeight="medium" sx={{ mb: 1 }}>R$ {item.preco.toFixed(2)}</Typography>
                   <Button
-                    variant="contained" size="medium"
+                    variant="contained" size="large"
                     onClick={() => addToCart(item)}
                     className="mt-auto w-full"
                     disabled={!selectedPersonId}

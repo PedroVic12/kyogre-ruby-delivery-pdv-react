@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Edit, Plus, Home, Package, List, ArrowLeft, Save, ArrowDown, ArrowUp } from 'lucide-react';
 
-const ControleEstoquePage = () => {
+const EstoquePageTemplate = () => {
   // Initial Categories
   const initialCategories = [
     { id: '1', name: 'Bebidas' },
@@ -1111,6 +1111,76 @@ const ControleEstoquePage = () => {
       </div>
     </nav>
   );
+  const Home2 = ({ items, transactions }) => {
+    const totalItems = items.length;
+    const totalQuantity = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    const lowStockItems = items.filter(item => item.quantity <= item.minQuantity);
+  
+    return (
+      <div>
+        <h1>Total de Itens: {totalItems}</h1>
+        <h2>Quantidade Total: {totalQuantity}</h2>
+        <h3>Itens com Estoque Baixo: {lowStockItems.length}</h3>
+      </div>
+    );
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <Home2 items={items} transactions={transactions} />;
+      case 'list':
+        return (
+          <ListItems
+            items={items}
+            categories={categories}
+            onItemSelect={(id) => {
+              setSelectedItemId(id);
+              setCurrentPage('show');
+            }}
+            onDelete={handleDeleteItem}
+          />
+        );
+      case 'create':
+        return (
+          <CreateItem
+            onItemCreated={handleAddItem}
+            onCancel={() => setCurrentPage('list')}
+            categories={categories}
+          />
+        );
+      case 'show':
+        const selectedItem = items.find((item) => item.id === selectedItemId);
+        const selectedCategory = categories.find(
+          (category) => category.id === selectedItem?.categoryId
+        );
+        return (
+          <ShowItem
+            item={selectedItem}
+            category={selectedCategory}
+            onEdit={() => setCurrentPage('update')}
+            onDelete={handleDeleteItem}
+            onTransaction={() => setIsTransactionModalOpen(true)}
+            transactions={transactions.filter(
+              (transaction) => transaction.itemId === selectedItemId
+            )}
+            onBack={() => setCurrentPage('list')}
+          />
+        );
+      case 'update':
+        const itemToUpdate = items.find((item) => item.id === selectedItemId);
+        return (
+          <UpdateItem
+            item={itemToUpdate}
+            categories={categories}
+            onItemUpdated={handleUpdateItem}
+            onCancel={() => setCurrentPage('show')}
+          />
+        );
+      default:
+        return <div>Página não encontrada</div>;
+    }
+  };
 
   // Main Layout
   return (
@@ -1222,4 +1292,4 @@ const ControleEstoquePage = () => {
   );
 };
 
-export default ControleEstoquePage;
+export default EstoquePageTemplate;

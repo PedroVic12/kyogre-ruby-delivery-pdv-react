@@ -456,7 +456,7 @@ const UpdateItem = ({
   );
 };
 
-const ControleEstoquePage = () => {
+const StockManagerpage = () => {
   const [items, setItems] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('stockItems');
@@ -569,7 +569,7 @@ const ControleEstoquePage = () => {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className="flex-1">
-            Controle Estoque - REACT 2025
+            Controle Estoque
           </Typography>
           <nav className="flex gap-4">
             <Button
@@ -611,4 +611,4 @@ const ControleEstoquePage = () => {
   );
 };
 
-export default ControleEstoquePage;
+export default StockManagerpage;

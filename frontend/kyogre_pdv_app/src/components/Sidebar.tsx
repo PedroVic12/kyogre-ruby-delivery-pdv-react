@@ -15,13 +15,15 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
     { icon: Coffee, label: 'Pedidos', href: '/dashboard' },
     { icon: Palette, label: 'Editar Cardapio', href: '/dashboard/cardapioManager' },
 
+    
+
     // { icon: Users, label: 'Clientes', href: '/dashboard/clientes' },
     //{ icon: HeadphonesIcon, label: 'Atendimento', href: '/dashboard/atendimento' },
     { icon: NotebookPen, label: 'Cardápio Digital', href: '/cardapio' },
     { icon: Book, label: 'Splash Screen', href: '/splash' },
     { icon: Book, label: 'App Garçom', href: '/app_garcom' },
     //{ icon: Coffee, label: 'Cardapio PDV', href: '/cardapio/:mesa' },
-    { icon: Calculator, label: 'Controle Estoque', href: '/controle_estoque' },
+    { icon: Calculator, label: 'Controle Estoque', href: '/controle_estoque_mui' }, //!controle_estoque
    // { icon: Book, label: 'Pagina Componentes', href: '/pagina_componentes' },
     { icon: UserPlus, label: 'Login', href: '/login' },
 
