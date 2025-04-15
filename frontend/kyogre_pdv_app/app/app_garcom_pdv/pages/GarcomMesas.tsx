@@ -7,14 +7,15 @@ import BottomNavigationBar, {
   navigationItems,
 } from "../../../src/components/ui/BottomNavigationBar";
 import PainelMesas from "../controllers/client_webSocket_mesasPDV";
+import PedidoController from "../controllers/PedidoController";
 
 const GarcomMesas = () => {
   const navigate = useNavigate();
   const [tables, setTables] = useState<Table[]>([]);
   const tableController = TableController.getInstance();
+  const pedidoController = PedidoController.getInstance();
 
   useEffect(() => {
-    console.log("[DEBUG] Componente montado");
     console.log("[DEBUG] Inicializando TableController:", tableController);
 
     // Initial load
@@ -22,17 +23,59 @@ const GarcomMesas = () => {
       setTables(loadedTables);
     });
 
+    subscrivePedidosChangeItens()
+
     // Update local state when tables change
     const interval = setInterval(async () => {
       const currentTables = tableController.getTables();
       setTables([...currentTables]);
-    }, 1000);
+    }, 3000);
 
     return () => {
       console.log("[DEBUG] Componente desmontado");
       clearInterval(interval);
     };
   }, []);
+
+
+  const subscrivePedidosChangeItens = ()=>{
+    // Subscribe to pedidos changes
+    const supabase = tableController.supabase;
+    const subscription = supabase
+      .channel('pedidos-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'pedidos'
+        },
+        (payload) => {
+          console.log('[DEBUG] Novo pedido recebido:', payload);
+          // Atualiza os pedidos automaticamente
+          const pedidosAtualizados = pedidoController.loadPedidos();
+
+          console.log("Pedindo atualizados Realtime")
+          console.log(pedidosAtualizados)
+          
+          // Notifica o garçom sobre novo pedido
+          if (payload.eventType === 'INSERT') {
+            toast.success('Novo pedido recebido!', {
+              icon: "🔔",
+              duration: 4000,
+              position: "top-right",
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    // Cleanup subscription
+    return () => {
+      console.log("[DEBUG] Componente desmontado");
+      subscription.unsubscribe();
+    };
+  }
 
   const handleCallWaiter = (tableId: number): void => {
     console.log(`[DEBUG] Chamando garçom para a mesa ${tableId}`);
@@ -56,15 +99,55 @@ const GarcomMesas = () => {
   };
 
   const handleCreateOrder = (tableId: number) => {
-    toast.success(`Pedido da Mesa ${tableId}`, {
-      icon: "📝",
-      duration: 3000,
-      position: "top-center",
+    let pedidos = pedidoController.loadPedidos();
+    
+    const pedidosDaMesa = pedidos?.filter(pedido => 
+      pedido.complemento.toLowerCase().includes(`mesa ${tableId}`.toLowerCase())
+    );
+  
+    if (!pedidosDaMesa || pedidosDaMesa.length === 0) {
+      toast.error(`Nenhum pedido encontrado para Mesa ${tableId}`, {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+  
+    pedidosDaMesa.forEach((pedido) => {
+      const itemsPedido = pedido.carrinho
+        .map(item => `• ${item.quantidade}x ${item.nome} - R$ ${(item.preco * item.quantidade).toFixed(2)}`)
+        .join('\n');
+  
+      const message = `
+  🏷️ *Pedido da Mesa ${tableId}*
+  ───────────────\n
+  👤 Cliente: ${pedido.nome_cliente}
+  📍 Local: ${pedido.complemento}
+  💰 Total: R$ ${pedido.total_pagar.toFixed(2)}
+  🕒 Data: ${pedido.data_pedido.data} às ${pedido.data_pedido.hora}
+  
+  📋 *Itens do Pedido:*
+  ${itemsPedido}
+  ───────────────`;
+  
+      toast.success(message, {
+        icon: "📝",
+        duration: 6000,
+        position: "top-center",
+        style: {
+          background: '#f0f9ff',
+          border: '1px solid #93c5fd',
+          padding: '16px',
+          color: '#1e40af',
+          maxWidth: '400px',
+          whiteSpace: 'pre-line'
+        }
+      });
     });
   };
 
   const getTableColor = (status: Table["status"]): string => {
-    console.log(`[DEBUG] Obtendo cor para o status ${status}`);
+    //console.log(`[DEBUG] Obtendo cor para o status ${status}\n`);
     switch (status) {
       case "ocupada":
         return "bg-red-700";

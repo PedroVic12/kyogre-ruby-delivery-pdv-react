@@ -9,10 +9,30 @@ export interface Table {
   customers?: number;
 }
 
+
+//! SQL editor para criar novas tabelas
+// create table tables (
+//   id bigint primary key,
+//   name text not null,
+//   status text check (status in ('livre', 'ocupada', 'finalizando')) not null default 'livre',
+//   customers integer default 0,
+//   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+//   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+// );
+
+// -- Insert initial data
+// insert into tables (id, name) values
+//   (1, 'Mesa 1'),
+//   (2, 'Mesa 2'),
+//   (3, 'Mesa 3'),
+//   (4, 'Mesa 4'),
+//   (5, 'Mesa 5'),
+//   (6, 'Mesa 6');
+
 class TableController {
   private static instance: TableController;
   private tables: Table[] = [];
-  private supabase;
+  public supabase;
 
   private constructor() {
     //const supabaseUrl = process.env.SUPABASE_URL;
