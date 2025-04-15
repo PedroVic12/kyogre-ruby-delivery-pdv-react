@@ -21,6 +21,7 @@ RUN npm install --force \
     @ionic/react \
     @types/sqlite3 \
     @types/bcrypt \
+    @supabase/supabase-js \
     uuidv4 \
     sqlite \
     lucide-react \
