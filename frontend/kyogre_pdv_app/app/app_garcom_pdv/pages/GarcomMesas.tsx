@@ -81,7 +81,7 @@ const GarcomMesas = () => {
         <div className="flex items-center gap-2">
           <Bell className="h-10 w-10 text-white" />
           <h1 className="text-xl font-semibold text-white">
-            Mapa de Mesas para Garçom PDV
+            Mapa de Mesas para Garçom 
           </h1>
         </div>
         <div className="flex items-center gap-4 text-white text-sm">
@@ -147,14 +147,18 @@ const GarcomMesas = () => {
           ))}
         </div>
       </main>
-      <BottomNavigationBar
+
+
+      {/* <BottomNavigationBar
         navigationItems={[
           navigationItems[0],
           navigationItems[1],
           navigationItems[2],
           navigationItems[3],
         ]}
-      />
+      /> */}
+
+
     </div>
   );
 };
