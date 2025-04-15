@@ -6,6 +6,7 @@ import TableController, { Table } from "../controllers/TableController";
 import BottomNavigationBar, {
   navigationItems,
 } from "../../../src/components/ui/BottomNavigationBar";
+import PainelMesas from "../controllers/client_webSocket_mesasPDV";
 
 const GarcomMesas = () => {
   const navigate = useNavigate();
@@ -74,33 +75,38 @@ const GarcomMesas = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-sky-900 p-4">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-          <div className="flex items-center gap-2">
-            <Bell className="h-10 w-10 text-white" />
-            <h1 className="text-xl font-semibold text-white">
-              Mapa de Mesas para Garçom
-            </h1>
+  const AppBarGarcomApp = () =>{
+    return       <header className="bg-sky-900 p-4">
+      <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+        <div className="flex items-center gap-2">
+          <Bell className="h-10 w-10 text-white" />
+          <h1 className="text-xl font-semibold text-white">
+            Mapa de Mesas para Garçom PDV
+          </h1>
+        </div>
+        <div className="flex items-center gap-4 text-white text-sm">
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-green-600 rounded-sm" />
+            <span>Livre</span>
           </div>
-          <div className="flex items-center gap-4 text-white text-sm">
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-green-600 rounded-sm" />
-              <span>Livre</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-red-600 rounded-sm" />
-              <span>Ocupada</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-orange-600 rounded-sm" />
-              <span>Fechando conta</span>
-            </div>
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-red-600 rounded-sm" />
+            <span>Ocupada</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-orange-600 rounded-sm" />
+            <span>Fechando conta</span>
           </div>
         </div>
+      </div>
       </header>
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <AppBarGarcomApp/>
       <main className="container mx-auto p-4">
+        <PainelMesas></PainelMesas>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {tables.map((table) => (
             <div

@@ -22,7 +22,7 @@ import PDFGeneratorPage from './components/ui/pdf_generator';
 import CardapioSistemaPDV from '../app/app_garcom_pdv/pages/CardapioPDV_v2';
 import SplashScreen from './pages/splash_screen/react_splash__screen.js';
 import StockManagerpage from '../app/controle_estoque/StockManagerPage.jsx';
-import EstoquePageTemplate from '../app/controle_estoque/EstoquePageTemplate1.jsx';
+import EstoquePageTemplate from '../app/controle_estoque/templates/EstoquePageTemplate1.jsx';
 
 const isProduction = true; //! Altere para false se quiser simular login automático em desenvolvimento
 
