@@ -36,7 +36,6 @@ The Kyogre Ruby Delivery PDV (Point of Sale) project is a full-stack web applica
 ## Kyogre Delivery App
 ![image](https://github.com/user-attachments/assets/4a05915c-6fcb-45cc-8eae-d9e471b290a7)
 
-![image](https://github.com/user-attachments/assets/525c8168-f2d3-4775-9b2a-75697b92fbdd)
 
 
 ![image](https://github.com/user-attachments/assets/1dcac9ec-c014-461c-bd1c-c0604fd8a287)
