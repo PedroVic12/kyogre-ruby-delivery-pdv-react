@@ -33,6 +33,20 @@
 The Kyogre Ruby Delivery PDV (Point of Sale) project is a full-stack web application designed for restaurant management. It consists of a React-based frontend and a FastAPI-based backend, offering features for order management, product listing, customer management, and a digital menu. It utilizes Supabase as a backend-as-a-service for database management.
 
 
+## Kyogre Delivery App
+![image](https://github.com/user-attachments/assets/4a05915c-6fcb-45cc-8eae-d9e471b290a7)
+
+![image](https://github.com/user-attachments/assets/1dcac9ec-c014-461c-bd1c-c0604fd8a287)
+
+![image](https://github.com/user-attachments/assets/b22b99aa-6b1d-4315-95c8-70e9084d5762)
+
+
+## Aplicativo Garçom Click Veras
+
+![image](https://github.com/user-attachments/assets/5e0cfd64-2bbc-4e48-8ddd-4f9dc3b277cb)
+![image](https://github.com/user-attachments/assets/df9ee24e-1039-45f5-b106-24f171c289e9)
+
+
 
 ## Arquitetura Geral:
 
