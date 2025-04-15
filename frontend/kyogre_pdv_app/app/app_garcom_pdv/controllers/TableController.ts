@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import dotenv from 'dotenv';
 
-dotenv.config()
 
 
 export interface Table {
@@ -17,10 +15,18 @@ class TableController {
   private supabase;
 
   private constructor() {
-    this.supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_KEY!
-    );
+    //const supabaseUrl = process.env.SUPABASE_URL;
+    //const supabaseKey = process.env.SUPABASE_KEY;
+
+    const supabaseUrl = "https://szxghxqynfooieeiymfx.supabase.co"
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6eGdoeHF5bmZvb2llZWl5bWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzNzExNDMsImV4cCI6MjA1Njk0NzE0M30.D5LvCtnWhAaGkzFCQPzTpirBYZB3hEkqk0cH1L-zTF8"
+    
+    
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Supabase environment variables are not set');
+    }
+
+    this.supabase = createClient(supabaseUrl, supabaseKey);
     this.initializeRealtimeSubscription();
   }
 
