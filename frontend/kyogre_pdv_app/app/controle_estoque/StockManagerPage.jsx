@@ -43,6 +43,12 @@ import { styled } from '@mui/material/styles';
 //   description: string;
 // }
 
+class StockItem{
+    constructor(){
+      id,name, quantity, description
+    }
+}
+
 // ===============================
 // Styled Components
 // ===============================
