@@ -6,7 +6,6 @@ const SUPABASE_URL = "https://szxghxqynfooieeiymfx.supabase.co"
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6eGdoeHF5bmZvb2llZWl5bWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEzNzExNDMsImV4cCI6MjA1Njk0NzE0M30.D5LvCtnWhAaGkzFCQPzTpirBYZB3hEkqk0cH1L-zTF8"
 
 
-
 const supabase = createClient(
   SUPABASE_URL, // substitua
   SUPABASE_KEY
@@ -42,7 +41,7 @@ export default function PainelMesas() {
   
     return (
       <div className="p-4">
-        <h2 className="text-xl font-bold">📡 Realtime Supabase</h2>
+        <h2 className="text-xl font-bold">📡 Realtime Supabase!</h2>
         <ul>
           {mensagens.map((msg, idx) => (
             <li key={idx} className="text-green-500">→ {msg}</li>

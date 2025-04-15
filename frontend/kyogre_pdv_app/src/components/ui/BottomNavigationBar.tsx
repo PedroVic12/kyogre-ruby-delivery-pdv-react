@@ -39,7 +39,12 @@ export const navigationItems: NavigationItem[] = [
         url: "/settings",
         isCentral: false,
     },
-
+    {
+        label: "Pedidos",
+        icon: <span style={{ fontSize: "20px", color: "white" }}>⚙️</span>, // Ícone de configurações
+        url: "/settings",
+        isCentral: false,
+    },
 ];
 
 // Definição do tipo para as props do componente
