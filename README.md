@@ -156,18 +156,22 @@ The project is organized into two main directories: `frontend` and `backend`.
 
 ## N8N
 
+### Instalação N8N via npm
+
+```bash
+npm install n8n -g
+```
+
 ```bash
 npx n8n
 
 ```
 So acessar a http://localhost:5678/ com esse comando
 
+### Instalação N8N via Docker
 
-```
-npm install n8n -g
-```
 
-```
+```bash
 n8n
 # or
 n8n start
