@@ -1,10 +1,10 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import { StockContextProvider } from "./contexts/StockContext";
-import Home from "./pages/Home";
-import ListItems from "./pages/items/ListItems";
-import CreateItem from "./pages/items/CreateItem";
-import ShowItem from "./pages/items/ShowItem";
-import UpdateItem from "./pages/items/UpdateItem";
+import { StockContextProvider } from "../src/contexts/StockContext";
+import Home from "../src/pages/Home";
+import ListItems from "../src/pages/items/ListItems";
+import CreateItem from "../src/pages/items/CreateItem";
+import ShowItem from "../src/pages/items/ShowItem";
+import UpdateItem from "../src/pages/items/UpdateItem";
 
 import { Button, IconButton } from '@mui/material';
 
