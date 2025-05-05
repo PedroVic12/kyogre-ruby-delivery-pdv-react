@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.dea3f333.css","mappings":"AAAA,KAIE,wBAAyB,CAHzB,4BAA8B,CAC9B,QAAS,CACT,SAEF,CAEA,IACE,YAAa,CACb,iBACF","sources":["index.css"],"sourcesContent":["body {\n  font-family: Arial, sans-serif;\n  margin: 0;\n  padding: 0;\n  background-color: #f0f0f0;\n}\n\ndiv {\n  padding: 20px;\n  text-align: center;\n}\n"],"names":[],"sourceRoot":""}
