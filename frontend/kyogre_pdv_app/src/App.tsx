@@ -13,7 +13,7 @@ import './index.css';
 import { HomePage } from './pages/dashboard/HomePage';
 import { DashboardPedidosPage } from './pages/dashboard/DashboardPedidos';
 import PaginaComponentes from './pages/UI/pagina_componentes.js';
-import ControleEstoquePage from '../app/controle_estoque/src/ControleEstoquePage.jsx';
+import ControleEstoquePage from '../app/controle_estoque/templates/ControleEstoquePage.jsx';
 import GarcomMesas from '../app/app_garcom_pdv/pages/GarcomMesas.js';
 import CheckoutPage from '../app/app_garcom_pdv/pages/CheckoutPage.js';
 import { CardapioManagerPage } from './pages/dashboard/CardapioManager';
